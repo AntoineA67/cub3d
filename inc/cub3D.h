@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/22 23:00:43 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/22 23:25:36 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ typedef struct s_vars {
 	t_coord	size;
 	// t_coord	translate;
 	// t_coord	rotation;
-	// t_data	img;
+	t_data	img;
 	// int		(*f)(t_rgb *c1, t_rgb *c2, float val, t_rgb map_color);
 	// int		rotate;
 	// int		zoom;
@@ -91,26 +91,26 @@ typedef struct s_line {
 	float	dist;
 }		t_line;
 
-int		to_rgb(t_rgb c);
+// int		to_rgb(t_rgb c);
 int		f_loop(t_vars *vars);
-int		is_in_window(t_coord *point);
-int		key_hook(int keycode, t_vars *vars);
-int		grad_color(t_rgb *c1, t_rgb *c2, float val, t_rgb map_color);
-int		base_color(t_rgb *c1, t_rgb *c2, float val, t_rgb map_color);
-int		mouse_hook(int keycode, int x, int y, t_vars *vars);
-void	out(t_vars *vars);
+// int		is_in_window(t_coord *point);
+// int		key_hook(int keycode, t_vars *vars);
+// int		grad_color(t_rgb *c1, t_rgb *c2, float val, t_rgb map_color);
+// int		base_color(t_rgb *c1, t_rgb *c2, float val, t_rgb map_color);
+// int		mouse_hook(int keycode, int x, int y, t_vars *vars);
+// void	out(t_vars *vars);
 void	esc(t_vars *vars, int err);
-void	reset(t_vars *vars);
-void	project(t_vars *vars);
-void	exit_lst(t_list **lst);
-void	next_color(t_vars *vars);
-void	color(t_rgb *c, int r, int g, int b);
+// void	reset(t_vars *vars);
+// void	project(t_vars *vars);
+// void	exit_lst(t_list **lst);
+// void	next_color(t_vars *vars);
+// void	color(t_rgb *c, int r, int g, int b);
 void	coord(t_coord *p, int x, int y, int z);
-void	plot_line(t_vars *vars, t_coord p1, t_coord p2);
-void	pixel_put(t_data *data, int x, int y, int color);
-float	deg_to_rad(int d);
-t_rgb	cycle_color(t_rgb color);
-t_coord	*parse(int fd);
-t_coord	*create_l_pts(t_list *lst, int size_x, int size_y);
+// void	plot_line(t_vars *vars, t_coord p1, t_coord p2);
+// void	pixel_put(t_data *data, int x, int y, int color);
+// float	deg_to_rad(int d);
+// t_rgb	cycle_color(t_rgb color);
+char	*parse(int fd);
+char	*create_l_pts(t_list *lst, int size_x, int size_y);
 
 #endif

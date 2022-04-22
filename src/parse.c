@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/22 23:00:46 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/22 23:23:29 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ char	*parse(int fd)
 	size.y = 0;
 	while (node && node->content)
 	{
-		if (ft_strlen((char *)node->content) > size.x)
+		if ((int)ft_strlen((char *)node->content) > size.x)
 			size.x = ft_strlen((char *)node->content);
 		size.y++;
 		node = node->next;

@@ -12,31 +12,36 @@
 
 #include "../inc/cub3D.h"
 
-static void	fill_point(t_coord *point, char *s)
-{
-	char	*find;
+// static void	fill_point(t_coord *point, char *s)
+// {
+// 	char	*find;
 
-	point->z = ft_atoi(s);
-	find = ft_strchr(s, ',');
-	if (find && *(find) + 1 && *(find) + 2)
-		point->c.v = ft_max(ft_atoi_base(find + 3, "0123456789abcdef"),
-				ft_atoi_base(find + 3, "0123456789ABCDEF"));
-	else
-		point->c.v = 0xffffff;
-	point->c.r = (point->c.v / 0x10000) % 0x100;
-	point->c.g = (point->c.v / 0x100) % 0x100;
-	point->c.b = point->c.v % 0x100;
-}
+// 	point->z = ft_atoi(s);
+// 	find = ft_strchr(s, ',');
+// 	if (find && *(find) + 1 && *(find) + 2)
+// 		point->c.v = ft_max(ft_atoi_base(find + 3, "0123456789abcdef"),
+// 				ft_atoi_base(find + 3, "0123456789ABCDEF"));
+// 	else
+// 		point->c.v = 0xffffff;
+// 	point->c.r = (point->c.v / 0x10000) % 0x100;
+// 	point->c.g = (point->c.v / 0x100) % 0x100;
+// 	point->c.b = point->c.v % 0x100;
+// }
 
 char	*create_l_pts(t_list *lst, int size_x, int size_y)
 {
 	char	*l_pts;
+	t_list	*node;
 
 	l_pts = ft_calloc(size_x * size_y, sizeof(char));
 	if (!l_pts)
-		exit_lst(&lst);
+		return (NULL);
+	node = lst->next;
+	while (node)
+	{
+		ft_strlcat(l_pts, node->content, -1);
+		node = node->next;
+	}
 	ft_lstclear(&lst, &free);
-	coord(&l_pts[0], size_x, size_y, size_x * size_y);
-	printf("%s\n", l_pts);
 	return (l_pts);
 }
