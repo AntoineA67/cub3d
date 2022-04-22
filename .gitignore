@@ -1,0 +1,8 @@
+*.out*
+.DS_Store
+*.o
+*.py
+cub3D
+*test*
+libft/libft.a
+*non*
