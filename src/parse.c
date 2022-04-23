@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/22 23:23:29 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/24 00:08:26 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,26 +103,25 @@ static void	fill_lst(t_list **lst, int fd)
 	}
 }
 
-char	*parse(int fd)
+char	*parse(int fd, t_vars *vars)
 {
 	t_list	*lst;
 	t_list	*node;
-	t_coord	size;
 
 	lst = ft_lstnew(NULL);
 	if (!lst)
 		exit(EXIT_FAILURE);
 	fill_lst(&lst, fd);
 	node = lst->next;
-	size.x = 0;
-	size.y = 0;
+	vars->size.x = 0;
+	vars->size.y = 0;
 	while (node && node->content)
 	{
-		if ((int)ft_strlen((char *)node->content) > size.x)
-			size.x = ft_strlen((char *)node->content);
-		size.y++;
+		if ((int)ft_strlen((char *)node->content) > vars->size.x)
+			vars->size.x = ft_strlen((char *)node->content);
+		vars->size.y++;
 		node = node->next;
 	}
-	printf("x: %d y: %d\n", size.x, size.y);
-	return (create_l_pts(lst, size.x, size.y));
+	printf("x: %d y: %d\n", vars->size.x, vars->size.y);
+	return (create_l_pts(lst, vars->size.x, vars->size.y));
 }

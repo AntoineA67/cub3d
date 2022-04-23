@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/22 23:27:14 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/24 01:20:04 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,29 +41,15 @@ static void	fill_vars(t_vars *vars, int fd)
 {
 	t_data	img;
 
-	vars->map = parse(fd);
-	// vars->l_tmp = cp_l_pts(vars->l_pts);
+	vars->map = parse(fd, vars);
 	vars->mlx = mlx_init();
-	// if (!vars->mlx)
-	// 	esc(vars, 1);
-	// coord(&vars->size, 1920, 1080, 0);
 	img.img = mlx_new_image(vars->mlx, vars->size.x * 100, vars->size.y * 100);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel,
 	 		&img.line_length, &img.endian);
 	if (!img.addr)
 		return ;
-	 	// esc(vars, 1);
 	img.bits_per_pixel /= 8;
-	// vars->zoom = 10;
-	// vars->rotate = 0;
-	// coord(&vars->translate, vars->size.x / 2, vars->size.y / 2, 0);
 	vars->img = img;
-	// coord(&vars->rotation, -55, 0, -45);
-	// color(&vars->color, 255, 255, 255);
-	// vars->color.v = 0;
-	// vars->f = &grad_color;
-	// vars->proj_type = 1;
-	(void)vars;
 	close(fd);
 }
 
@@ -74,12 +60,72 @@ static char	*extract_name(char *str)
 	return (str);
 }
 
-// static int	test_hook(t_vars *vars)
-// {
-// 	(void)vars;
-// 	// esc(vars, 0);
-// 	return (0);
-// }
+static int	test_hook(t_vars *vars)
+{
+	(void)vars;
+	// esc(vars, 0);
+	return (0);
+}
+
+void	raycasting(t_vars *vars)
+{
+	int		x;
+	t_ray	ray;
+
+	x = -1;
+	while (++x < vars->size.x)
+	{
+		ray.camera_x = 2 * x / vars->size.x - 1;
+		ray.ray_dir.x = vars->dir.x + vars->plane.x * ray.camera_x;
+		ray.ray_dir.y = vars->dir.y + vars->plane.y * ray.camera_x;
+	}
+	if (ray.ray_dir.x == 0)
+		ray.delta_dist.x = 1e30;
+	else
+		ray.delta_dist.x = abs(1 / ray.ray_dir.x);
+	if (ray.ray_dir.y == 0)
+		ray.delta_dist.y = 1e30;
+	else
+		ray.delta_dist.y = abs(1 / ray.ray_dir.y);
+	if (ray.ray_dir.x < 0)
+	{
+		ray.step.x = -1;
+		ray.side_dist.x = (vars->pos.x - ray.map_pos.x) * ray.delta_dist.x;
+	}
+	else
+	{
+		ray.step.x = 1;
+		ray.side_dist.x = (ray.map_pos.x + 1.0 - ray.map_pos.x) * ray.delta_dist.x;
+	}
+	if (ray.ray_dir.y < 0)
+	{
+		ray.step.y = -1;
+		ray.side_dist.y = (vars->pos.y - ray.map_pos.y) * ray.delta_dist.y;
+	}
+	else
+	{
+		ray.step.y = 1;
+		ray.side_dist.y = (ray.map_pos.y + 1.0 - ray.map_pos.y) * ray.delta_dist.y;
+	}
+	ray.hit = 0;
+	while (ray.hit == 0)
+	{
+		if (ray.side_dist.x < ray.side_dist.y)
+		{
+			ray.side_dist.x += ray.delta_dist.x;
+			ray.map_pos.x += ray.step.x;
+			ray.side = 0;
+		}
+		else
+		{
+			ray.side_dist.y += ray.delta_dist.y;
+			ray.map_pos.y += ray.step.y;
+			ray.side = 1;
+		}
+		if (vars->map[ray.map_pos.x + ray.map_pos.y * vars->size.x] > 0)
+			ray.hit = 1;
+	}
+}
 
 int	main(int argc, char **argv)
 {
@@ -101,13 +147,16 @@ int	main(int argc, char **argv)
 	(void)extract_name;
 	vars.win = mlx_new_window(vars.mlx, vars.size.x * 100,
 			vars.size.y * 100, extract_name(argv[1]));
+	
+	raycasting(&vars);
+
 	// if (!vars.win)
 	// 	esc(&vars, 1);
 	//mlx_hook(vars.win, 2, 0, key_hook, &vars);
-	//mlx_hook(vars.win, 17, 0, test_hook, &vars);
+	mlx_hook(vars.win, 17, 0, test_hook, &vars);
 	//mlx_mouse_hook(vars.win, mouse_hook, &vars);
 	//project(&vars);
 	printf("List\n%s\n", vars.map);
 	//mlx_loop_hook(vars.mlx, f_loop, &vars);
-	//mlx_loop(vars.mlx);
+	mlx_loop(vars.mlx);
 }

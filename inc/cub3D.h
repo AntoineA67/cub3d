@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/22 23:25:36 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/24 01:04:46 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,20 +60,10 @@ typedef struct s_textures {
 }			t_textures;
 
 typedef struct s_vars {
-	// t_coord	*l_pts;
-	// t_coord	*l_tmp;
-	// t_rgb	color;
 	t_coord	size;
-	// t_coord	translate;
-	// t_coord	rotation;
 	t_data	img;
-	// int		(*f)(t_rgb *c1, t_rgb *c2, float val, t_rgb map_color);
-	// int		rotate;
-	// int		zoom;
-	// int		proj_type;
 	void	*mlx;
 	void	*win;
-
 	char	*map;
 	t_v2	pos;
 	t_v2	dir;
@@ -81,15 +71,17 @@ typedef struct s_vars {
 	t_v2	camera;
 }			t_vars;
 
-typedef struct s_line {
-	int		dx;
-	int		dy;
-	int		sx;
-	int		sy;
-	int		err;
-	int		e_d;
-	float	dist;
-}		t_line;
+typedef struct s_ray {
+	double	camera_x;
+	t_v2	ray_dir;
+	t_coord	map_pos;
+	t_v2	side_dist;
+	t_v2	delta_dist;
+	double	perp_wall_dist;
+	t_coord	step;
+	int		hit;
+	int		side;
+}		t_ray;
 
 // int		to_rgb(t_rgb c);
 int		f_loop(t_vars *vars);
@@ -110,7 +102,7 @@ void	coord(t_coord *p, int x, int y, int z);
 // void	pixel_put(t_data *data, int x, int y, int color);
 // float	deg_to_rad(int d);
 // t_rgb	cycle_color(t_rgb color);
-char	*parse(int fd);
+char	*parse(int fd, t_vars *vars);
 char	*create_l_pts(t_list *lst, int size_x, int size_y);
 
 #endif
