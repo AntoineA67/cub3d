@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:24:04 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/22 23:12:45 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/24 21:41:43 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,16 @@ void	coord(t_coord *p, int x, int y, int z)
 	p->z = z;
 }
 
-// void	pixel_put(t_data *data, int x, int y, int color)
-// {
-// 	char	*dst;
+void	pixel_put(t_data *data, int x, int y, int color)
+{
+	char	*dst;
 
-// 	if (x >= 0 && x < 1920 && y >= 0 && y < 1080)
-// 	{
-// 		dst = data->addr + (y * data->line_length + x * data->bits_per_pixel);
-// 		*(unsigned int *)dst = color;
-// 	}
-// }
+	if (x >= 0 && x < 1920 && y >= 0 && y < 1080)
+	{
+		dst = data->addr + (y * data->line_length + x * data->bits_per_pixel);
+		*(unsigned int *)dst = color;
+	}
+}
 
 // int	f_loop(t_vars *vars)
 // {

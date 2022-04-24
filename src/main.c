@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/24 01:20:04 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/24 21:57:18 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,13 @@ static void	fill_vars(t_vars *vars, int fd)
 
 	vars->map = parse(fd, vars);
 	vars->mlx = mlx_init();
-	img.img = mlx_new_image(vars->mlx, vars->size.x * 100, vars->size.y * 100);
+	vars->plane.x = 0.0;
+	vars->plane.y = 0.66;
+	vars->pos.x = 2.0;
+	vars->pos.y = 2.0;
+	vars->dir.x = -1.0;
+	vars->dir.y = 0.0;
+	img.img = mlx_new_image(vars->mlx, 1920, 1080);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel,
 	 		&img.line_length, &img.endian);
 	if (!img.addr)
@@ -63,14 +69,17 @@ static char	*extract_name(char *str)
 static int	test_hook(t_vars *vars)
 {
 	(void)vars;
+	exit(EXIT_SUCCESS);
 	// esc(vars, 0);
 	return (0);
 }
 
-void	raycasting(t_vars *vars)
+int	raycasting(t_vars *vars)
 {
 	int		x;
 	t_ray	ray;
+	double	step;
+	int		y;
 
 	x = -1;
 	while (++x < vars->size.x)
@@ -78,53 +87,100 @@ void	raycasting(t_vars *vars)
 		ray.camera_x = 2 * x / vars->size.x - 1;
 		ray.ray_dir.x = vars->dir.x + vars->plane.x * ray.camera_x;
 		ray.ray_dir.y = vars->dir.y + vars->plane.y * ray.camera_x;
-	}
-	if (ray.ray_dir.x == 0)
-		ray.delta_dist.x = 1e30;
-	else
-		ray.delta_dist.x = abs(1 / ray.ray_dir.x);
-	if (ray.ray_dir.y == 0)
-		ray.delta_dist.y = 1e30;
-	else
-		ray.delta_dist.y = abs(1 / ray.ray_dir.y);
-	if (ray.ray_dir.x < 0)
-	{
-		ray.step.x = -1;
-		ray.side_dist.x = (vars->pos.x - ray.map_pos.x) * ray.delta_dist.x;
-	}
-	else
-	{
-		ray.step.x = 1;
-		ray.side_dist.x = (ray.map_pos.x + 1.0 - ray.map_pos.x) * ray.delta_dist.x;
-	}
-	if (ray.ray_dir.y < 0)
-	{
-		ray.step.y = -1;
-		ray.side_dist.y = (vars->pos.y - ray.map_pos.y) * ray.delta_dist.y;
-	}
-	else
-	{
-		ray.step.y = 1;
-		ray.side_dist.y = (ray.map_pos.y + 1.0 - ray.map_pos.y) * ray.delta_dist.y;
-	}
-	ray.hit = 0;
-	while (ray.hit == 0)
-	{
-		if (ray.side_dist.x < ray.side_dist.y)
+		ray.map_pos.x = (ft_strchr(vars->map, 'P') - vars->map) % vars->size.x;
+		ray.map_pos.y = (ft_strchr(vars->map, 'P') - vars->map) / vars->size.x;
+		if (ray.ray_dir.x == 0)
+			ray.delta_dist.x = 1e30;
+		else
+			ray.delta_dist.x = fabs(1 / ray.ray_dir.x);
+		if (ray.ray_dir.y == 0)
+			ray.delta_dist.y = 1e30;
+		else
+			ray.delta_dist.y = fabs(1 / ray.ray_dir.y);
+		if (ray.ray_dir.x < 0)
 		{
-			ray.side_dist.x += ray.delta_dist.x;
-			ray.map_pos.x += ray.step.x;
-			ray.side = 0;
+			ray.step.x = -1;
+			ray.side_dist.x = (vars->pos.x - ray.map_pos.x) * ray.delta_dist.x;
 		}
 		else
 		{
-			ray.side_dist.y += ray.delta_dist.y;
-			ray.map_pos.y += ray.step.y;
-			ray.side = 1;
+			ray.step.x = 1;
+			ray.side_dist.x = (ray.map_pos.x + 1.0 - ray.map_pos.x) * ray.delta_dist.x;
 		}
-		if (vars->map[ray.map_pos.x + ray.map_pos.y * vars->size.x] > 0)
-			ray.hit = 1;
+		if (ray.ray_dir.y < 0)
+		{
+			ray.step.y = -1;
+			ray.side_dist.y = (vars->pos.y - ray.map_pos.y) * ray.delta_dist.y;
+		}
+		else
+		{
+			ray.step.y = 1;
+			ray.side_dist.y = (ray.map_pos.y + 1.0 - ray.map_pos.y) * ray.delta_dist.y;
+		}
+		ray.hit = 0;
+		//printf("Next ray\n");
+		while (ray.hit == 0)
+		{
+			if (ray.side_dist.x < ray.side_dist.y)
+			{
+				ray.side_dist.x += ray.delta_dist.x;
+				ray.map_pos.x += ray.step.x;
+				ray.side = 0;
+			}
+			else
+			{
+				ray.side_dist.y += ray.delta_dist.y;
+				ray.map_pos.y += ray.step.y;
+				ray.side = 1;
+			}
+			//printf("ray: %d %d c:%c\n", ray.map_pos.x, ray.map_pos.y, vars->map[ray.map_pos.x + ray.map_pos.y * vars->size.x]);
+			if (vars->map[ray.map_pos.x + ray.map_pos.y * vars->size.x] == '1')
+				ray.hit = 1;
+		}
+		printf("%d %d\n", ray.map_pos.x, ray.map_pos.y)
+		if (ray.side == 0)
+			ray.perp_wall_dist = ray.side_dist.x - ray.delta_dist.x;
+		else
+			ray.perp_wall_dist = ray.side_dist.y - ray.delta_dist.y;
+		ray.h = ray.map_pos.y + (1 - ray.step.y) / 2;
+		ray.line_height = (int)(ray.h / ray.perp_wall_dist);
+
+		ray.pitch = 100;
+		ray.draw_start = -ray.line_height / 2 + ray.h / 2 + ray.pitch;
+		if (ray.draw_start < 0)
+			ray.draw_start = 0;
+		ray.draw_end = ray.line_height / 2 + ray.h / 2 + ray.pitch;
+		if (ray.draw_end >= ray.h)
+			ray.draw_end = ray.h - 1;
+		if (ray.side == 0)
+			ray.wall.x = ray.map_pos.y + ray.perp_wall_dist * ray.ray_dir.y;
+		else
+			ray.wall.x = ray.map_pos.y + ray.perp_wall_dist * ray.ray_dir.y;
+		ray.wall.x -= floor((ray.wall.x));
+		ray.tex.x = (int)(ray.wall.x * TEX_W);
+		if (ray.side == 0 && ray.ray_dir.x > 0)
+			ray.tex.x = TEX_W - ray.tex.x - 1;
+		if (ray.side == 1 && ray.ray_dir.y < 0)
+			ray.tex.x = TEX_W - ray.tex.x - 1;
+		step = 1.0 * TEX_W / ray.line_height;
+		ray.tex_pos = (ray.draw_start - ray.pitch - ray.h / 2 + ray.line_height / 2) * step;
+		y = ray.draw_start - 1;
+		printf("%d %d\n", x, y);
+		while (++y < ray.draw_end)
+		{
+			ray.tex.y = (int)ray.tex_pos & (TEX_W - 1);
+			ray.tex_pos += step;
+			ray.color = 0xffffff;
+			//ray.color = vars->textures_img[ft_atoi(vars->map[ray.map_pos.x + ray.map_pos.y * vars->size.x])].addr[]//TODO addresse pixel textures
+			// if (ray.side == 1)
+			// 	ray.color = ray.color >> 1 & 8355711;
+			pixel_put(&vars->img, x, y, ray.color);
+			//mlx_pixel_put(vars->mlx, vars->win, x, y, ray.color);
+			printf("%d %d", x, y);
+		}	
 	}
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
+	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -145,9 +201,10 @@ int	main(int argc, char **argv)
 	}
 	fill_vars(&vars, fd);
 	(void)extract_name;
-	vars.win = mlx_new_window(vars.mlx, vars.size.x * 100,
-			vars.size.y * 100, extract_name(argv[1]));
-	
+	vars.win = mlx_new_window(vars.mlx, 1920,
+			1080, extract_name(argv[1]));
+	printf("EA: %s\nNO: %s\nSO: %s\nWE: %s\n", vars.textures.ea, vars.textures.no, vars.textures.so, vars.textures.we);
+	printf("%s\n", vars.map);
 	raycasting(&vars);
 
 	// if (!vars.win)
@@ -157,6 +214,6 @@ int	main(int argc, char **argv)
 	//mlx_mouse_hook(vars.win, mouse_hook, &vars);
 	//project(&vars);
 	printf("List\n%s\n", vars.map);
-	//mlx_loop_hook(vars.mlx, f_loop, &vars);
+	mlx_loop_hook(vars.mlx, raycasting, &vars);
 	mlx_loop(vars.mlx);
 }

@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/24 00:08:26 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/24 21:04:44 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ int	str_to_rgb(t_rgb *col, char *str)
 
 int	elem_textures(char **l, t_textures *textures, int fd)
 {
-	if (**l == '\n' && !*(*(l + 1)))
+	char	*t;
+
+	t = *l;
+	if (**l == '\n' && !*(t + 1))
 	{
 		free(*l);
 		*l = get_next_line(fd);
@@ -63,11 +66,11 @@ int	elem_textures(char **l, t_textures *textures, int fd)
 	}
 	else if (!ft_strncmp(*l, "NO ", 3))
 		textures->no = ft_strtrim(*l + 3, "\n ");
-	else if (!ft_strncmp(*l, "so ", 3))
+	else if (!ft_strncmp(*l, "SO ", 3))
 		textures->so = ft_strtrim(*l + 3, "\n ");
-	else if (!ft_strncmp(*l, "we ", 3))
+	else if (!ft_strncmp(*l, "WE ", 3))
 		textures->we = ft_strtrim(*l + 3, "\n ");
-	else if (!ft_strncmp(*l, "ea ", 3))
+	else if (!ft_strncmp(*l, "EA ", 3))
 		textures->ea = ft_strtrim(*l + 3, "\n ");
 	else if (!ft_strncmp(*l, "F ", 2))
 		str_to_rgb(&textures->f, *l + 2);
@@ -80,18 +83,18 @@ int	elem_textures(char **l, t_textures *textures, int fd)
 	return (0);
 }
 
-static void	fill_lst(t_list **lst, int fd)
+static void	fill_lst(t_list **lst, int fd, t_textures *textures)
 {
 	char		*l;
 	t_list		*node;
-	t_textures	textures;
 
+	ft_bzero(textures, sizeof(t_textures));
 	node = *lst;
 	l = get_next_line(fd);
 	if (!l)
 		exit_lst(lst);
 	while (l)
-		if (elem_textures(&l, &textures, fd))
+		if (elem_textures(&l, textures, fd))
 			break;
 	while (l)
 	{
@@ -111,7 +114,7 @@ char	*parse(int fd, t_vars *vars)
 	lst = ft_lstnew(NULL);
 	if (!lst)
 		exit(EXIT_FAILURE);
-	fill_lst(&lst, fd);
+	fill_lst(&lst, fd, &vars->textures);
 	node = lst->next;
 	vars->size.x = 0;
 	vars->size.y = 0;
