@@ -4,9 +4,9 @@ OBJDIR		= obj/
 INCDIR		= inc/
 VPATH		= src/
 INC			= $(addprefix ${INCDIR}, cub3D.h)
-SRC			= main.c utils.c parse.c l_pts.c
+SRC			= main.c utils.c parse.c l_pts.c key_hooks.c plot.c
 OBJ			= $(addprefix ${OBJDIR}, $(SRC:.c=.o))
-LIBRARY		= -L libft -lft -L mlx2020 -lmlx
+LIBRARY		= -L libft -lft -L mlx2020 -lmlx -lm
 LIB_FILE	= libft/libft.a libmlx.dylib
 CC			= gcc
 FLAGS		= -Wall -Wextra -Werror
@@ -30,9 +30,12 @@ libft/libft.a:
 	make -C libft
 
 clean:
+	make clean -C libft
 	rm -rf ${OBJDIR}
 
-fclean:	clean
+fclean:
+	make fclean -C libft
+	rm -rf ${OBJDIR}
 	${RM} ${NAME}
 
 re: fclean all

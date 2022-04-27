@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:24:04 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/24 21:41:43 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/27 19:18:53 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,23 @@
 // 	coord(&vars->translate, vars->size.x / 2, vars->size.y / 2, 0);
 // }
 
-// void	esc(t_vars *vars, int err)
-// {
-// 	if (vars->img.img)
-// 		mlx_destroy_image(vars->mlx, vars->img.img);
-// 	if (vars->win)
-// 		mlx_destroy_window(vars->mlx, vars->win);
-// 	if (vars->l_pts)
-// 		free(vars->l_pts);
-// 	if (vars->l_tmp)
-// 		free(vars->l_tmp);
-// 	exit(err);
-// }
+void	esc(t_vars *vars, int err)
+{
+	if (err)
+		write(2, "Error\n", 6);
+	if (vars->img.img)
+		mlx_destroy_image(vars->mlx, vars->img.img);
+	if (vars->win)
+		mlx_destroy_window(vars->mlx, vars->win);
+	exit(err);
+}
 
-void	coord(t_coord *p, int x, int y, int z)
+t_coord	coord(t_coord *p, int x, int y, int z)
 {
 	p->x = x;
 	p->y = y;
 	p->z = z;
+	return (*p);
 }
 
 void	pixel_put(t_data *data, int x, int y, int color)

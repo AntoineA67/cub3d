@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/24 21:57:18 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/27 19:21:12 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,26 @@
 // 	return (mod_l_pts);
 // }
 
+int	init_player(t_vars *vars)
+{
+	char	*player_in_map;
+
+	vars->player.rot = 0; //TODO changer selon orientation de depart
+	vars->player.delta.x = 0;
+	vars->player.delta.y = 0;
+	player_in_map = ft_strchr(vars->map, 'P');
+	vars->player.pos.x = (player_in_map - vars->map) % vars->size.x;
+	vars->player.pos.y = (player_in_map - vars->map) / vars->size.x;
+	return (0);
+}
+
 static void	fill_vars(t_vars *vars, int fd)
 {
 	t_data	img;
 
 	vars->map = parse(fd, vars);
+	if (init_player(vars))
+		return ; //NO PLAYER IN MAP
 	vars->mlx = mlx_init();
 	vars->plane.x = 0.0;
 	vars->plane.y = 0.66;
@@ -137,7 +152,7 @@ int	raycasting(t_vars *vars)
 			if (vars->map[ray.map_pos.x + ray.map_pos.y * vars->size.x] == '1')
 				ray.hit = 1;
 		}
-		printf("%d %d\n", ray.map_pos.x, ray.map_pos.y)
+		printf("%d %d\n", ray.map_pos.x, ray.map_pos.y);
 		if (ray.side == 0)
 			ray.perp_wall_dist = ray.side_dist.x - ray.delta_dist.x;
 		else
@@ -183,6 +198,52 @@ int	raycasting(t_vars *vars)
 	return (0);
 }
 
+void	draw_direction(t_vars *vars)
+{
+	t_coord	p1;
+	t_coord	p2;
+
+	p1.x = vars->player.pos.x * 10;
+	p1.y = vars->player.pos.y * 10;
+	p2.x = (vars->player.pos.x + vars->player.delta.x) * 10;
+	p2.y = (vars->player.pos.y+ vars->player.delta.y) * 10;
+	printf("%d %d	%d %d\n", p1.x, p1.y, p2.x, p2.y);
+	plot_line(vars, p1, p2);
+}
+
+void	show_player(t_vars *vars)
+{
+	(void)vars;
+	int	i;
+	int	j;
+	int	size;
+
+	size = 10;
+	i = -size;
+	while (++i < size)
+	{
+		j = -size;
+		while (++j < size)
+		{
+			pixel_put(&vars->img, i + vars->player.pos.x * 10,
+					j + vars->player.pos.y * 10, 0xffffff);
+		}
+	}
+	draw_direction(vars);
+}
+
+void	render(t_vars *vars)
+{
+	t_coord	p1;
+	t_coord	p2;
+	
+	ft_int_memset(vars->img.addr, 0x1D1443,
+		vars->img.line_length * 1080 / 4);
+	show_player(vars);
+	plot_line(vars, coord(&p1, 0, 0, 0), coord(&p2, 100, 200, 0));
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
+}
+
 int	main(int argc, char **argv)
 {
 	t_vars	vars;
@@ -205,15 +266,16 @@ int	main(int argc, char **argv)
 			1080, extract_name(argv[1]));
 	printf("EA: %s\nNO: %s\nSO: %s\nWE: %s\n", vars.textures.ea, vars.textures.no, vars.textures.so, vars.textures.we);
 	printf("%s\n", vars.map);
-	raycasting(&vars);
-
+	show_player(&vars);
+	// raycasting(&vars);
 	// if (!vars.win)
 	// 	esc(&vars, 1);
-	//mlx_hook(vars.win, 2, 0, key_hook, &vars);
+	mlx_hook(vars.win, 2, 0, key_hook, &vars);
 	mlx_hook(vars.win, 17, 0, test_hook, &vars);
+	render(&vars);
 	//mlx_mouse_hook(vars.win, mouse_hook, &vars);
 	//project(&vars);
 	printf("List\n%s\n", vars.map);
-	mlx_loop_hook(vars.mlx, raycasting, &vars);
+	// mlx_loop_hook(vars.mlx, raycasting, &vars);
 	mlx_loop(vars.mlx);
 }

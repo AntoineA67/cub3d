@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/24 21:45:12 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/27 19:19:24 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,14 @@ typedef struct s_textures {
 	t_rgb	c;
 }			t_textures;
 
+typedef struct s_player {
+	t_v2	pos;
+	t_v2	delta;
+	double	rot;
+}		t_player;
+
 typedef struct s_vars {
+	t_player	player;
 	t_textures	textures;
 	t_data		textures_img[2];
 	t_coord		size;
@@ -108,8 +115,10 @@ typedef struct s_line {
 
 // int		to_rgb(t_rgb c);
 int		f_loop(t_vars *vars);
+void	render(t_vars *vars);
+void	plot_line(t_vars *vars, t_coord p1, t_coord p2);
 // int		is_in_window(t_coord *point);
-// int		key_hook(int keycode, t_vars *vars);
+int		key_hook(int keycode, t_vars *vars);
 // int		grad_color(t_rgb *c1, t_rgb *c2, float val, t_rgb map_color);
 // int		base_color(t_rgb *c1, t_rgb *c2, float val, t_rgb map_color);
 // int		mouse_hook(int keycode, int x, int y, t_vars *vars);
@@ -120,8 +129,8 @@ void	esc(t_vars *vars, int err);
 // void	exit_lst(t_list **lst);
 // void	next_color(t_vars *vars);
 // void	color(t_rgb *c, int r, int g, int b);
-void	coord(t_coord *p, int x, int y, int z);
-void	plot_line(t_vars *vars, t_coord p1, t_coord p2);
+t_coord	coord(t_coord *p, int x, int y, int z);
+
 void	pixel_put(t_data *data, int x, int y, int color);
 // float	deg_to_rad(int d);
 // t_rgb	cycle_color(t_rgb color);
