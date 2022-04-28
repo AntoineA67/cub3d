@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/28 15:50:39 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/28 15:52:13 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@ typedef struct s_data {
 	int		endian;
 }			t_data;
 
-typedef struct s_v2 {
+typedef struct s_vector2 {
 	double	x;
 	double	y;
-}			t_v2;
+}			t_vector2;
 
 typedef struct s_textures {
 	char	*no;
@@ -62,8 +62,8 @@ typedef struct s_textures {
 }			t_textures;
 
 typedef struct s_player {
-	t_v2	pos;
-	t_v2	delta;
+	t_vector2	pos;
+	t_vector2	delta;
 	double	rot;
 }		t_player;
 
@@ -76,20 +76,19 @@ typedef struct s_vars {
 	void		*mlx;
 	void		*win;
 	char		*map;
-	t_v2		pos;
-	t_v2		dir;
-	int			rays_number;
-	t_v2		plane;
-	t_v2		*plane_rays;
-	t_v2		camera;
+	t_vector2		pos;
+	t_vector2		dir;
+	t_vector2		plane;
+	t_vector2		*plane_rays;
+	t_vector2		camera;
 }			t_vars;
 
 typedef struct s_ray {
 	double			camera_x;
-	t_v2			ray_dir;
+	t_vector2			ray_dir;
 	t_coord			map_pos;
-	t_v2			side_dist;
-	t_v2			delta_dist;
+	t_vector2			side_dist;
+	t_vector2			delta_dist;
 	double			perp_wall_dist;
 	t_coord			step;
 	double			tex_pos;
@@ -100,7 +99,7 @@ typedef struct s_ray {
 	int				draw_end;
 	double			h;
 	int				pitch;
-	t_v2			wall;
+	t_vector2			wall;
 	t_coord			tex;
 	unsigned int	color;
 }		t_ray;
