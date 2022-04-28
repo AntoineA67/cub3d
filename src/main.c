@@ -6,11 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2022/04/28 15:55:33 by qroussea         ###   ########lyon.fr   */
-=======
-/*   Updated: 2022/04/28 15:54:45 by arangoni         ###   ########.fr       */
->>>>>>> b00a5d9d1cc273c357697b2a94b0c9fff24b8b7d
+/*   Updated: 2022/04/28 15:58:27 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,27 +209,6 @@ void	draw_direction(t_vars *vars)
 	p2.y = (vars->player.pos.y+ vars->player.delta.y) * 10;
 	printf("%d %d	%d %d\n", p1.x, p1.y, p2.x, p2.y);
 	plot_line(vars, p1, p2);
-}
-
-void	show_player(t_vars *vars)
-{
-	(void)vars;
-	int	i;
-	int	j;
-	int	size;
-
-	size = 10;
-	i = -size;
-	while (++i < size)
-	{
-		j = -size;
-		while (++j < size)
-		{
-			pixel_put(&vars->img, i + vars->player.pos.x * 10,
-					j + vars->player.pos.y * 10, 0xffffff);
-		}
-	}
-	draw_direction(vars);
 }
 
 void	calculate_plane_points(t_vars *vars)

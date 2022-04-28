@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/28 15:54:46 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/28 16:00:28 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,16 +68,17 @@ typedef struct s_player {
 }		t_player;
 
 typedef struct s_vars {
-	t_player	player;
-	t_textures	textures;
-	t_data		textures_img[2];
-	t_coord		size;
-	t_data		img;
-	void		*mlx;
-	void		*win;
-	char		*map;
-	int 		rays;
-	int			render_dist;
+	int				rays_number;
+	t_player		player;
+	t_textures		textures;
+	t_data			textures_img[2];
+	t_coord			size;
+	t_data			img;
+	void			*mlx;
+	void			*win;
+	char			*map;
+	int 			rays;
+	int				render_dist;
 	t_vector2		pos;
 	t_vector2		dir;
 	t_vector2		plane;
@@ -117,6 +118,9 @@ typedef struct s_line {
 }		t_line;
 
 // int		to_rgb(t_rgb c);
+void	show_player(t_vars *vars);
+void	draw_direction(t_vars *vars);
+void	calculate_plane_points(t_vars *vars);
 int		f_loop(t_vars *vars);
 void	render(t_vars *vars);
 void	plot_line(t_vars *vars, t_coord p1, t_coord p2);
