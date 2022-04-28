@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/27 19:19:24 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/28 15:28:27 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@ typedef struct s_data {
 	int		endian;
 }			t_data;
 
-typedef struct s_v2 {
+typedef struct s_vector2 {
 	double	x;
 	double	y;
-}			t_v2;
+}			t_vector2;
 
 typedef struct s_textures {
 	char	*no;
