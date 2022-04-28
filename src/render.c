@@ -3,25 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/28 15:54:49 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/28 16:00:50 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
-
-void	project_rays(t_vars *vars)
-{
-	int	i;
-
-	i = -1;
-	while (++i < vars->rays_number)
-	{
-		
-	}
-}
 
 void	draw_2d_map(t_vars *vars)
 {
@@ -47,7 +36,6 @@ void	render(t_vars *vars)
 	show_player(vars);
 	plot_line(vars, coord(&p1, 0, 0, 0), coord(&p2, 100, 200, 0));
 	calculate_plane_points(vars);
-	draw_2d_map(vars);
 	//project_rays(vars, rays);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
 }

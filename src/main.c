@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2022/04/28 15:55:33 by qroussea         ###   ########lyon.fr   */
-=======
-/*   Updated: 2022/04/28 15:54:45 by arangoni         ###   ########.fr       */
->>>>>>> b00a5d9d1cc273c357697b2a94b0c9fff24b8b7d
+/*   Updated: 2022/04/28 16:00:17 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,6 +237,9 @@ void	calculate_plane_points(t_vars *vars)
 	t_vector2	perp;
 
 	perp = vars->player.pos;
+	perp.x += cos(vars->player.rot);
+	perp.y += sin(vars->player.rot);
+	pixel_put(&vars->img, perp.x, perp.y, 0x0000ff);
 }
 
 int	main(int argc, char **argv)
