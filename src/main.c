@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2022/04/28 15:55:33 by qroussea         ###   ########lyon.fr   */
+=======
+/*   Updated: 2022/04/28 15:54:45 by arangoni         ###   ########.fr       */
+>>>>>>> b00a5d9d1cc273c357697b2a94b0c9fff24b8b7d
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,36 +241,6 @@ void	calculate_plane_points(t_vars *vars)
 	t_vector2	perp;
 
 	perp = vars->player.pos;
-}
-
-void	draw_2d_map(t_vars *vars)
-{
-	int	x;
-	int	y;
-
-	y = -1;
-	while (++y < vars->size.y)
-	{
-		x = -1;
-		while (++x < vars->size.x)
-			pixel_put(&vars->img, x * 10, y * 10, 0xffffff - vars->map[y * vars->size.x + x] * 256);
-	}
-}
-
-void	render(t_vars *vars)
-{
-	// t_coord	p1;
-	// t_coord	p2;
-	
-	ft_int_memset(vars->img.addr, 0x1D1443,
-		vars->img.line_length * 1080 / 4);
-	show_player(vars);
-	plot_line(vars, coord(&p1, 0, 0, 0), coord(&p2, 100, 200, 0));
-	calculate_plane_points(vars);
-	draw_2d_map(vars);
-	// plot_line(vars, coord(&p1, 0, 0, 0), coord(&p2, 100, 200, 0));
-	//project_rays(vars, rays);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
 }
 
 int	main(int argc, char **argv)

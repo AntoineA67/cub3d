@@ -4,7 +4,7 @@ OBJDIR		= obj/
 INCDIR		= inc/
 VPATH		= src/
 INC			= $(addprefix ${INCDIR}, cub3D.h)
-SRC			= main.c utils.c parse.c l_pts.c key_hooks.c plot.c
+SRC			= main.c utils.c parse.c l_pts.c key_hooks.c plot.c render.c
 OBJ			= $(addprefix ${OBJDIR}, $(SRC:.c=.o))
 LIBRARY		= -L libft -lft -L mlx2020 -lmlx -lm
 LIB_FILE	= libft/libft.a libmlx.dylib
