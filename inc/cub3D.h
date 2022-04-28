@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/28 15:52:13 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/28 15:54:46 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ typedef struct s_vars {
 	void		*mlx;
 	void		*win;
 	char		*map;
+	int 		rays;
+	int			render_dist;
 	t_vector2		pos;
 	t_vector2		dir;
 	t_vector2		plane;
