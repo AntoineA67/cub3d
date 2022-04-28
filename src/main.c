@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/28 15:51:59 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/28 15:54:45 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,56 +232,11 @@ void	show_player(t_vars *vars)
 	draw_direction(vars);
 }
 
-<<<<<<< HEAD
 void	calculate_plane_points(t_vars *vars)
 {
 	t_vector2	perp;
 
 	perp
-=======
-// void	project_rays(t_vars *vars)
-// {
-// 	int	i;
-
-// 	i = -1;
-// 	while (++i < vars->rays_number)
-// 	{
-		
-// 	}
-// }
-
-void	draw_2d_map(t_vars *vars)
-{
-	int	x;
-	int	y;
-
-	y = -1;
-	while (++y < vars->size.y)
-	{
-		x = -1;
-		while (++x < vars->size.x)
-			pixel_put(&vars->img, x * 10, y * 10, 0xffffff - vars->map[y * vars->size.x + x] * 256);
-	}
->>>>>>> d1718299cf07f98dd4e7a2f387798711ee1b22a8
-}
-
-void	render(t_vars *vars)
-{
-	// t_coord	p1;
-	// t_coord	p2;
-	
-	ft_int_memset(vars->img.addr, 0x1D1443,
-		vars->img.line_length * 1080 / 4);
-	show_player(vars);
-<<<<<<< HEAD
-	plot_line(vars, coord(&p1, 0, 0, 0), coord(&p2, 100, 200, 0));
-	calculate_plane_points(vars);
-=======
-	draw_2d_map(vars);
-	// plot_line(vars, coord(&p1, 0, 0, 0), coord(&p2, 100, 200, 0));
-	//project_rays(vars, rays);
->>>>>>> d1718299cf07f98dd4e7a2f387798711ee1b22a8
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
 }
 
 int	main(int argc, char **argv)
