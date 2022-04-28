@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/27 19:21:12 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/28 15:50:14 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,6 +232,13 @@ void	show_player(t_vars *vars)
 	draw_direction(vars);
 }
 
+void	calculate_plane_points(t_vars *vars)
+{
+	t_vector2	perp;
+
+	perp
+}
+
 void	render(t_vars *vars)
 {
 	t_coord	p1;
@@ -241,6 +248,7 @@ void	render(t_vars *vars)
 		vars->img.line_length * 1080 / 4);
 	show_player(vars);
 	plot_line(vars, coord(&p1, 0, 0, 0), coord(&p2, 100, 200, 0));
+	calculate_plane_points(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
 }
 
