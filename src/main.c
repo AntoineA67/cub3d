@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/28 15:58:27 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/28 16:02:17 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,6 +216,9 @@ void	calculate_plane_points(t_vars *vars)
 	t_vector2	perp;
 
 	perp = vars->player.pos;
+	perp.x += cos(vars->player.rot);
+	perp.y += sin(vars->player.rot);
+	pixel_put(&vars->img, perp.x, perp.y, 0x0000ff);
 }
 
 int	main(int argc, char **argv)

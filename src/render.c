@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/28 16:01:05 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/28 16:02:05 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ void	render(t_vars *vars)
 	show_player(vars);
 	// plot_line(vars, coord(&p1, 0, 0, 0), coord(&p2, 100, 200, 0));
 	calculate_plane_points(vars);
-	draw_2d_map(vars);
 	//project_rays(vars, rays);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
 }
