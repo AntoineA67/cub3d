@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/28 15:28:27 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/28 15:49:06 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct s_vars {
 	t_v2		pos;
 	t_v2		dir;
 	t_v2		plane;
+	t_v2		*plane_rays;
 	t_v2		camera;
 }			t_vars;
 
