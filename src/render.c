@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 17:13:18 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/29 17:44:38 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,9 @@ void	project_rays(t_vars *vars)
 	int			mx;
 	int			my;
 	int			mp;
+	int			size;
 	double		ra;
+	double		ra2;
 	double		aTan;
 	double		nTan;
 	double		ry;
@@ -48,10 +50,9 @@ void	project_rays(t_vars *vars)
 	double		yo;
 	double		xo;
 	double		end;
-	int			size;
+	double		min_dist;
 	t_vector2	disV;
 	t_vector2	disH;
-	double		min_dist;
 
 	size = 64;
 	i = -1;
@@ -59,15 +60,15 @@ void	project_rays(t_vars *vars)
 	end = fmod(vars->player.rot + M_PI_4 + (M_PI * 2) , M_PI * 2);
 	if (ra > end)
 		end += (M_PI * 2);
-	printf("Start:%f|End:%f\n", ra, end);
+	// printf("Start:%f|End:%f\n", ra, end);
 	while (ra < end)
 	{
+		i++;
 		disV.x = 1e30;
 		disV.y = 1e30;
 		disH.x = 1e30;
 		disH.y = 1e30;
 		dof = 0;
-		double ra2;
 		ra2 =  fmod(ra , M_PI * 2);
 		aTan = -1.0/tan(ra2);
 		if (ra2 > M_PI) //looking down
@@ -157,18 +158,21 @@ void	project_rays(t_vars *vars)
 		min_dist = dist(vars->player.pos.x, vars->player.pos.y, rx, ry, ra2);
 		double ca = vars->player.rot - ra2;
 		if (ca < 0)
-				ca += M_PI * 2;
+			ca += M_PI * 2;
 		if (ca > M_PI * 2)
 			ca -= M_PI * 2;
 		min_dist *= cos(ca);
-		while (++i % 10 != 9)
-		{
-			plot_line(vars,
+		// while (++i % 10 != 9)
+		// {
+		// 	plot_line(vars,
+		// 		gen_coord(i, 540 - (int)(10000 / min_dist), 0),
+		// 		gen_coord(i, 540 + (int)(10000 / min_dist), 0));
+		// }
+		plot_line(vars,
 				gen_coord(i, 540 - (int)(10000 / min_dist), 0),
 				gen_coord(i, 540 + (int)(10000 / min_dist), 0));
-		}
-		printf("%.2f %d\n", min_dist, (int)(10000 / min_dist));
-		ra += .01;
+		// printf("%.2f %d\n", min_dist, (int)(10000 / min_dist));
+		ra += M_PI_2 / vars->win_size.x;
 	}
 }
 
@@ -221,8 +225,10 @@ void	draw_2d_map(t_vars *vars, int size)
 
 void	render(t_vars *vars)
 {
-	ft_int_memset(vars->img.addr, 0x1D1443,
-		vars->img.line_length * 1080 / 4);
+	ft_int_memset(vars->img.addr, to_rgb(vars->textures.c, 0),
+		vars->img.line_length * vars->win_size.y / 8);
+	ft_int_memset(vars->img.addr + vars->img.line_length * vars->win_size.y / 2
+		, to_rgb(vars->textures.f, 0), vars->img.line_length * vars->win_size.y / 8);
 	draw_2d_map(vars, 64);
 	project_rays(vars);
 	show_player(vars, 64);

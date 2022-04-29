@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 17:10:39 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/29 18:00:52 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,25 @@ int	init_player(t_vars *vars)
 	return (0);
 }
 
+void	init_imgs(t_vars *vars)
+{
+	mlx_xpm_file_to_image(vars->mlx, vars->textures.no, &vars->textures.img_no.size.x, &vars->textures.img_no.size.y);
+}
+
 static void	fill_vars(t_vars *vars, int fd)
 {
 	t_data	img;
 
+	vars->win_size.x = 1920;
+	vars->win_size.y = 1080;
 	vars->map = parse(fd, vars);
 	if (init_player(vars))
 		return ; //NO PLAYER IN MAP
+	init_imgs(vars);
 	vars->mlx = mlx_init();
 	vars->plane.x = 0.0;
 	vars->plane.y = 0.66;
-	img.img = mlx_new_image(vars->mlx, 1920, 1080);
+	img.img = mlx_new_image(vars->mlx, vars->win_size.x, vars->win_size.y);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel,
 	 		&img.line_length, &img.endian);
 	if (!img.addr)
@@ -138,9 +146,10 @@ int	main(int argc, char **argv)
 	vars.plane_rays = ft_calloc(sizeof(t_vector2), vars.rays_number);
 	vars.render_dist = 30;
 	vars.fps_cap = 144;
-	vars.win = mlx_new_window(vars.mlx, 1920,
-			1080, extract_name(argv[1]));
-	printf("EA: %s\nNO: %s\nSO: %s\nWE: %s\n", vars.textures.ea, vars.textures.no, vars.textures.so, vars.textures.we);
+	vars.win = mlx_new_window(vars.mlx, vars.win_size.x,
+			vars.win_size.y, extract_name(argv[1]));
+	printf("EA: %s\nNO: %s\nSO: %s\nWE: %s\nF: %#x\nC: %#x\n",
+		vars.textures.ea, vars.textures.no, vars.textures.so, vars.textures.we, to_rgb(vars.textures.f, 0), to_rgb(vars.textures.c, 0));
 	// raycasting(&vars);
 	// if (!vars.win)
 	// 	esc(&vars, 1);

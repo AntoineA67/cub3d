@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/28 16:47:48 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/29 17:38:34 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,21 @@ int	str_to_rgb(t_rgb *col, char *str)
 	char	**splitted;
 	int		i;
 
+	// printf("%s\n", str);
 	splitted = ft_split(str, ',');
 	i = -1;
 	while (splitted[++i])
 	{
-		if (err_format_rgb(splitted[i]) || i > 2)
-			return 1; //TODO GESTION ERREUR	
+		// if (err_format_rgb(splitted[i]) || i > 2)
+		// {
+		// 	printf("error\n");
+		// 	return 1; //TODO GESTION ERREUR	
+		// }
 	}
 	col->r = ft_atoi(splitted[0]);
 	col->g = ft_atoi(splitted[1]);
 	col->b = ft_atoi(splitted[2]);
+	// printf("%d %d %d\n", col->r, col->g, col->b);
 	return (0);
 }
 

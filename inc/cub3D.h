@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 14:58:49 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/29 17:59:48 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <math.h>
 # include <sys/time.h>
 # include "../libft/libft.h"
-# include "../mlx2020/mlx.h"
+# include "../mlx_opengl/mlx.h"
 
 typedef struct s_rgb
 {
@@ -46,6 +46,7 @@ typedef struct s_data {
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+	t_coord	size;
 }			t_data;
 
 typedef struct s_vector2 {
@@ -58,6 +59,10 @@ typedef struct s_textures {
 	char	*so;
 	char	*we;
 	char	*ea;
+	t_data	img_no;
+	t_data	img_so;
+	t_data	img_we;
+	t_data	img_ea;
 	t_rgb	f;
 	t_rgb	c;
 }			t_textures;
@@ -70,9 +75,10 @@ typedef struct s_player {
 
 typedef struct s_vars {
 	int				rays_number;
+	t_coord			win_size;
 	t_player		player;
 	t_textures		textures;
-	t_data			textures_img[2];
+	t_data			textures_img[4];
 	t_coord			size;
 	t_data			img;
 	void			*mlx;
