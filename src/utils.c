@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:24:04 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 18:45:43 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/29 19:23:06 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ t_coord	gen_coord(int x, int y, int z, t_rgb c)
 	p.c.r = c.r;
 	p.c.g = c.g;
 	p.c.b = c.b;
+	p.c.v = c.v;
 	return (p);
 }
 

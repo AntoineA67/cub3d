@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 19:45:52 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 19:18:38 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/29 19:23:45 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_rgb	gen_color(int r, int g, int b, int v)
 unsigned int	to_rgb(t_rgb c, unsigned char grey)
 {
 	if (grey)
-		return (0x00 << 24 | grey << 16 | grey << 8 | grey);
+		return (c.v << 24 | grey << 16 | grey << 8 | grey);
 	return (c.v << 24 | c.r << 16 | c.g << 8 | c.b);
 }
 
