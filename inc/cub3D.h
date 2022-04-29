@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 18:30:00 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/29 18:48:25 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,8 +130,8 @@ unsigned int	to_rgb(t_rgb c, unsigned char grey);
 void	show_player(t_vars *vars, int size);
 void	draw_direction(t_vars *vars, int ratio);
 void	calculate_plane_points(t_vars *vars);
-void	draw_square(t_vars *vars, t_coord p, unsigned int color);
-void	draw_square_center(t_vars *vars, t_coord p, unsigned int color);
+void	draw_square(t_vars *vars, t_coord p);
+void	draw_square_center(t_vars *vars, t_coord p);
 int		f_loop(t_vars *vars);
 void	render(t_vars *vars);
 void	plot_line(t_vars *vars, t_coord p1, t_coord p2);
@@ -147,7 +147,7 @@ void	esc(t_vars *vars, int err);
 // void	exit_lst(t_list **lst);
 // void	next_color(t_vars *vars);
 // void	color(t_rgb *c, int r, int g, int b);
-t_coord	gen_coord(int x, int y, int z);
+t_coord	gen_coord(int x, int y, int z, t_rgb c);
 t_rgb	gen_color(int r, int g, int b);
 t_coord	coord(t_coord *p, int x, int y, int z);
 

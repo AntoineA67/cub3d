@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:03:35 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/27 19:13:19 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/29 18:42:20 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	plot_line(t_vars *vars, t_coord p1, t_coord p2)
 	i = 0;
 	while (++i)
 	{
-		pixel_put(&(vars->img), p1.x, p1.y, 0xffffff);
+		pixel_put(&(vars->img), p1.x, p1.y, to_rgb(p1.c, 0));
 		l.e_d = 2 * l.err;
 		if (l.e_d >= l.dy)
 		{
@@ -83,3 +83,5 @@ void	plot_line(t_vars *vars, t_coord p1, t_coord p2)
 		}
 	}
 }
+
+// void	line_texture(t_vars *vars, int x, )
