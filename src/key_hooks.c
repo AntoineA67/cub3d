@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_hooks.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 18:28:27 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/29 18:56:48 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,14 @@ static void	move_player(t_vars *vars, int dir)
 		{
 			vars->player.pos.x = newposX;
 			vars->player.pos.y = newposY;
-	if (vars->map[((int)newposX>>6) + ((int)newposY>>6) * vars->size.x - 1] == 'O')
-		vars->map[((int)newposX>>6) + ((int)newposY>>6) * vars->size.x - 1] = 'C';
-	else if (vars->map[((int)newposX>>6) + ((int)newposY>>6) * vars->size.x + 1] == 'O')
-		vars->map[((int)newposX>>6) + ((int)newposY>>6) * vars->size.x + 1] = 'C';
-	else if (vars->map[((int)newposX>>6) + (((int)newposY>>6) + 1) * vars->size.x] == 'O')
-		vars->map[((int)newposX>>6) + (((int)newposY>>6) + 1) * vars->size.x] = 'C';
-	else if (vars->map[((int)newposX>>6) + (((int)newposY>>6) - 1) * vars->size.x] == 'O')
-		vars->map[((int)newposX>>6) + (((int)newposY>>6) - 1) * vars->size.x] = 'C';
+			if (vars->map[((int)newposX>>6) + ((int)newposY>>6) * vars->size.x - 1] == 'O')
+				vars->map[((int)newposX>>6) + ((int)newposY>>6) * vars->size.x - 1] = 'C';
+			else if (vars->map[((int)newposX>>6) + ((int)newposY>>6) * vars->size.x + 1] == 'O')
+				vars->map[((int)newposX>>6) + ((int)newposY>>6) * vars->size.x + 1] = 'C';
+			else if (vars->map[((int)newposX>>6) + (((int)newposY>>6) + 1) * vars->size.x] == 'O')
+				vars->map[((int)newposX>>6) + (((int)newposY>>6) + 1) * vars->size.x] = 'C';
+			else if (vars->map[((int)newposX>>6) + (((int)newposY>>6) - 1) * vars->size.x] == 'O')
+				vars->map[((int)newposX>>6) + (((int)newposY>>6) - 1) * vars->size.x] = 'C';
 		}
 	}
 	// printf("AAA: %.2f %.2f - %d %d - %c %d\n", newposX, newposY,
