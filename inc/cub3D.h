@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 14:56:23 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/29 14:58:49 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_vars {
 	long			n1;
 	long			n2;
 	t_vector2		plane;
+	t_vector2		*plane_rays;
 	t_vector2		camera;
 }			t_vars;
 
