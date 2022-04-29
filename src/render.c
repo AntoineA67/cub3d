@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2022/04/29 18:00:06 by qroussea         ###   ########lyon.fr   */
-=======
-/*   Updated: 2022/04/29 17:13:18 by arangoni         ###   ########.fr       */
->>>>>>> cd33846f46b96b7631f3aaeab51e1ffb155c2dc1
+/*   Updated: 2022/04/29 18:15:01 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +108,7 @@ void	project_rays(t_vars *vars)
 			mx = (int)rx>>6;
 			my = (int)ry>>6;
 			mp = my * vars->size.x + mx;
-			if (mp < vars->size.x * vars->size.y && mp >= 0 && vars->map[mp] == '1')
+			if (mp < vars->size.x * vars->size.y && mp >= 0 && (vars->map[mp] == '1' || vars->map[mp] == 'O'))
 				dof = size;
 			else
 			{
@@ -151,7 +147,7 @@ void	project_rays(t_vars *vars)
 			mx = (int)rx>>6;
 			my = (int)ry>>6;
 			mp = my * vars->size.x + mx;
-			if (mp < vars->size.x * vars->size.y && mp >= 0 && vars->map[mp] == '1')
+			if (mp < vars->size.x * vars->size.y && mp >= 0 && (vars->map[mp] == '1' || vars->map[mp] == 'O'))
 				dof = size;
 			else
 			{
@@ -168,9 +164,10 @@ void	project_rays(t_vars *vars)
 			rx = disV.x;
 			ry = disV.y;
 		}
-		plot_line(vars,
-				gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0),
-				gen_coord(rx + size, size + ry, 0));
+		if (ra2 == fmod(vars->player.rot - M_PI_4 + (M_PI * 2) , M_PI * 2))
+			plot_line(vars,
+					gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0),
+					gen_coord(rx + size, size + ry, 0xff));
 		min_dist = dist(vars->player.pos.x, vars->player.pos.y, rx, ry, ra2);
 		double ca = vars->player.rot - ra2;
 		if (ca < 0)
@@ -187,6 +184,9 @@ void	project_rays(t_vars *vars)
 		printf("%.2f %d\n", min_dist, (int)(10000 / min_dist));
 		ra += .01;
 	}
+			plot_line(vars,
+					gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0),
+					gen_coord(rx + size, size + ry, 0xff));
 }
 
 void	draw_square_center(t_vars *vars, t_coord p, unsigned int color)
@@ -239,6 +239,9 @@ void	draw_2d_map(t_vars *vars, int size)
 			else if (vars->map[pos] == '1')
 				draw_square(vars, gen_coord(x * size + size, y * size + size, size),
 					to_rgb(gen_color(0, 0, 0), 150));
+			else if (vars->map[pos] == 'O')
+				draw_square(vars, gen_coord(x * size + size, y * size + size, size),
+					to_rgb(gen_color(0, 0, 0), 200));
 		}
 	}
 		//printf("\n");

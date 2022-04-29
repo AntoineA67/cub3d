@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 16:52:23 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/29 18:03:01 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <math.h>
 # include <sys/time.h>
 # include "../libft/libft.h"
-# include "../mlx2020/mlx.h"
+# include "../mlx_opengl/mlx.h"
 
 typedef struct s_rgb
 {
