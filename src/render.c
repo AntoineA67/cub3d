@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 14:15:31 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/29 14:56:35 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,7 +231,6 @@ void	render(t_vars *vars)
 	ft_int_memset(vars->img.addr, 0x1D1443,
 		vars->img.line_length * 1080 / 4);
 	// plot_line(vars, coord(&p1, 0, 0, 0), coord(&p2, 100, 200, 0));
-	calculate_plane_points(vars);
 	draw_2d_map(vars, 64);
 	project_rays(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);

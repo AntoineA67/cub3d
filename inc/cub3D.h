@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 14:08:43 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/29 14:56:23 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <math.h>
+# include <sys/time.h>
 # include "../libft/libft.h"
 # include "../mlx2020/mlx.h"
 
@@ -79,8 +80,10 @@ typedef struct s_vars {
 	char			*map;
 	int 			rays;
 	int				render_dist;
+	int				fps_cap;
+	long			n1;
+	long			n2;
 	t_vector2		plane;
-	t_vector2		*plane_rays;
 	t_vector2		camera;
 }			t_vars;
 

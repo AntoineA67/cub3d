@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 14:14:51 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/29 14:56:15 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,75 +86,33 @@ static int	test_hook(t_vars *vars)
 	return (0);
 }
 
-void	calculate_plane_points(t_vars *vars)
+long	gettime(long initime)
 {
-	t_vector2	perp;
-	perp.x = vars->player.pos.x + (cos(vars->player.rot + M_PI_4) * vars->render_dist);
-	perp.y = vars->player.pos.y + (sin(vars->player.rot + M_PI_4) * vars->render_dist);
-	t_coord		c;
-	t_coord		c2;
+	long			res;
+	struct timeval	time;
 
-	c.x = vars->player.pos.x * 10;
-	c.y = vars->player.pos.y * 10;
-	c2.x = perp.x * 10;
-	c2.y = perp.y * 10;
-	plot_line(vars, c, c2);
-	perp.x = vars->player.pos.x + (cos(vars->player.rot - M_PI_4) * vars->render_dist);
-	perp.y = vars->player.pos.y + (sin(vars->player.rot - M_PI_4) * vars->render_dist);
-	c2.x = perp.x * 10;
-	c2.y = perp.y * 10;
-	plot_line(vars, c, c2);
-	double pas = M_PI_2 / vars->rays_number;
-for (int i = 0; i <  vars->rays_number; i++)
-{
-	perp.x = vars->player.pos.x + (cos((vars->player.rot - M_PI_4 )+ (pas * i)) * vars->render_dist);
-	perp.y = vars->player.pos.y + (sin((vars->player.rot - M_PI_4) + (pas * i)) * vars->render_dist);
-	c2.x = perp.x * 10;
-	c2.y = perp.y * 10;
-	plot_line(vars, c, c2);
-}
-
-	// t_vector2	perp;
-	// t_coord		c;
-	// t_coord		c2;
-	// double		m;
-	// double		b;
-
-	// perp.x = vars->player.pos.x + (cos(vars->player.rot) * vars->render_dist);
-	// perp.y = vars->player.pos.y + (sin(vars->player.rot) * vars->render_dist);
-	// m = -1 * ((perp.x - vars->player.pos.x) / (perp.y - vars->player.pos.y));
-	// b = perp.y - (m * perp.x);
-	// c2.x = vars->player.pos.x * 10;
-	// c2.y = vars->player.pos.y * 10;
-	// for (int i = 0; i < vars->rays_number; i++)
-	// {
-	// 	c.x = vars->player.pos.x - (192.0 / 2.0) + ((192.0 / vars->rays_number) * i);
-	// 	c.y = m * c.x + b;
-	// 	c.x *= 10;
-	// 	c.y *= 10;
-	// 	plot_line(vars, c, c2);
-	// }
+	gettimeofday(&time, NULL);
+	res = time.tv_usec / 1000;
+	res += time.tv_sec * 1000;
+	res -= initime;
+	return (res);
 }
 
 int	frame(void *data)
 {
 	t_vars	*vars;
-	static	int	i;
+	long	temp;
+	char	*fps;
 
-	i++;
-	printf("%d\n", i);
 	vars = (t_vars *)data;
-	render(vars);
-	return (0);
-}
-
-int	framee(void *data)
-{
-	static	int	i;
-
-	(void)data;
-	i++;
-	printf("%d\n", i);
+	if (!vars->fps_cap || !(gettime(vars->n1) % (1000 / vars->fps_cap)))
+	{
+		render(vars);
+		temp = gettime(vars->n1);
+		fps = ft_strjoin("FPS: ", ft_itoa(1000 / (temp - vars->n2)));
+		mlx_string_put(vars->mlx, vars->win, 100, 100, 0xff, fps);
+		vars->n2 = temp;
+	}
 	return (0);
 }
 
@@ -179,6 +137,7 @@ int	main(int argc, char **argv)
 	vars.rays_number = 64;
 	vars.plane_rays = ft_calloc(sizeof(t_vector2), vars.rays_number);
 	vars.render_dist = 30;
+	vars.fps_cap = 30;
 	vars.win = mlx_new_window(vars.mlx, 1920,
 			1080, extract_name(argv[1]));
 	printf("EA: %s\nNO: %s\nSO: %s\nWE: %s\n", vars.textures.ea, vars.textures.no, vars.textures.so, vars.textures.we);
@@ -187,10 +146,10 @@ int	main(int argc, char **argv)
 	// 	esc(&vars, 1);
 	mlx_hook(vars.win, 2, 0, key_hook, &vars);
 	mlx_hook(vars.win, 17, 0, test_hook, &vars);
-	mlx_loop_hook(vars.win, frame, &vars);
-	mlx_loop_hook(vars.win, framee, &vars);
+	mlx_loop_hook(vars.mlx, frame, &vars);
 	// mlx_mouse_hook(vars.win, mouse_hook, &vars);
 	//project(&vars);
 	// mlx_loop_hook(vars.mlx, raycasting, &vars);
+	vars.n1 = gettime(0);
 	mlx_loop(vars.mlx);
 }
