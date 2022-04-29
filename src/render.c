@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2022/04/29 18:00:06 by qroussea         ###   ########lyon.fr   */
+=======
+/*   Updated: 2022/04/29 17:13:18 by arangoni         ###   ########.fr       */
+>>>>>>> cd33846f46b96b7631f3aaeab51e1ffb155c2dc1
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +55,7 @@ void	project_rays(t_vars *vars)
 	int			size;
 	t_vector2	disV;
 	t_vector2	disH;
+	double		min_dist;
 
 	size = 64;
 	i = -1;
@@ -166,7 +171,21 @@ void	project_rays(t_vars *vars)
 		plot_line(vars,
 				gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0),
 				gen_coord(rx + size, size + ry, 0));
-		ra += .1;
+		min_dist = dist(vars->player.pos.x, vars->player.pos.y, rx, ry, ra2);
+		double ca = vars->player.rot - ra2;
+		if (ca < 0)
+				ca += M_PI * 2;
+		if (ca > M_PI * 2)
+			ca -= M_PI * 2;
+		min_dist *= cos(ca);
+		while (++i % 10 != 9)
+		{
+			plot_line(vars,
+				gen_coord(i, 540 - (int)(10000 / min_dist), 0),
+				gen_coord(i, 540 + (int)(10000 / min_dist), 0));
+		}
+		printf("%.2f %d\n", min_dist, (int)(10000 / min_dist));
+		ra += .01;
 	}
 }
 
@@ -227,11 +246,8 @@ void	draw_2d_map(t_vars *vars, int size)
 
 void	render(t_vars *vars)
 {
-	// t_coord	p1;
-	// t_coord	p2;
 	ft_int_memset(vars->img.addr, 0x1D1443,
 		vars->img.line_length * 1080 / 4);
-	// plot_line(vars, coord(&p1, 0, 0, 0), coord(&p2, 100, 200, 0));
 	draw_2d_map(vars, 64);
 	project_rays(vars);
 	show_player(vars, 64);

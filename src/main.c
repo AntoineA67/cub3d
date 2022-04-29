@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 17:46:57 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/29 18:02:11 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ int	main(int argc, char **argv)
 	vars.rays_number = 64;
 	vars.plane_rays = ft_calloc(sizeof(t_vector2), vars.rays_number);
 	vars.render_dist = 30;
-	vars.fps_cap = 30;
+	vars.fps_cap = 144;
 	vars.win = mlx_new_window(vars.mlx, 1920,
 			1080, extract_name(argv[1]));
 	printf("EA: %s\nNO: %s\nSO: %s\nWE: %s\n", vars.textures.ea, vars.textures.no, vars.textures.so, vars.textures.we);
