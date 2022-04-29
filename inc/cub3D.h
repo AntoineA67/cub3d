@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/28 18:20:21 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/29 12:09:05 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ void	show_player(t_vars *vars, int size);
 void	draw_direction(t_vars *vars, int ratio);
 void	calculate_plane_points(t_vars *vars);
 void	draw_square(t_vars *vars, t_coord p, unsigned int color);
+void	draw_square_center(t_vars *vars, t_coord p, unsigned int color);
 int		f_loop(t_vars *vars);
 void	render(t_vars *vars);
 void	plot_line(t_vars *vars, t_coord p1, t_coord p2);

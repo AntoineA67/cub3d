@@ -6,33 +6,24 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 11:52:26 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/29 12:52:55 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
 
 void	show_player(t_vars *vars, int size)
-{	
-	// t_coord	p1;
-// 	t_coord	p2;
-// 	int		x;
-// 	int		y;
-
-// 	x = 10;
-	(void)size;
-// 	y = 1080 - vars->size.y * size - 10;
-	printf("%d\n", 1080 - (vars->size.y * size));
-	draw_square(vars, gen_coord(vars->player.pos.x + size,
-		1080 - vars->size.y * size + vars->player.pos.y, 20), to_rgb(gen_color(255, 255, 0), 0));
+{
+	draw_square_center(vars, gen_coord(vars->player.pos.x + size,
+		size + vars->player.pos.y, 20), to_rgb(gen_color(255, 255, 0), 0));
 	// p1.x = ((int)vars->player.pos.x>>6) * size + x;
 	// p1.y = ((int)vars->player.pos.y>>6) * size + y;
 	// p2.x = (((int)vars->player.pos.x>>6) + vars->player.delta.x) * size + x;
 	// p2.y = (((int)vars->player.pos.y>>6) + vars->player.delta.y) * size + y;
 	plot_line(vars,
-		gen_coord(vars->player.pos.x + size, 1080 - vars->size.y * size + vars->player.pos.y, 0),
-		gen_coord(vars->player.pos.x + vars->player.delta.x * 10 + size,
-			1080 - vars->size.y * size + vars->player.pos.y + vars->player.delta.y * 10, 0));
+		gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0),
+		gen_coord(vars->player.pos.x + vars->player.delta.x * 10.0 + size,
+			size + vars->player.pos.y + vars->player.delta.y * 10.0, 0));
 	// printf("%d %d	%d %d\n", p1.x, p1.y, p2.x, p2.y);
 }
 
@@ -43,12 +34,12 @@ void	project_rays(t_vars *vars)
 	int		mx;
 	int		my;
 	int		mp;
-	float	ra;
-	float	aTan;
-	float	ry;
-	float	rx;
-	float	yo;
-	float	xo;
+	double	ra;
+	double	aTan;
+	double	ry;
+	double	rx;
+	double	yo;
+	double	xo;
 	int		size;
 
 	size = 64;
@@ -60,14 +51,14 @@ void	project_rays(t_vars *vars)
 		aTan = -1/tan(ra);
 		if (ra > M_PI) //looking down
 		{
-			ry = ((int)vars->player.pos.y / 64) * 64 - .0001;
+			ry = (((int)vars->player.pos.y>>6)<<6) - .0001;
 			rx = (vars->player.pos.y - ry) * aTan + vars->player.pos.x;
 			yo = -64.0;
 			xo = 64.0 * aTan;
 		}
 		else if (ra < M_PI && ra != 0) //looking up
 		{
-			ry = ((int)vars->player.pos.y / 64) * 64 + 64.0;
+			ry = (((int)vars->player.pos.y>>6)<<6) + 64.0;
 			rx = (vars->player.pos.y - ry) * aTan + vars->player.pos.x;
 			yo = 64.0;
 			xo = -64.0 * aTan;
@@ -80,8 +71,8 @@ void	project_rays(t_vars *vars)
 		}
 		while (dof < 8)
 		{
-			mx = (int)(rx) / 64;
-			my = (int)(ry) / 64;
+			mx = (int)rx>>6;
+			my = (int)ry>>6;
 			mp = my * vars->size.x + mx;
 			printf("mx, my, mp: %d %d, %d\n", mx, my, mp);
 			if (mp < vars->size.x * vars->size.y && vars->map[mp] == '1')
@@ -94,14 +85,13 @@ void	project_rays(t_vars *vars)
 			}
 		}
 	printf("%d HIT: %.2f %.2f	%3d %3d\n", i, rx, ry, (((int)rx>>6)), (((int)ry>>6)));
-	plot_line(vars,
-			gen_coord(vars->player.pos.x + size, 1080 - vars->size.y * size + vars->player.pos.y, 0),
-			gen_coord(rx + size,
-			1080 - vars->size.y * size + ry + size, 0));
+	// plot_line(vars,
+	// 		gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0),
+	// 		gen_coord(rx + size, size + ry + size, 0));
 	}
 }
 
-void	draw_square(t_vars *vars, t_coord p, unsigned int color)
+void	draw_square_center(t_vars *vars, t_coord p, unsigned int color)
 {
 	int	dy;
 	int	dx;
@@ -111,6 +101,21 @@ void	draw_square(t_vars *vars, t_coord p, unsigned int color)
 	{
 		dx = p.x - p.z / 2;
 		while (++dx < p.x + p.z / 2)
+			pixel_put(&vars->img, dx,
+					dy, color);
+	}
+}
+
+void	draw_square(t_vars *vars, t_coord p, unsigned int color)
+{
+	int	dy;
+	int	dx;
+
+	dy = p.y;
+	while (++dy < p.y + p.z)
+	{
+		dx = p.x;
+		while (++dx < p.x + p.z)
 			pixel_put(&vars->img, dx,
 					dy, color);
 	}
@@ -160,7 +165,7 @@ void	draw_2d_map(t_vars *vars, int size)
 	{
 		x = -1;
 		while (++x < vars->size.x)
-			draw_square(vars, gen_coord(x * size + size, y * size + 1080 - vars->size.y * size, size),
+			draw_square(vars, gen_coord(x * size + size, y * size + size, size),
 				to_rgb(gen_color(0, 0, 0), (vars->map[x + y * vars->size.x] > 0) * 150
 					+ (vars->map[x + y * vars->size.x] > 48) * 50
 					+ (vars->map[x + y * vars->size.x] > 49) * 50));
