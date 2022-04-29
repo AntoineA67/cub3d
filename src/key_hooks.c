@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/27 18:59:19 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/29 10:46:27 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ static void	rotate_player(t_vars *vars, int dir)
 	vars->player.rot += dir / 10.0;
 	printf("%.2f\n", vars->player.rot);
 	if (vars->player.rot < 0.0)
-		vars->player.rot += 2.0 * PI;
-	else if (vars->player.rot > 2.0 * PI)
-		vars->player.rot -= 2.0 * PI;
+		vars->player.rot += 2.0 * M_PI;
+	else if (vars->player.rot > 2.0 * M_PI)
+		vars->player.rot -= 2.0 * M_PI;
 	vars->player.delta.x = cos(vars->player.rot) * 5.0;
 	vars->player.delta.y = sin(vars->player.rot) * 5.0;
 }
@@ -98,6 +98,7 @@ int	key_hook(int keycode, t_vars *vars)
 		esc(vars, 0);
 	render(vars);
 	//project(vars);
-	printf("Pos: %.2f %.2f	Rot: %.2f\n", vars->player.pos.x, vars->player.pos.y, vars->player.rot);
+	printf("Pos: %.2f %.2f	Rot: %.2f Delta: %.2f %.2f\n",
+			vars->player.pos.x, vars->player.pos.y, vars->player.rot, vars->player.delta.x, vars->player.delta.y);
 	return (0);
 }

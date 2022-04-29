@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/24 21:04:44 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/28 16:47:48 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ char	*parse(int fd, t_vars *vars)
 {
 	t_list	*lst;
 	t_list	*node;
+	int		len_tmp;
 
 	lst = ft_lstnew(NULL);
 	if (!lst)
@@ -120,8 +121,12 @@ char	*parse(int fd, t_vars *vars)
 	vars->size.y = 0;
 	while (node && node->content)
 	{
-		if ((int)ft_strlen((char *)node->content) > vars->size.x)
-			vars->size.x = ft_strlen((char *)node->content);
+		len_tmp = ft_strlen((char *)node->content);
+		if (((char *)node->content)[len_tmp - 1] == '\n')
+			((char *)node->content)[len_tmp - 1] = 0;
+		len_tmp = ft_strlen((char *)node->content);
+		if (len_tmp > vars->size.x)
+			vars->size.x = len_tmp;
 		vars->size.y++;
 		node = node->next;
 	}

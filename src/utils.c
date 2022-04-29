@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:24:04 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/27 19:18:53 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/28 16:11:15 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,15 @@ t_coord	coord(t_coord *p, int x, int y, int z)
 	p->y = y;
 	p->z = z;
 	return (*p);
+}
+
+t_coord	gen_coord(int x, int y, int z)
+{
+	t_coord p;
+	p.x = x;
+	p.y = y;
+	p.z = z;
+	return (p);
 }
 
 void	pixel_put(t_data *data, int x, int y, int color)
