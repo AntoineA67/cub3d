@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 14:08:29 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/29 14:14:51 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,28 @@ for (int i = 0; i <  vars->rays_number; i++)
 	// }
 }
 
+int	frame(void *data)
+{
+	t_vars	*vars;
+	static	int	i;
+
+	i++;
+	printf("%d\n", i);
+	vars = (t_vars *)data;
+	render(vars);
+	return (0);
+}
+
+int	framee(void *data)
+{
+	static	int	i;
+
+	(void)data;
+	i++;
+	printf("%d\n", i);
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
 	t_vars	vars;
@@ -165,7 +187,8 @@ int	main(int argc, char **argv)
 	// 	esc(&vars, 1);
 	mlx_hook(vars.win, 2, 0, key_hook, &vars);
 	mlx_hook(vars.win, 17, 0, test_hook, &vars);
-	render(&vars);
+	mlx_loop_hook(vars.win, frame, &vars);
+	mlx_loop_hook(vars.win, framee, &vars);
 	// mlx_mouse_hook(vars.win, mouse_hook, &vars);
 	//project(&vars);
 	// mlx_loop_hook(vars.mlx, raycasting, &vars);

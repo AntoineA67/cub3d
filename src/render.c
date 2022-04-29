@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 14:08:16 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/29 14:15:31 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,24 +29,31 @@ void	show_player(t_vars *vars, int size)
 
 void	project_rays(t_vars *vars)
 {
-	int		i;
-	int		dof;
-	int		mx;
-	int		my;
-	int		mp;
-	double	ra;
-	double	aTan;
-	double	ry;
-	double	rx;
-	double	yo;
-	double	xo;
-	int		size;
+	int			i;
+	int			dof;
+	int			mx;
+	int			my;
+	int			mp;
+	double		ra;
+	double		aTan;
+	double		nTan;
+	double		ry;
+	double		rx;
+	double		yo;
+	double		xo;
+	int			size;
+	t_vector2	disV;
+	t_vector2	disH;
 
 	size = 64;
 	i = -1;
-	ra = vars->player.rot;
-	while (++i < 1)
+	ra = 0;
+	while (ra < M_PI * 2.0)
 	{
+		disV.x = 1e30;
+		disV.y = 1e30;
+		disH.x = 1e30;
+		disH.y = 1e30;
 		dof = 0;
 		aTan = -1/tan(ra);
 		if (ra > M_PI) //looking down
@@ -75,7 +82,7 @@ void	project_rays(t_vars *vars)
 			my = (int)ry>>6;
 			mp = my * vars->size.x + mx;
 			printf("mx, my, mp: %d %d, %d\n", mx, my, mp);
-			if (mp < vars->size.x * vars->size.y && vars->map[mp] == '1')
+			if (mp < vars->size.x * vars->size.y && mp > 0 && vars->map[mp] == '1')
 				dof = 8;
 			else
 			{
@@ -84,10 +91,54 @@ void	project_rays(t_vars *vars)
 				dof += 1;
 			}
 		}
-	printf("%d HIT: %.2f %.2f	%3d %3d\n", i, rx, ry, (((int)rx>>6)), (((int)ry>>6)));
-	// plot_line(vars,
-	// 		gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0),
-	// 		gen_coord(rx + size, size + ry + size, 0));
+		disV.x = rx;
+		disV.y = ry;
+		//Horizontal rays
+		dof = 0;
+		nTan = -tan(ra);
+		if (ra > M_PI_2 && ra < M_PI_2 * 3) //looking left
+		{
+			rx = (((int)vars->player.pos.x>>6)<<6) - .0001;
+			ry = (vars->player.pos.x - rx) * nTan + vars->player.pos.y;
+			xo = -64.0;
+			yo = 64.0 * nTan;
+		}
+		else if (ra > M_PI_2 * 3 || ra < M_PI_2) //looking right
+		{
+			rx = (((int)vars->player.pos.x>>6)<<6) + 64.0;
+			ry = (vars->player.pos.x - rx) * nTan + vars->player.pos.y;
+			xo = 64.0;
+			yo = -64.0 * nTan;
+		}
+		else if (ra == M_PI_2 || ra == M_PI_2 * 3)//looking straight left or right
+		{
+			rx = vars->player.pos.x;
+			ry = vars->player.pos.y;
+			dof = 8;
+		}
+		while (dof < 8)
+		{
+			mx = (int)rx>>6;
+			my = (int)ry>>6;
+			mp = my * vars->size.x + mx;
+			printf("mx, my, mp: %d %d, %d\n", mx, my, mp);
+			if (mp < vars->size.x * vars->size.y && mp > 0 && vars->map[mp] == '1')
+				dof = 8;
+			else
+			{
+				rx += xo;
+				ry += yo;
+				dof += 1;
+			}
+		}
+		disH.x = rx;
+		disH.y = ry;
+		// if (sqrt(disH.x * disH.x))
+		printf("%d HIT: %.2f %.2f	%3d %3d\n", i, rx, ry, (((int)rx>>6)), (((int)ry>>6)));
+		plot_line(vars,
+				gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0),
+				gen_coord(rx + size, size + ry, 0));
+		ra += .1;
 	}
 }
 
