@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 14:58:49 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/29 16:52:23 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,10 @@ typedef struct s_vars {
 	void			*mlx;
 	void			*win;
 	char			*map;
-	int 			rays;
+	double 			rays;
 	int				render_dist;
 	int				fps_cap;
+	int				start_rot;
 	long			n1;
 	long			n2;
 	t_vector2		plane;

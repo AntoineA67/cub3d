@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 14:27:37 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/29 17:50:28 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static void	move_player(t_vars *vars, int dir)
 		vars->player.pos.y = newposY;
 	}
 	// printf("AAA: %.2f %.2f - %d %d - %c %d\n", newposX, newposY,
-	// 	(int)newposX / 64, (int)newposY / 64, vars->map[(int)((newposX / 64) + (newposY / 64) * vars->size.x)], (int)(((int)newposX / 64) + ((int)newposY / 64) * vars->size.x));
+	 //	(int)newposX / 64, (int)newposY / 64, vars->map[(int)((newposX / 64) + (newposY / 64) * vars->size.x)], (int)(((int)newposX / 64) + ((int)newposY / 64) * vars->size.x));
 }
 
 static void	rotate_player(t_vars *vars, int dir)

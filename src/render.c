@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 16:05:31 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/29 18:00:06 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	project_rays(t_vars *vars)
 	// 	ra = end;
 	// 	end = buff;
 	// }
-	printf("Start:%f|End:%f\n", ra, end);
+	//printf("Start:%f|End:%f\n", ra, end);
 	// if (ra < 0.0)
 	// {
 	// 	ra = (M_PI * 2 )+ ra;
@@ -204,17 +204,25 @@ void	draw_2d_map(t_vars *vars, int size)
 {
 	int	x;
 	int	y;
+	int	pos;
 
 	y = -1;
+	pos = -1;
 	while (++y < vars->size.y)
 	{
 		x = -1;
-		while (++x < vars->size.x)
-			draw_square(vars, gen_coord(x * size + size, y * size + size, size),
-				to_rgb(gen_color(0, 0, 0), (vars->map[x + y * vars->size.x] > 0) * 150
-					+ (vars->map[x + y * vars->size.x] > 48) * 50
-					+ (vars->map[x + y * vars->size.x] > 49) * 50));
+		while (++x < vars->size.x && ++pos >= 0)
+		{
+			//printf("%c", vars->map[x + y * vars->size.x]);
+			if (vars->map[pos] == '0')
+				draw_square(vars, gen_coord(x * size + size, y * size + size, size),
+					to_rgb(gen_color(0, 0, 0), 50));
+			else if (vars->map[pos] == '1')
+				draw_square(vars, gen_coord(x * size + size, y * size + size, size),
+					to_rgb(gen_color(0, 0, 0), 150));
+		}
 	}
+		//printf("\n");
 }
 
 void	render(t_vars *vars)
