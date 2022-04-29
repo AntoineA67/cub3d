@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 19:45:52 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/28 16:56:13 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/29 19:18:38 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,14 @@ void	color(t_rgb *c, int r, int g, int b)
 	c->b = b;
 }
 
-t_rgb	gen_color(int r, int g, int b)
+t_rgb	gen_color(int r, int g, int b, int v)
 {
 	t_rgb	c;
 
 	c.r = r;
 	c.g = g;
 	c.b = b;
+	c.v = v;
 	return (c);
 }
 
@@ -33,7 +34,7 @@ unsigned int	to_rgb(t_rgb c, unsigned char grey)
 {
 	if (grey)
 		return (0x00 << 24 | grey << 16 | grey << 8 | grey);
-	return (0x00 << 24 | c.r << 16 | c.g << 8 | c.b);
+	return (c.v << 24 | c.r << 16 | c.g << 8 | c.b);
 }
 
 t_rgb	cycle_color(t_rgb color)

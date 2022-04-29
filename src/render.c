@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 19:15:57 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/29 19:19:28 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 void	show_player(t_vars *vars, int size)
 {
 	draw_square_center(vars, gen_coord(vars->player.pos.x + size,
-		size + vars->player.pos.y, 20, gen_color(255, 0, 100)));
+		size + vars->player.pos.y, 20, gen_color(255, 0, 100, 0)));
 	// p1.x = ((int)vars->player.pos.x>>6) * size + x;
 	// p1.y = ((int)vars->player.pos.y>>6) * size + y;
 	// p2.x = (((int)vars->player.pos.x>>6) + vars->player.delta.x) * size + x;
 	// p2.y = (((int)vars->player.pos.y>>6) + vars->player.delta.y) * size + y;
 	plot_line(vars,
-		gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(255, 0, 100)),
+		gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(255, 0, 100, 0)),
 		gen_coord(vars->player.pos.x + vars->player.delta.x * 10.0 + size,
-			size + vars->player.pos.y + vars->player.delta.y * 10.0, 0, gen_color(255, 0, 100)));
+			size + vars->player.pos.y + vars->player.delta.y * 10.0, 0, gen_color(255, 0, 100, 0)));
 	// printf("%d %d	%d %d\n", p1.x, p1.y, p2.x, p2.y);
 }
 
@@ -102,7 +102,7 @@ void	project_rays(t_vars *vars)
 		{
 			rx = vars->player.pos.x;
 			ry = vars->player.pos.y;
-			dof = 8;
+			dof = size;
 		}
 		while (dof < size)
 		{
@@ -141,7 +141,7 @@ void	project_rays(t_vars *vars)
 		{
 			rx = vars->player.pos.x;
 			ry = vars->player.pos.y;
-			dof = 8;
+			dof = size;
 		}
 		while (dof < size)
 		{
@@ -166,21 +166,21 @@ void	project_rays(t_vars *vars)
 			rx = disV.x;
 			ry = disV.y;
 			if (ra2 > M_PI)
-				color = gen_color(255, 0, 0);
+				color = gen_color(255, 0, 0, 0);
 			else
-				color = gen_color(0, 255, 0);
+				color = gen_color(0, 255, 0, 0);
 		}
 		else
 		{
 			if (ra2 > M_PI_2 && ra2 < M_PI_2 + M_PI)
-				color = gen_color(0, 0, 255);
+				color = gen_color(0, 0, 255, 0);
 			else
-				color = gen_color(255, 255, 0);
+				color = gen_color(255, 255, 0, 0);
 		}
 		// if (ra2 == fmod(vars->player.rot - M_PI_4 + (M_PI * 2) , M_PI * 2))
 		plot_line(vars,
-				gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(10, 10, 10)),
-				gen_coord(rx + size, size + ry, 0, gen_color(10, 10, 10)));
+				gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(10, 10, 10, 0)),
+				gen_coord(rx + size, size + ry, 0, gen_color(10, 10, 10, 0)));
 		min_dist = dist(vars->player.pos.x, vars->player.pos.y, rx, ry, ra2);
 		double ca = vars->player.rot - ra2;
 		if (ca < 0)
@@ -197,13 +197,13 @@ void	project_rays(t_vars *vars)
 		// printf("%.2f\n", ra2);
 		plot_line(vars,
 				gen_coord(i, 540 - (int)(10000 / min_dist), 0, color),
-				gen_coord(i, 540 + (int)(10000 / min_dist), 0, gen_color(0, 0, 0)));
+				gen_coord(i, 540 + (int)(10000 / min_dist), 0, gen_color(0, 0, 0, 0)));
 		// printf("%.2f %d\n", min_dist, (int)(10000 / min_dist));
 		ra += M_PI_2 / vars->win_size.x;
 	}
 	plot_line(vars,
-			gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(255, 0, 100)),
-			gen_coord(rx + size, size + ry, 0, gen_color(255, 0, 100)));
+			gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(255, 0, 100, 0)),
+			gen_coord(rx + size, size + ry, 0, gen_color(255, 0, 100, 0)));
 }
 
 void	draw_square_center(t_vars *vars, t_coord p)
@@ -251,12 +251,12 @@ void	draw_2d_map(t_vars *vars, int size)
 		{
 			//printf("%c", vars->map[x + y * vars->size.x]);
 			if (vars->map[pos] == '0')
-				draw_square(vars, gen_coord(x * size + size, y * size + size, size, gen_color(100, 100, 100)));
+				draw_square(vars, gen_coord(x * size + size, y * size + size, size, gen_color(100, 100, 100, 0)));
 			else if (vars->map[pos] == '1')
-				draw_square(vars, gen_coord(x * size + size, y * size + size, size, gen_color(200, 200, 200)));
+				draw_square(vars, gen_coord(x * size + size, y * size + size, size, gen_color(200, 200, 200, 0)));
 			else if (vars->map[pos] == 'O')
 				draw_square(vars, gen_coord(x * size + size, y * size + size, size,
-					gen_color(150, 20, 150)));
+					gen_color(150, 20, 150, 0)));
 		}
 	}
 		//printf("\n");

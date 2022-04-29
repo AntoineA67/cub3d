@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 18:48:25 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/29 19:17:18 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ void	esc(t_vars *vars, int err);
 // void	next_color(t_vars *vars);
 // void	color(t_rgb *c, int r, int g, int b);
 t_coord	gen_coord(int x, int y, int z, t_rgb c);
-t_rgb	gen_color(int r, int g, int b);
+t_rgb	gen_color(int r, int g, int b, int v);
 t_coord	coord(t_coord *p, int x, int y, int z);
 
 void	pixel_put(t_data *data, int x, int y, int color);
