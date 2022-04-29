@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/28 16:02:17 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/29 13:44:34 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,11 +214,51 @@ void	draw_direction(t_vars *vars)
 void	calculate_plane_points(t_vars *vars)
 {
 	t_vector2	perp;
+	perp.x = vars->player.pos.x + (cos(vars->player.rot + M_PI_4) * vars->render_dist);
+	perp.y = vars->player.pos.y + (sin(vars->player.rot + M_PI_4) * vars->render_dist);
+	t_coord		c;
+	t_coord		c2;
 
-	perp = vars->player.pos;
-	perp.x += cos(vars->player.rot);
-	perp.y += sin(vars->player.rot);
-	pixel_put(&vars->img, perp.x, perp.y, 0x0000ff);
+	c.x = vars->player.pos.x * 10;
+	c.y = vars->player.pos.y * 10;
+	c2.x = perp.x * 10;
+	c2.y = perp.y * 10;
+	plot_line(vars, c, c2);
+	perp.x = vars->player.pos.x + (cos(vars->player.rot - M_PI_4) * vars->render_dist);
+	perp.y = vars->player.pos.y + (sin(vars->player.rot - M_PI_4) * vars->render_dist);
+	c2.x = perp.x * 10;
+	c2.y = perp.y * 10;
+	plot_line(vars, c, c2);
+	double pas = M_PI_2 / vars->rays_number;
+for (int i = 0; i <  vars->rays_number; i++)
+{
+	perp.x = vars->player.pos.x + (cos((vars->player.rot - M_PI_4 )+ (pas * i)) * vars->render_dist);
+	perp.y = vars->player.pos.y + (sin((vars->player.rot - M_PI_4) + (pas * i)) * vars->render_dist);
+	c2.x = perp.x * 10;
+	c2.y = perp.y * 10;
+	plot_line(vars, c, c2);
+}
+
+	// t_vector2	perp;
+	// t_coord		c;
+	// t_coord		c2;
+	// double		m;
+	// double		b;
+
+	// perp.x = vars->player.pos.x + (cos(vars->player.rot) * vars->render_dist);
+	// perp.y = vars->player.pos.y + (sin(vars->player.rot) * vars->render_dist);
+	// m = -1 * ((perp.x - vars->player.pos.x) / (perp.y - vars->player.pos.y));
+	// b = perp.y - (m * perp.x);
+	// c2.x = vars->player.pos.x * 10;
+	// c2.y = vars->player.pos.y * 10;
+	// for (int i = 0; i < vars->rays_number; i++)
+	// {
+	// 	c.x = vars->player.pos.x - (192.0 / 2.0) + ((192.0 / vars->rays_number) * i);
+	// 	c.y = m * c.x + b;
+	// 	c.x *= 10;
+	// 	c.y *= 10;
+	// 	plot_line(vars, c, c2);
+	// }
 }
 
 int	main(int argc, char **argv)
@@ -239,6 +279,9 @@ int	main(int argc, char **argv)
 	}
 	fill_vars(&vars, fd);
 	(void)extract_name;
+	vars.rays_number = 64;
+	vars.plane_rays = ft_calloc(sizeof(t_vector2), vars.rays_number);
+	vars.render_dist = 30;
 	vars.win = mlx_new_window(vars.mlx, 1920,
 			1080, extract_name(argv[1]));
 	printf("EA: %s\nNO: %s\nSO: %s\nWE: %s\n", vars.textures.ea, vars.textures.no, vars.textures.so, vars.textures.we);

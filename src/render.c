@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/28 16:02:05 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/29 13:54:28 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	render(t_vars *vars)
 {
 	// t_coord	p1;
 	// t_coord	p2;
-	
 	ft_int_memset(vars->img.addr, 0x1D1443,
 		vars->img.line_length * 1080 / 4);
 	show_player(vars);
