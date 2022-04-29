@@ -33,7 +33,7 @@ char	*create_l_pts(t_list *lst, int size_x, int size_y)
 	char	*l_pts;
 	t_list	*node;
 
-	l_pts = ft_calloc(size_x * size_y, sizeof(char));
+	l_pts = ft_calloc(size_x * size_y + 1, sizeof(char));
 	if (!l_pts)
 		return (NULL);
 	node = lst->next;

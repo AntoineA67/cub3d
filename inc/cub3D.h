@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 13:56:24 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/29 14:08:43 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,6 @@ typedef struct s_vars {
 	char			*map;
 	int 			rays;
 	int				render_dist;
-	t_vector2		pos;
-	t_vector2		dir;
 	t_vector2		plane;
 	t_vector2		*plane_rays;
 	t_vector2		camera;
@@ -117,10 +115,12 @@ typedef struct s_line {
 	float	dist;
 }		t_line;
 
-// int		to_rgb(t_rgb c);
-void	show_player(t_vars *vars);
-void	draw_direction(t_vars *vars);
+unsigned int	to_rgb(t_rgb c, unsigned char grey);
+void	show_player(t_vars *vars, int size);
+void	draw_direction(t_vars *vars, int ratio);
 void	calculate_plane_points(t_vars *vars);
+void	draw_square(t_vars *vars, t_coord p, unsigned int color);
+void	draw_square_center(t_vars *vars, t_coord p, unsigned int color);
 int		f_loop(t_vars *vars);
 void	render(t_vars *vars);
 void	plot_line(t_vars *vars, t_coord p1, t_coord p2);
@@ -136,6 +136,8 @@ void	esc(t_vars *vars, int err);
 // void	exit_lst(t_list **lst);
 // void	next_color(t_vars *vars);
 // void	color(t_rgb *c, int r, int g, int b);
+t_coord	gen_coord(int x, int y, int z);
+t_rgb	gen_color(int r, int g, int b);
 t_coord	coord(t_coord *p, int x, int y, int z);
 
 void	pixel_put(t_data *data, int x, int y, int color);

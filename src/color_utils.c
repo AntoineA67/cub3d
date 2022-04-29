@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 19:45:52 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/22 21:48:04 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/28 16:56:13 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,20 @@ void	color(t_rgb *c, int r, int g, int b)
 	c->b = b;
 }
 
-int	to_rgb(t_rgb c)
+t_rgb	gen_color(int r, int g, int b)
 {
+	t_rgb	c;
+
+	c.r = r;
+	c.g = g;
+	c.b = b;
+	return (c);
+}
+
+unsigned int	to_rgb(t_rgb c, unsigned char grey)
+{
+	if (grey)
+		return (0x00 << 24 | grey << 16 | grey << 8 | grey);
 	return (0x00 << 24 | c.r << 16 | c.g << 8 | c.b);
 }
 
@@ -47,28 +59,28 @@ t_rgb	cycle_color(t_rgb color)
 	return (c);
 }
 
-void	next_color(t_vars *vars)
-{
-	t_rgb	*c;
+// void	next_color(t_vars *vars)
+// {
+// 	t_rgb	*c;
 
-	c = &vars->color;
-	if (c->v)
-		c->v = 0;
-	if (c->r == 255 && c->g == 255 && c->b == 255)
-	{
-		c->g = 0;
-		c->b = 0;
-	}
-	else if (c->r == 255 && c->g < 255 && c->b == 0)
-		c->g = 255;
-	else if (c->r == 0 && c->g == 255 && c->b < 255)
-		c->b = 255;
-	else if (c->r < 255 && c->g == 0 && c->b == 255)
-		c->r = 255;
-	else if (c->r > 0 && c->g == 255 && c->b == 0)
-		c->r = 0;
-	else if (c->r == 0 && c->g > 0 && c->b == 255)
-		c->g = 0;
-	else if (c->r == 255 && c->g == 0 && c->b > 0)
-		c->b = 0;
-}
+// 	c = &vars->color;
+// 	if (c->v)
+// 		c->v = 0;
+// 	if (c->r == 255 && c->g == 255 && c->b == 255)
+// 	{
+// 		c->g = 0;
+// 		c->b = 0;
+// 	}
+// 	else if (c->r == 255 && c->g < 255 && c->b == 0)
+// 		c->g = 255;
+// 	else if (c->r == 0 && c->g == 255 && c->b < 255)
+// 		c->b = 255;
+// 	else if (c->r < 255 && c->g == 0 && c->b == 255)
+// 		c->r = 255;
+// 	else if (c->r > 0 && c->g == 255 && c->b == 0)
+// 		c->r = 0;
+// 	else if (c->r == 0 && c->g > 0 && c->b == 255)
+// 		c->g = 0;
+// 	else if (c->r == 255 && c->g == 0 && c->b > 0)
+// 		c->b = 0;
+// }
