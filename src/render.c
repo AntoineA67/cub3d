@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 17:44:38 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/29 18:29:48 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,20 @@ void	project_rays(t_vars *vars)
 	end = fmod(vars->player.rot + M_PI_4 + (M_PI * 2) , M_PI * 2);
 	if (ra > end)
 		end += (M_PI * 2);
-	// printf("Start:%f|End:%f\n", ra, end);
+	// if (ra > end)
+	// {
+	// 	double buff = ra;
+	// 	ra = end;
+	// 	end = buff;
+	// }
+	//printf("Start:%f|End:%f\n", ra, end);
+	// if (ra < 0.0)
+	// {
+	// 	ra = (M_PI * 2 )+ ra;
+	// 	end = ra;
+	// 	ra = vars->player.rot + M_PI_4;
+	// 	printf("Start:%f|End:%f\n", ra, end);
+	// }
 	while (ra < end)
 	{
 		i++;
@@ -96,7 +109,7 @@ void	project_rays(t_vars *vars)
 			mx = (int)rx>>6;
 			my = (int)ry>>6;
 			mp = my * vars->size.x + mx;
-			if (mp < vars->size.x * vars->size.y && mp >= 0 && vars->map[mp] == '1')
+			if (mp < vars->size.x * vars->size.y && mp >= 0 && (vars->map[mp] == '1' || vars->map[mp] == 'O'))
 				dof = size;
 			else
 			{
@@ -135,7 +148,7 @@ void	project_rays(t_vars *vars)
 			mx = (int)rx>>6;
 			my = (int)ry>>6;
 			mp = my * vars->size.x + mx;
-			if (mp < vars->size.x * vars->size.y && mp >= 0 && vars->map[mp] == '1')
+			if (mp < vars->size.x * vars->size.y && mp >= 0 && (vars->map[mp] == '1' || vars->map[mp] == 'O'))
 				dof = size;
 			else
 			{
@@ -152,9 +165,10 @@ void	project_rays(t_vars *vars)
 			rx = disV.x;
 			ry = disV.y;
 		}
-		plot_line(vars,
-				gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0),
-				gen_coord(rx + size, size + ry, 0));
+		if (ra2 == fmod(vars->player.rot - M_PI_4 + (M_PI * 2) , M_PI * 2))
+			plot_line(vars,
+					gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0),
+					gen_coord(rx + size, size + ry, 0xff));
 		min_dist = dist(vars->player.pos.x, vars->player.pos.y, rx, ry, ra2);
 		double ca = vars->player.rot - ra2;
 		if (ca < 0)
@@ -174,6 +188,9 @@ void	project_rays(t_vars *vars)
 		// printf("%.2f %d\n", min_dist, (int)(10000 / min_dist));
 		ra += M_PI_2 / vars->win_size.x;
 	}
+			plot_line(vars,
+					gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0),
+					gen_coord(rx + size, size + ry, 0xff));
 }
 
 void	draw_square_center(t_vars *vars, t_coord p, unsigned int color)
@@ -210,17 +227,28 @@ void	draw_2d_map(t_vars *vars, int size)
 {
 	int	x;
 	int	y;
+	int	pos;
 
 	y = -1;
+	pos = -1;
 	while (++y < vars->size.y)
 	{
 		x = -1;
-		while (++x < vars->size.x)
-			draw_square(vars, gen_coord(x * size + size, y * size + size, size),
-				to_rgb(gen_color(0, 0, 0), (vars->map[x + y * vars->size.x] > 0) * 150
-					+ (vars->map[x + y * vars->size.x] > 48) * 50
-					+ (vars->map[x + y * vars->size.x] > 49) * 50));
+		while (++x < vars->size.x && ++pos >= 0)
+		{
+			//printf("%c", vars->map[x + y * vars->size.x]);
+			if (vars->map[pos] == '0')
+				draw_square(vars, gen_coord(x * size + size, y * size + size, size),
+					to_rgb(gen_color(0, 0, 0), 50));
+			else if (vars->map[pos] == '1')
+				draw_square(vars, gen_coord(x * size + size, y * size + size, size),
+					to_rgb(gen_color(0, 0, 0), 150));
+			else if (vars->map[pos] == 'O')
+				draw_square(vars, gen_coord(x * size + size, y * size + size, size),
+					to_rgb(gen_color(0, 0, 0), 200));
+		}
 	}
+		//printf("\n");
 }
 
 void	render(t_vars *vars)

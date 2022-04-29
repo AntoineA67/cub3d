@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 17:59:48 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/29 18:30:00 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,10 @@ typedef struct s_vars {
 	void			*mlx;
 	void			*win;
 	char			*map;
-	int 			rays;
+	double 			rays;
 	int				render_dist;
 	int				fps_cap;
+	int				start_rot;
 	long			n1;
 	long			n2;
 	t_vector2		plane;

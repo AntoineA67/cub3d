@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 17:38:34 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/29 18:29:33 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,12 +111,30 @@ static void	fill_lst(t_list **lst, int fd, t_textures *textures)
 	}
 }
 
+int	ft_strschr(char *s, char *finds)
+{
+	int		i;
+
+	i = 0;
+	if (!s)
+		return (0);
+	while (finds && finds[i])
+	{
+		if (ft_strchr(s, finds[i]))
+			return (i);
+		i++;
+	}
+	return (0);
+}
+
 char	*parse(int fd, t_vars *vars)
 {
 	t_list	*lst;
 	t_list	*node;
 	int		len_tmp;
+	char *tmp;
 
+	tmp = "ENWS";
 	lst = ft_lstnew(NULL);
 	if (!lst)
 		exit(EXIT_FAILURE);
@@ -126,6 +144,12 @@ char	*parse(int fd, t_vars *vars)
 	vars->size.y = 0;
 	while (node && node->content)
 	{
+		printf("d:%s\n", node->content);
+		if (ft_strschr(node->content, tmp))
+		{
+			vars->start_rot = M_PI_2 * ft_strschr(node->content, tmp);
+			*ft_strchr(node->content, tmp[ft_strschr(node->content, tmp)]) = 'P';
+		}
 		len_tmp = ft_strlen((char *)node->content);
 		if (((char *)node->content)[len_tmp - 1] == '\n')
 			((char *)node->content)[len_tmp - 1] = 0;
@@ -133,6 +157,21 @@ char	*parse(int fd, t_vars *vars)
 		if (len_tmp > vars->size.x)
 			vars->size.x = len_tmp;
 		vars->size.y++;
+		node = node->next;
+	}
+	node = lst->next;
+	while (node && node->content)
+	{
+		if ((int)ft_strlen((char *)node->content) < vars->size.x)
+		{
+			tmp = ft_calloc(sizeof(char), vars->size.x + 1);
+			ft_memset(tmp, ' ', vars->size.x);
+			ft_strlcpy(tmp, node->content, ft_strlen((char *)node->content) + 1);
+			tmp[ft_strlen((char *)node->content)] = ' ';
+			printf("|%s|\n", tmp);
+			free(node->content);
+			node->content = tmp;
+		}
 		node = node->next;
 	}
 	printf("x: %d y: %d\n", vars->size.x, vars->size.y);
