@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 19:17:18 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/30 12:21:05 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# define TEX_W 64
 
 # include <stdio.h>
 # include <unistd.h>
@@ -88,6 +87,7 @@ typedef struct s_vars {
 	int				render_dist;
 	int				fps_cap;
 	int				start_rot;
+	double			min_map_mult;
 	long			n1;
 	long			n2;
 	t_vector2		plane;
@@ -127,7 +127,7 @@ typedef struct s_line {
 }		t_line;
 
 unsigned int	to_rgb(t_rgb c, unsigned char grey);
-void	show_player(t_vars *vars, int size);
+void	show_player(t_vars *vars, double size);
 void	draw_direction(t_vars *vars, int ratio);
 void	calculate_plane_points(t_vars *vars);
 void	draw_square(t_vars *vars, t_coord p);

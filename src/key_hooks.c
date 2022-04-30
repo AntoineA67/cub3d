@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_hooks.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 18:56:48 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/30 13:19:25 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,29 +66,52 @@
 // 	}
 // }
 
+int	change_case(t_vars	*vars, double newposX, double newposY)
+{
+	long	pos;
+	long	posplayer;
+
+	pos = ((int)newposX/(int)vars->min_map_mult) + ((int)newposY/(int)vars->min_map_mult) * vars->size.x;
+	posplayer = ((int)vars->player.pos.x/(int)vars->min_map_mult) + ((int)vars->player.pos.y/(int)vars->min_map_mult) * vars->size.x;
+	if (vars->map[pos - 1] == 'C')
+		vars->map[pos - 1] = 'O';
+	else if (vars->map[pos + 1] == 'C')
+		vars->map[pos + 1] = 'O';
+	else if (vars->map[pos + vars->size.x] == 'C')
+		vars->map[pos + vars->size.x] = 'O';
+	else if (vars->map[pos - vars->size.x] == 'C')
+		vars->map[pos - vars->size.x] = 'O';
+	else if (vars->map[pos] != 'O')
+	{
+	if (vars->map[posplayer - 1] == 'O')
+		vars->map[posplayer - 1] = 'C';
+	else if (vars->map[posplayer + 1] == 'O')
+		vars->map[posplayer + 1] = 'C';
+	else if (vars->map[posplayer + vars->size.x] == 'O')
+		vars->map[posplayer + vars->size.x] = 'C';
+	else if (vars->map[posplayer - vars->size.x] == 'O')
+		vars->map[posplayer - vars->size.x] = 'C';
+	}
+	return (0);
+}
+
 static void	move_player(t_vars *vars, int dir)
 {
 	double	newposX;
 	double	newposY;
 	int		size;
 
-	size = 64;
-	newposX = vars->player.pos.x + dir * cos(vars->player.rot) * 10.0;
-	newposY = vars->player.pos.y + dir * sin(vars->player.rot) * 10.0;
-	if (vars->map[((int)newposX>>6) + ((int)newposY>>6) * vars->size.x] != '1')
+	size = vars->min_map_mult;
+	newposX = vars->player.pos.x + dir * cos(vars->player.rot) * (size / 4);
+	newposY = vars->player.pos.y + dir * sin(vars->player.rot) * (size / 4);
+	if (vars->map[((int)newposX/size) + ((int)newposY/size) * vars->size.x] != '1')
 	{
-		if (vars->map[((int)newposX>>6) + ((int)newposY>>6) * vars->size.x] != 'O')
+		if (vars->map[((int)newposX/size) + ((int)newposY/size) * vars->size.x] != 'C')
 		{
+			if (((int)newposX/size) + ((int)newposY/size) * vars->size.x != ((int)vars->player.pos.x/size) + ((int)vars->player.pos.y/size) * vars->size.x)
+					change_case(vars, newposX, newposY);
 			vars->player.pos.x = newposX;
 			vars->player.pos.y = newposY;
-			if (vars->map[((int)newposX>>6) + ((int)newposY>>6) * vars->size.x - 1] == 'O')
-				vars->map[((int)newposX>>6) + ((int)newposY>>6) * vars->size.x - 1] = 'C';
-			else if (vars->map[((int)newposX>>6) + ((int)newposY>>6) * vars->size.x + 1] == 'O')
-				vars->map[((int)newposX>>6) + ((int)newposY>>6) * vars->size.x + 1] = 'C';
-			else if (vars->map[((int)newposX>>6) + (((int)newposY>>6) + 1) * vars->size.x] == 'O')
-				vars->map[((int)newposX>>6) + (((int)newposY>>6) + 1) * vars->size.x] = 'C';
-			else if (vars->map[((int)newposX>>6) + (((int)newposY>>6) - 1) * vars->size.x] == 'O')
-				vars->map[((int)newposX>>6) + (((int)newposY>>6) - 1) * vars->size.x] = 'C';
 		}
 	}
 	// printf("AAA: %.2f %.2f - %d %d - %c %d\n", newposX, newposY,

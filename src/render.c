@@ -3,27 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 19:24:45 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/30 13:33:27 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
 
-void	show_player(t_vars *vars, int size)
+void	show_player(t_vars *vars, double size)
 {
 	draw_square_center(vars, gen_coord(vars->player.pos.x + size,
-		size + vars->player.pos.y, 20, gen_color(255, 0, 100, 0)));
+		size + vars->player.pos.y, size / 2.0, gen_color(255, 0, 100, 0)));
 	// p1.x = ((int)vars->player.pos.x>>6) * size + x;
 	// p1.y = ((int)vars->player.pos.y>>6) * size + y;
 	// p2.x = (((int)vars->player.pos.x>>6) + vars->player.delta.x) * size + x;
 	// p2.y = (((int)vars->player.pos.y>>6) + vars->player.delta.y) * size + y;
 	plot_line(vars,
 		gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(255, 0, 100, 0)),
-		gen_coord(vars->player.pos.x + vars->player.delta.x * 10.0 + size,
-			size + vars->player.pos.y + vars->player.delta.y * 10.0, 0, gen_color(255, 0, 100, 0)));
+		gen_coord(vars->player.pos.x + size + vars->player.delta.x * 10.0,
+			vars->player.pos.y + size + vars->player.delta.y * 10.0, 0, gen_color(255, 0, 100, 0)));
 	// printf("%d %d	%d %d\n", p1.x, p1.y, p2.x, p2.y);
 }
 
@@ -33,7 +33,7 @@ double	dist(double ax, double ay, double bx, double by, double angle)
 	return (sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
 }
 
-void	project_rays(t_vars *vars)
+void	project_rays(t_vars *vars, double	render_ratio)
 {
 	int			i;
 	int			dof;
@@ -41,6 +41,7 @@ void	project_rays(t_vars *vars)
 	int			my;
 	int			mp;
 	int			size;
+	int			shift;
 	double		ra;
 	double		ra2;
 	double		aTan;
@@ -54,7 +55,14 @@ void	project_rays(t_vars *vars)
 	t_vector2	disV;
 	t_vector2	disH;
 
-	size = 64;
+	shift = 0;
+	size = (int)vars->min_map_mult;
+	while (size != 1)
+	{
+		size /= 2;
+		shift++;
+	}
+	size = (int)vars->min_map_mult;
 	i = -1;
 	ra = fmod(vars->player.rot - M_PI_4 + (M_PI * 2) , M_PI * 2);
 	end = fmod(vars->player.rot + M_PI_4 + (M_PI * 2) , M_PI * 2);
@@ -86,17 +94,17 @@ void	project_rays(t_vars *vars)
 		aTan = -1.0/tan(ra2);
 		if (ra2 > M_PI) //looking down
 		{
-			ry = (((int)vars->player.pos.y>>6)<<6) - .00001;
+			ry = (((int)vars->player.pos.y>>shift)<<shift) - .00001;
 			rx = (vars->player.pos.y - ry) * aTan + vars->player.pos.x;
-			yo = -64.0;
-			xo = 64.0 * aTan;
+			yo = -vars->min_map_mult;
+			xo = vars->min_map_mult * aTan;
 		}
 		if (ra2 < M_PI && ra2 != 0) //looking up
 		{
-			ry = (((int)vars->player.pos.y>>6)<<6) + 64.0;
+			ry = (((int)vars->player.pos.y>>shift)<<shift) + vars->min_map_mult;
 			rx = (vars->player.pos.y - ry) * aTan + vars->player.pos.x;
-			yo = 64.0;
-			xo = -64.0 * aTan;
+			yo = vars->min_map_mult;
+			xo = -vars->min_map_mult * aTan;
 		}
 		if (ra2 == 0.0 || ra2 == M_PI)//looking straight left or right
 		{
@@ -106,10 +114,10 @@ void	project_rays(t_vars *vars)
 		}
 		while (dof < size)
 		{
-			mx = (int)rx>>6;
-			my = (int)ry>>6;
+			mx = (int)rx>>shift;
+			my = (int)ry>>shift;
 			mp = my * vars->size.x + mx;
-			if (mp < vars->size.x * vars->size.y && mp >= 0 && (vars->map[mp] == '1' || vars->map[mp] == 'O'))
+			if (mp < vars->size.x * vars->size.y && mp >= 0 && (vars->map[mp] == '1' || vars->map[mp] == 'C'))
 				dof = size;
 			else
 			{
@@ -125,17 +133,17 @@ void	project_rays(t_vars *vars)
 		nTan = -tan(ra2);
 		if (ra2 > M_PI_2 && ra2 < M_PI_2 * 3.0) //looking left
 		{
-			rx = (((int)vars->player.pos.x>>6)<<6) - .00001;
+			rx = (((int)vars->player.pos.x>>shift)<<shift) - .00001;
 			ry = (vars->player.pos.x - rx) * nTan + vars->player.pos.y;
-			xo = -64.0;
-			yo = 64.0 * nTan;
+			xo = -vars->min_map_mult;
+			yo = vars->min_map_mult * nTan;
 		}
 		if (ra2 > M_PI_2 * 3.0 || ra2 < M_PI_2) //looking right
 		{
-			rx = (((int)vars->player.pos.x>>6)<<6) + 64.0;
+			rx = (((int)vars->player.pos.x>>shift)<<shift) + vars->min_map_mult;
 			ry = (vars->player.pos.x - rx) * nTan + vars->player.pos.y;
-			xo = 64.0;
-			yo = -64.0 * nTan;
+			xo = vars->min_map_mult;
+			yo = -vars->min_map_mult * nTan;
 		}
 		if (ra2 == M_PI_2 || ra2 == M_PI_2 * 3.0)//looking stra2ight left or right
 		{
@@ -145,10 +153,10 @@ void	project_rays(t_vars *vars)
 		}
 		while (dof < size)
 		{
-			mx = (int)rx>>6;
-			my = (int)ry>>6;
+			mx = (int)rx>>shift;
+			my = (int)ry>>shift;
 			mp = my * vars->size.x + mx;
-			if (mp < vars->size.x * vars->size.y && mp >= 0 && (vars->map[mp] == '1' || vars->map[mp] == 'O'))
+			if (mp < vars->size.x * vars->size.y && mp >= 0 && (vars->map[mp] == '1' || vars->map[mp] == 'C'))
 				dof = size;
 			else
 			{
@@ -178,9 +186,9 @@ void	project_rays(t_vars *vars)
 				color = gen_color(255, 255, 0, 0);
 		}
 		// if (ra2 == fmod(vars->player.rot - M_PI_4 + (M_PI * 2) , M_PI * 2))
-		plot_line(vars,
-				gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(10, 10, 10, 200)),
-				gen_coord(rx + size, size + ry, 0, gen_color(10, 10, 10, 200)));
+		//plot_line(vars,
+			//	gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(10, 10, 10, 200)),
+			//	gen_coord(rx + size, size + ry, 0, gen_color(10, 10, 10, 200)));
 		min_dist = dist(vars->player.pos.x, vars->player.pos.y, rx, ry, ra2);
 		double ca = vars->player.rot - ra2;
 		if (ca < 0)
@@ -196,14 +204,14 @@ void	project_rays(t_vars *vars)
 		// }
 		// printf("%.2f\n", ra2);
 		plot_line(vars,
-				gen_coord(i, 540 - (int)(10000 / min_dist), 0, color),
-				gen_coord(i, 540 + (int)(10000 / min_dist), 0, gen_color(0, 0, 0, 0)));
+				gen_coord(i, 540 - (int)(10000 / (min_dist * (render_ratio / vars->min_map_mult))), 0, color),
+				gen_coord(i, 540 + (int)(10000 / (min_dist * (render_ratio / vars->min_map_mult))), 0, gen_color(0, 0, 0, 0)));
 		// printf("%.2f %d\n", min_dist, (int)(10000 / min_dist));
 		ra += M_PI_2 / vars->win_size.x;
 	}
-	plot_line(vars,
-			gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(255, 0, 100, 0)),
-			gen_coord(rx + size, size + ry, 0, gen_color(255, 0, 100, 0)));
+	//plot_line(vars,
+		//	gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(255, 0, 100, 0)),
+		//	gen_coord(rx + size, size + ry, 0, gen_color(255, 0, 100, 0)));
 }
 
 void	draw_square_center(t_vars *vars, t_coord p)
@@ -241,15 +249,22 @@ void	draw_2d_map(t_vars *vars, int size)
 	int	x;
 	int	y;
 	int	pos;
+	int x1;
+	int y1;
 
 	y = -1;
 	pos = -1;
+	x1 = 0;
+	y1 = 0;
 	while (++y < vars->size.y)
 	{
 		x = -1;
 		while (++x < vars->size.x && ++pos >= 0)
 		{
 			//printf("%c", vars->map[x + y * vars->size.x]);
+		if (y >= (((int)vars->player.pos.y / (int)size) - 1) && y <= (((int)vars->player.pos.y / (int)size) + 1)&&
+			x >= (((int)vars->player.pos.x / (int)size) - 1) && x <= (((int)vars->player.pos.x / (int)size) + 1))
+		{
 			if (vars->map[pos] == '0')
 				draw_square(vars, gen_coord(x * size + size, y * size + size, size, gen_color(100, 100, 100, 0)));
 			else if (vars->map[pos] == '1')
@@ -257,6 +272,14 @@ void	draw_2d_map(t_vars *vars, int size)
 			else if (vars->map[pos] == 'O')
 				draw_square(vars, gen_coord(x * size + size, y * size + size, size,
 					gen_color(150, 20, 150, 0)));
+			// if (x1 == 2)
+			// {
+			// 	x1 = 0;
+			// 	y1++;
+			// }
+		}
+		else
+			draw_square(vars, gen_coord(x1 * size + size, y1 * size + size, size, vars->textures.c));
 		}
 	}
 		//printf("\n");
@@ -268,8 +291,8 @@ void	render(t_vars *vars)
 		vars->img.line_length * vars->win_size.y / 8);
 	ft_int_memset(vars->img.addr + vars->img.line_length * vars->win_size.y / 2
 		, to_rgb(vars->textures.f, 0), vars->img.line_length * vars->win_size.y / 8);
-	draw_2d_map(vars, 64);
-	project_rays(vars);
-	show_player(vars, 64);
+	project_rays(vars, 64.0);
+	draw_2d_map(vars, vars->min_map_mult);
+	show_player(vars, vars->min_map_mult);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
 }
