@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 13:23:14 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/30 14:21:24 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ int	init_player(t_vars *vars)
 {
 	char	*player_in_map;
 
-	vars->player.rot = vars->start_rot; //TODO changer selon orientation de depart
+	vars->player.rot = vars->start_rot;
 	vars->player.delta.x = 0;
 	vars->player.delta.y = 0;
 	player_in_map = ft_strchr(vars->map, 'P');
 	vars->map[player_in_map - vars->map] = '0';
-	vars->player.pos.x = (player_in_map - vars->map) % vars->size.x * 64.0;
-	vars->player.pos.y = (player_in_map - vars->map) / vars->size.x * 64.0;
+	vars->player.pos.x = ((player_in_map - vars->map) % vars->size.x) * vars->min_map_mult;
+	vars->player.pos.y = ((player_in_map - vars->map) / vars->size.x) * vars->min_map_mult;
 	return (0);
 }
 
@@ -129,14 +129,18 @@ int	frame(void *data)
 	t_vars	*vars;
 	long	temp;
 	char	*fps;
+	char	*itoa;
 
 	vars = (t_vars *)data;
 	if (!vars->fps_cap || !(gettime(vars->n1) % (1000 / vars->fps_cap)))
 	{
 		render(vars);
 		temp = gettime(vars->n1);
-		fps = ft_strjoin("FPS: ", ft_itoa(1000 / (temp - vars->n2)));
+		itoa = ft_itoa(1000 / (temp - vars->n2));
+		fps = ft_strjoin("FPS: ", itoa);
 		mlx_string_put(vars->mlx, vars->win, 100, 100, 0xff, fps);
+		free(itoa);
+		free(fps);
 		vars->n2 = temp;
 	}
 	return (0);
@@ -158,9 +162,10 @@ int	main(int argc, char **argv)
 		perror("File error");
 		exit(EXIT_FAILURE);
 	}
+	vars.min_map_mult = 16.0;
 	fill_vars(&vars, fd);
 	(void)extract_name;
-	vars.rays_number = 64;
+	vars.rays_number = 0;
 	vars.plane_rays = ft_calloc(sizeof(t_vector2), vars.rays_number);
 	vars.render_dist = 30;
 	vars.fps_cap = 144;
