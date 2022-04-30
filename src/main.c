@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 15:00:16 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/30 15:28:20 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ int	init_player(t_vars *vars)
 	vars->player.delta.y = 0;
 	player_in_map = ft_strchr(vars->map, 'P');
 	vars->map[player_in_map - vars->map] = '0';
-	vars->player.pos.x = ((player_in_map - vars->map) % vars->size.x) * vars->min_map_mult;
-	vars->player.pos.y = ((player_in_map - vars->map) / vars->size.x) * vars->min_map_mult;
+	vars->player.pos.x = (player_in_map - vars->map) % vars->size.x + .0;
+	vars->player.pos.y = (player_in_map - vars->map) / vars->size.x + .0;
 	return (0);
 }
 

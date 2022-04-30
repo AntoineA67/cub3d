@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:03:35 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 14:26:25 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/30 16:36:29 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,13 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, double dist, t_data *im
 	double	y;
 	double	step;
 
-	i = vars->win_size.y / 2 - (int)(10000 / dist) - 1;
+	i = vars->win_size.y / 2 - dist;
 	y = 0.0;
-	step = (img->size.y * 1.0) / ((vars->win_size.y / 2 + (int)(10000 / dist))
-			- (vars->win_size.y / 2 - (int)(10000 / dist))) - .1;
-	printf("%d %d %f %d\n", i, vars->win_size.y / 2 + (int)(10000 / dist),
-		step, img->size.y);
-	while (++i < vars->win_size.y / 2 + (int)(10000 / dist))
+	step = (img->size.y * 1.0) / ((vars->win_size.y / 2 + dist)
+			- (vars->win_size.y / 2 - dist));
+	// printf("%d %d %f %d\n", i, vars->win_size.y / 2 + (int)dist,
+	// 	step, img->size.y);
+	while (++i < vars->win_size.y / 2 + dist)
 	{
 		// printf("%d %d %d %.2f\n", screen_x, i, (int)y, y);
 		pixel_put(&vars->img, screen_x, i,
