@@ -6,13 +6,20 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 19:03:08 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/30 19:59:24 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <string.h>
+#include <errno.h>
+#include <arpa/inet.h>
 
 # include <stdio.h>
 # include <unistd.h>

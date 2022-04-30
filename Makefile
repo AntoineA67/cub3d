@@ -4,7 +4,8 @@ OBJDIR		= obj/
 INCDIR		= inc/
 VPATH		= src/
 INC			= $(addprefix ${INCDIR}, cub3D.h)
-SRC			= main.c utils.c parse.c l_pts.c key_hooks.c mouse_hooks.c plot.c render.c color_utils.c
+SRC			= main.c utils.c parse.c l_pts.c key_hooks.c mouse_hooks.c plot.c render.c color_utils.c client.c
+SERVER		= server
 OBJ			= $(addprefix ${OBJDIR}, $(SRC:.c=.o))
 LIBRARY		= -L libft -lft -L mlx_opengl -lmlx -lm
 LIB_FILE	= libft/libft.a mlx_opengl/libmlx.a
@@ -29,6 +30,9 @@ ${OBJDIR}%.o: %.c ${INC} Makefile
 libft/libft.a:
 	make -C libft
 
+${SERVER}: Makefile
+	${CC} ${FLAGS} src/server.c -o $@
+
 clean:
 	make clean -C libft
 	rm -rf ${OBJDIR}
@@ -40,4 +44,4 @@ fclean:
 
 re: fclean all
 
-.PHONY: all clean fclean re 
+.PHONY: all clean fclean re
