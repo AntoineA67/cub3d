@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 16:40:17 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/30 16:56:04 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,23 @@
 
 void	show_player(t_vars *vars, double size)
 {
+	size = 16.0;
 	if (vars->settings.map_type == 1)
 	{
-		draw_square_center(vars, gen_coord( size + vars->player.pos.x,
-			size + vars->player.pos.y, size / 2.0, gen_color(255, 0, 100, 0)));
+		draw_square_center(vars, gen_coord( size * (vars->player.pos.x + 1),
+			size * (vars->player.pos.y + 1), size / 2.0, gen_color(255, 0, 100, 0)));
 		plot_line(vars,
-			gen_coord( size+ vars->player.pos.x, size+ vars->player.pos.y , 0, gen_color(255, 0, 100, 0)),
+			gen_coord( size + vars->player.pos.x, size+ vars->player.pos.y , 0, gen_color(255, 0, 100, 0)),
 			gen_coord( (size + vars->player.pos.x) + vars->player.delta.x * 10.0,
 				 (size + vars->player.pos.y) + vars->player.delta.y * 10.0, 0, gen_color(255, 0, 100, 0)));
 	}
 	else if (vars->settings.map_type == 2)
 	{
 		size = 64;
-		draw_square_center(vars, gen_coord( size + size + vars->player.pos.x,
-			size + size + vars->player.pos.y, size / 2.0, gen_color(255, 0, 100, 0)));
+		draw_square_center(vars, gen_coord( size * (vars->player.pos.x + 1),
+			size * (vars->player.pos.y + 1), size / 2.0, gen_color(255, 0, 100, 0)));
 		plot_line(vars,
-			gen_coord( size + vars->player.pos.x, size + vars->player.pos.y , 0, gen_color(255, 0, 100, 0)),
+			gen_coord( size + vars->player.pos.x, size+ vars->player.pos.y , 0, gen_color(255, 0, 100, 0)),
 			gen_coord( (size + vars->player.pos.x) + vars->player.delta.x * 10.0,
 				 (size + vars->player.pos.y) + vars->player.delta.y * 10.0, 0, gen_color(255, 0, 100, 0)));
 	}
@@ -308,6 +309,7 @@ void	draw_2d_map(t_vars *vars, int size)
 	pos = -1;
 	x1 = 0;
 	y1 = 0;
+	size = 16;
 	while (++y < vars->size.y)
 	{
 		x = -1;
@@ -320,7 +322,7 @@ void	draw_2d_map(t_vars *vars, int size)
 				draw_square(vars, gen_coord(x * size + size, y * size + size, size, gen_color(100, 100, 100, 0)));
 			else if (vars->map[pos] == '1')
 				draw_square(vars, gen_coord(x * size + size, y * size + size, size, gen_color(200, 200, 200, 0)));
-			else if (vars->map[pos] == 'O')
+			else if (vars->map[pos] == 'O' || vars->map[pos] == 'C')
 				draw_square(vars, gen_coord(x * size + size, y * size + size, size,
 					gen_color(150, 20, 150, 0)));
 		}
@@ -331,19 +333,19 @@ void	draw_2d_map(t_vars *vars, int size)
 				draw_square(vars, gen_coord(x * size + size, y * size + size, size, gen_color(100, 100, 100, 0)));
 			else if (vars->map[pos] == '1')
 				draw_square(vars, gen_coord(x * size + size, y * size + size, size, gen_color(200, 200, 200, 0)));
-			else if (vars->map[pos] == 'O')
+			else if (vars->map[pos] == 'O' || vars->map[pos] == 'C')
 				draw_square(vars, gen_coord(x * size + size, y * size + size, size,
 					gen_color(150, 20, 150, 0)));
 		}
-		else if (y >= (((int)vars->player.pos.y / (int)size) - 1) && y <= (((int)vars->player.pos.y / (int)size) + 1)&&
-			x >= (((int)vars->player.pos.x / (int)size) - 1) && x <= (((int)vars->player.pos.x / (int)size) + 1))
+		else if (y >= ((int)vars->player.pos.y - 1) && y <= ((int)vars->player.pos.y + 1)&&
+			x >= ((int)vars->player.pos.x - 1) && x <= ((int)vars->player.pos.x + 1))
 		{
 			if (vars->map[pos] == '0')
-				draw_square(vars, gen_coord(x1++ * size + size, y1 * size + size, size, gen_color(100, 100, 100, 0)));
+				draw_square(vars, gen_coord((x1++ * size) + size, y1 * size + size, size, gen_color(100, 100, 100, 0)));
 			else if (vars->map[pos] == '1')
-				draw_square(vars, gen_coord(x1++ * size + size, y1 * size + size, size, gen_color(200, 200, 200, 0)));
-			else if (vars->map[pos] == 'O')
-				draw_square(vars, gen_coord(x1++ * size + size, y1 * size + size, size,
+				draw_square(vars, gen_coord((x1++ * size) + size, y1 * size + size, size, gen_color(200, 200, 200, 0)));
+			else if (vars->map[pos] == 'O' || vars->map[pos] == 'C')
+				draw_square(vars, gen_coord((x1++ * size) + size, y1 * size + size, size,
 					gen_color(150, 20, 150, 0)));
 			if (x1 == 3)
 			{

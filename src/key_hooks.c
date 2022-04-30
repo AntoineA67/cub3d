@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 16:39:54 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/30 17:01:09 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,8 @@ static void	move_player(t_vars *vars, int dir)
 	int		size;
 
 	size = vars->min_map_mult;
-	newposX = vars->player.pos.x + dir * cos(vars->player.rot) * .06;
-	newposY = vars->player.pos.y + dir * sin(vars->player.rot) * .06;
+	newposX = vars->player.pos.x + dir * cos(vars->player.rot) * 0.2;
+	newposY = vars->player.pos.y + dir * sin(vars->player.rot) * 0.2;
 	// printf("%.2f	%.2f\n", newposX, newposY);
 	if (vars->map[(int)newposX + (int)newposY * vars->size.x] != '1')
 	{
