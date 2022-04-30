@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 19:24:45 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/30 12:14:58 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,24 +163,10 @@ void	project_rays(t_vars *vars)
 		if (dist(vars->player.pos.x, vars->player.pos.y, disV.x, disV.y, ra2) <
 			dist(vars->player.pos.x, vars->player.pos.y, disH.x, disH.y, ra2))
 		{
+			//HIT VERTICAL
 			rx = disV.x;
 			ry = disV.y;
-			if (ra2 > M_PI)
-				color = gen_color(255, 0, 0, 0);
-			else
-				color = gen_color(0, 255, 0, 0);
 		}
-		else
-		{
-			if (ra2 > M_PI_2 && ra2 < M_PI_2 + M_PI)
-				color = gen_color(0, 0, 255, 0);
-			else
-				color = gen_color(255, 255, 0, 0);
-		}
-		// if (ra2 == fmod(vars->player.rot - M_PI_4 + (M_PI * 2) , M_PI * 2))
-		plot_line(vars,
-				gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(10, 10, 10, 200)),
-				gen_coord(rx + size, size + ry, 0, gen_color(10, 10, 10, 200)));
 		min_dist = dist(vars->player.pos.x, vars->player.pos.y, rx, ry, ra2);
 		double ca = vars->player.rot - ra2;
 		if (ca < 0)
@@ -188,22 +174,67 @@ void	project_rays(t_vars *vars)
 		if (ca > M_PI * 2)
 			ca -= M_PI * 2;
 		min_dist *= cos(ca);
+		if (dist(vars->player.pos.x, vars->player.pos.y, disV.x, disV.y, ra2) <
+			dist(vars->player.pos.x, vars->player.pos.y, disH.x, disH.y, ra2))
+		{
+			if (ra2 > M_PI)
+			{
+				color = gen_color(255, 0, 0, 0);
+				line_texture(vars, i, fmod(rx, 64.0) * vars->textures.img_so.size.x / (size * 1.0),
+					min_dist, &vars->textures.img_so);
+				//sud
+			}
+			else
+			{
+				color = gen_color(0, 255, 0, 0);
+				line_texture(vars, i, fmod(rx, 64.0) * 100.0 / (size * 1.0),
+					min_dist, &vars->textures.img_no);
+				//nord
+			}
+		}
+		else
+		{
+			//HIT HORIZONTAL
+			if (ra2 > M_PI_2 && ra2 < M_PI_2 + M_PI)
+			{
+				color = gen_color(0, 0, 255, 0);
+				line_texture(vars, i, fmod(ry, 64.0) * 100.0 / (size * 1.0),
+					min_dist, &vars->textures.img_ea);
+				//est
+			}
+			else
+			{
+				color = gen_color(255, 255, 0, 0);
+				line_texture(vars, i, fmod(ry, 64.0) * 100.0 / (size * 1.0),
+					min_dist, &vars->textures.img_we);
+				//ouest
+			}
+		}
+		// if (ra2 == fmod(vars->player.rot - M_PI_4 + (M_PI * 2) , M_PI * 2))
+		if (i == vars->win_size.x / 2)
+		{
+			printf("%.2f %.2f	%d %d	%.2f %.2f %.2f\n", rx, ry,
+				(int)rx / size, (int)ry / size, fmod(rx, 64.0) * 100.0 / 64.0, fmod(ry, 64.0) * 100.0 / 64.0, min_dist);
+			plot_line(vars,
+					gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(10, 10, 10, 200)),
+					gen_coord(rx + size, size + ry, 0, gen_color(10, 10, 10, 200)));
+
+		}
 		// while (++i % 10 != 9)
 		// {
 		// 	plot_line(vars,
 		// 		gen_coord(i, 540 - (int)(10000 / min_dist), 0),
 		// 		gen_coord(i, 540 + (int)(10000 / min_dist), 0));
 		// }
-		// printf("%.2f\n", ra2);
-		plot_line(vars,
-				gen_coord(i, 540 - (int)(10000 / min_dist), 0, color),
-				gen_coord(i, 540 + (int)(10000 / min_dist), 0, gen_color(0, 0, 0, 0)));
-		// printf("%.2f %d\n", min_dist, (int)(10000 / min_dist));
+		// plot_line(vars,
+		// 		gen_coord(i, 540 - (int)(10000 / min_dist), 0, color),
+		// 		gen_coord(i, 540 + (int)(10000 / min_dist), 0, gen_color(0, 0, 0, 0)));
+		//printf("%.2f %d\n", min_dist, (int)(10000 / min_dist));
 		ra += M_PI_2 / vars->win_size.x;
 	}
-	plot_line(vars,
-			gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(255, 0, 100, 0)),
-			gen_coord(rx + size, size + ry, 0, gen_color(255, 0, 100, 0)));
+	// plot_line(vars,
+	// 		gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(255, 0, 100, 0)),
+	// 		gen_coord(rx + size, size + ry, 0, gen_color(255, 0, 100, 0)));
 }
 
 void	draw_square_center(t_vars *vars, t_coord p)
@@ -266,8 +297,9 @@ void	render(t_vars *vars)
 {
 	ft_int_memset(vars->img.addr, to_rgb(vars->textures.c, 0),
 		vars->img.line_length * vars->win_size.y / 8);
-	ft_int_memset(vars->img.addr + vars->img.line_length * vars->win_size.y / 2
-		, to_rgb(vars->textures.f, 0), vars->img.line_length * vars->win_size.y / 8);
+	ft_int_memset(vars->img.addr + vars->img.line_length * vars->win_size.y / 2,
+		to_rgb(vars->textures.f, 0),
+		vars->img.line_length * vars->win_size.y / 8);
 	draw_2d_map(vars, 64);
 	project_rays(vars);
 	show_player(vars, 64);

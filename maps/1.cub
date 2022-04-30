@@ -1,7 +1,7 @@
-NO ./path_to_the_north_texture
-SO ./path_to_the_south_texture
-WE ./path_to_the_west_texture
-EA ./path_to_the_east_texture
+NO ./textures/xpm/dirt.xpm
+SO ./textures/xpm/gravel.xpm
+WE ./textures/xpm/leaves.xpm
+EA ./textures/xpm/bookshelf.xpm
 C 83,24,135
 F 220,100,0
 

@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:03:35 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 18:42:20 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/30 14:16:13 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,4 +84,30 @@ void	plot_line(t_vars *vars, t_coord p1, t_coord p2)
 	}
 }
 
-// void	line_texture(t_vars *vars, int x, )
+void	line_texture(t_vars *vars, int screen_x, int img_x, double dist, t_data *img)
+{
+	int		i;
+	double	y;
+	double	step;
+
+	i = vars->win_size.y / 2 - (int)(10000 / dist) - 1;
+	y = 0.0;
+	step = (img->size.y * 1.0) / ((vars->win_size.y / 2 + (int)(10000 / dist))
+			- (vars->win_size.y / 2 - (int)(10000 / dist))) - .1;
+	// printf("%d %d %f %d\n", i, vars->win_size.y / 2 + (int)(10000 / dist),
+		// step, img->size.y);
+	while (++i < vars->win_size.y / 2 + (int)(10000 / dist))
+	{
+		// printf("%d %d %d %.2f\n", screen_x, i, (int)y, y);
+		pixel_put(&vars->img, screen_x, i,
+			*(unsigned int *)(img->addr + (img_x
+			* (img->bits_per_pixel / 8) + (int)y * img->line_length)));
+		y += step;
+	}
+
+	(void)vars;
+	(void)screen_x;
+	(void)img_x;
+	(void)dist;
+	(void)img;
+}
