@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 16:37:21 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/30 16:40:17 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ double	dist(double ax, double ay, double bx, double by, double angle)
 	return (sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
 }
 
-void	project_rays(t_vars *vars, double	render_ratio)
+void	project_rays(t_vars *vars, double render_ratio)
 {
 	int			i;
 	int			dof;
@@ -61,6 +61,7 @@ void	project_rays(t_vars *vars, double	render_ratio)
 	int			shift;
 	double		ra;
 	double		ra2;
+	double		ca; 
 	double		aTan;
 	double		nTan;
 	double		ry;
@@ -72,6 +73,7 @@ void	project_rays(t_vars *vars, double	render_ratio)
 	t_vector2	disV;
 	t_vector2	disH;
 
+	(void)render_ratio;
 	shift = 0;
 	size = (int)vars->min_map_mult;
 	while (size != 1)
@@ -85,43 +87,25 @@ void	project_rays(t_vars *vars, double	render_ratio)
 	end = fmod(vars->player.rot + M_PI_4 + (M_PI * 2) , M_PI * 2);
 	if (ra > end)
 		end += (M_PI * 2);
-	// if (ra > end)
-	// {
-	// 	double buff = ra;
-	// 	ra = end;
-	// 	end = buff;
-	// }
-	//printf("Start:%f|End:%f\n", ra, end);
-	// if (ra < 0.0)
-	// {
-	// 	ra = (M_PI * 2 )+ ra;
-	// 	end = ra;
-	// 	ra = vars->player.rot + M_PI_4;
-	// 	printf("Start:%f|End:%f\n", ra, end);
-	// }
 	while (ra < end)
 	{
 		i++;
-		disV.x = 1e30;
-		disV.y = 1e30;
-		disH.x = 1e30;
-		disH.y = 1e30;
 		dof = 0;
 		ra2 =  fmod(ra , M_PI * 2);
 		aTan = -1.0/tan(ra2);
 		if (ra2 > M_PI) //looking down
 		{
-			ry = (((int)vars->player.pos.y>>shift)<<shift) - .00001;
+			ry = (int)vars->player.pos.y - .00001;
 			rx = (vars->player.pos.y - ry) * aTan + vars->player.pos.x;
-			yo = -vars->min_map_mult;
-			xo = vars->min_map_mult * aTan;
+			yo = -1.0;
+			xo = 1.0 * aTan;
 		}
 		if (ra2 < M_PI && ra2 != 0) //looking up
 		{
-			ry = (((int)vars->player.pos.y>>shift)<<shift) + vars->min_map_mult;
+			ry = (int)vars->player.pos.y + 1.0;
 			rx = (vars->player.pos.y - ry) * aTan + vars->player.pos.x;
-			yo = vars->min_map_mult;
-			xo = -vars->min_map_mult * aTan;
+			yo = 1.0;
+			xo = -1.0 * aTan;
 		}
 		if (ra2 == 0.0 || ra2 == M_PI)//looking straight left or right
 		{
@@ -131,8 +115,8 @@ void	project_rays(t_vars *vars, double	render_ratio)
 		}
 		while (dof < size)
 		{
-			mx = (int)rx>>shift;
-			my = (int)ry>>shift;
+			mx = (int)rx;
+			my = (int)ry;
 			mp = my * vars->size.x + mx;
 			if (mp < vars->size.x * vars->size.y && mp >= 0 && (vars->map[mp] == '1' || vars->map[mp] == 'C'))
 				dof = size;
@@ -150,17 +134,17 @@ void	project_rays(t_vars *vars, double	render_ratio)
 		nTan = -tan(ra2);
 		if (ra2 > M_PI_2 && ra2 < M_PI_2 * 3.0) //looking left
 		{
-			rx = (((int)vars->player.pos.x>>shift)<<shift) - .00001;
+			rx = (int)vars->player.pos.x - .00001;
 			ry = (vars->player.pos.x - rx) * nTan + vars->player.pos.y;
-			xo = -vars->min_map_mult;
-			yo = vars->min_map_mult * nTan;
+			xo = -1.0;
+			yo = 1.0 * nTan;
 		}
 		if (ra2 > M_PI_2 * 3.0 || ra2 < M_PI_2) //looking right
 		{
-			rx = (((int)vars->player.pos.x>>shift)<<shift) + vars->min_map_mult;
+			rx = (int)vars->player.pos.x + 1.0;
 			ry = (vars->player.pos.x - rx) * nTan + vars->player.pos.y;
-			xo = vars->min_map_mult;
-			yo = -vars->min_map_mult * nTan;
+			xo = 1.0;
+			yo = -1.0 * nTan;
 		}
 		if (ra2 == M_PI_2 || ra2 == M_PI_2 * 3.0)//looking stra2ight left or right
 		{
@@ -170,8 +154,8 @@ void	project_rays(t_vars *vars, double	render_ratio)
 		}
 		while (dof < size)
 		{
-			mx = (int)rx>>shift;
-			my = (int)ry>>shift;
+			mx = (int)rx;
+			my = (int)ry;
 			mp = my * vars->size.x + mx;
 			if (mp < vars->size.x * vars->size.y && mp >= 0 && (vars->map[mp] == '1' || vars->map[mp] == 'C'))
 				dof = size;
@@ -188,31 +172,82 @@ void	project_rays(t_vars *vars, double	render_ratio)
 		if (dist(vars->player.pos.x, vars->player.pos.y, disV.x, disV.y, ra2) <
 			dist(vars->player.pos.x, vars->player.pos.y, disH.x, disH.y, ra2))
 		{
+			//HIT VERTICAL
 			rx = disV.x;
 			ry = disV.y;
-			if (ra2 > M_PI)
-				color = gen_color(255, 0, 0, 0);
-			else
-				color = gen_color(0, 255, 0, 0);
 		}
-		else
-		{
-			if (ra2 > M_PI_2 && ra2 < M_PI_2 + M_PI)
-				color = gen_color(0, 0, 255, 0);
-			else
-				color = gen_color(255, 255, 0, 0);
-		}
-		// if (ra2 == fmod(vars->player.rot - M_PI_4 + (M_PI * 2) , M_PI * 2))
-		//plot_line(vars,
-			//	gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(10, 10, 10, 200)),
-			//	gen_coord(rx + size, size + ry, 0, gen_color(10, 10, 10, 200)));
 		min_dist = dist(vars->player.pos.x, vars->player.pos.y, rx, ry, ra2);
-		double ca = vars->player.rot - ra2;
+		ca = vars->player.rot - ra2;
 		if (ca < 0)
 			ca += M_PI * 2;
 		if (ca > M_PI * 2)
 			ca -= M_PI * 2;
+		// printf("MIN DIST %.2f %.2f\n", min_dist, min_dist * cos(ca));
 		min_dist *= cos(ca);
+		int	wall_height = vars->win_size.y / 2 / min_dist;
+
+		// printf("height %d\n", wall_height);
+		(void)color;
+		if (dist(vars->player.pos.x, vars->player.pos.y, disV.x, disV.y, ra2) <
+			dist(vars->player.pos.x, vars->player.pos.y, disH.x, disH.y, ra2))
+		{
+			if (ra2 > M_PI)
+			{
+				color = gen_color(255, 0, 0, 0);
+				line_texture(vars, i, (rx - (int)rx) * (vars->textures.img_so.size.x + .0),
+					wall_height, &vars->textures.img_so);
+				//sud
+			}
+			else
+			{
+				color = gen_color(0, 255, 0, 0);
+				line_texture(vars, i, (rx - (int)rx) * (vars->textures.img_so.size.x + .0),
+					wall_height, &vars->textures.img_no);
+				//nord
+			}
+		}
+		else
+		{
+			//HIT HORIZONTAL
+			if (ra2 > M_PI_2 && ra2 < M_PI_2 + M_PI)
+			{
+				color = gen_color(0, 0, 255, 0);
+				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_so.size.x + .0),
+					wall_height, &vars->textures.img_ea);
+				//est
+			}
+			else
+			{
+				color = gen_color(255, 255, 0, 0);
+				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_so.size.x + .0),
+					wall_height, &vars->textures.img_we);
+				//ouest
+			}
+		}
+		// if (ra2 == fmod(vars->player.rot - M_PI_4 + (M_PI * 2) , M_PI * 2))
+		if (i == vars->win_size.x / 2)
+		{
+			// printf("%.2f %.2f	%.2f %.2f	%d %d	%.2f\n", vars->player.pos.x, vars->player.pos.y, rx, ry,
+				// (int)rx, (int)ry, min_dist);
+			// plot_line(vars,
+			// 		gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(10, 10, 10, 200)),
+			// 		gen_coord(rx + size, size + ry, 0, gen_color(10, 10, 10, 200)));
+
+		}
+		//plot_line(vars,
+			//	gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(10, 10, 10, 200)),
+			//	gen_coord(rx + size, size + ry, 0, gen_color(10, 10, 10, 200)));
+
+		//MERGE
+		// min_dist = dist(vars->player.pos.x, vars->player.pos.y, rx, ry, ra2);
+		// double ca = vars->player.rot - ra2;
+		// if (ca < 0)
+		// 	ca += M_PI * 2;
+		// if (ca > M_PI * 2)
+		// 	ca -= M_PI * 2;
+		// min_dist *= cos(ca);
+
+
 		// while (++i % 10 != 9)
 		// {
 		// 	plot_line(vars,
@@ -220,9 +255,9 @@ void	project_rays(t_vars *vars, double	render_ratio)
 		// 		gen_coord(i, 540 + (int)(10000 / min_dist), 0));
 		// }
 		// printf("%.2f\n", ra2);
-		plot_line(vars,
-				gen_coord(i, 540 - (int)(10000 / (min_dist * (render_ratio / vars->min_map_mult))), 0, color),
-				gen_coord(i, 540 + (int)(10000 / (min_dist * (render_ratio / vars->min_map_mult))), 0, gen_color(0, 0, 0, 0)));
+		// plot_line(vars,
+		// 		gen_coord(i, 540 - (int)(10000 / (min_dist * (render_ratio / vars->min_map_mult))), 0, color),
+		// 		gen_coord(i, 540 + (int)(10000 / (min_dist * (render_ratio / vars->min_map_mult))), 0, gen_color(0, 0, 0, 0)));
 		// printf("%.2f %d\n", min_dist, (int)(10000 / min_dist));
 		ra += M_PI_2 / vars->win_size.x;
 	}

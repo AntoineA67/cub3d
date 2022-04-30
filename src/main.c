@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 16:33:40 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/30 16:40:00 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,27 +46,45 @@ int	init_player(t_vars *vars)
 	vars->player.delta.y = 0;
 	player_in_map = ft_strchr(vars->map, 'P');
 	vars->map[player_in_map - vars->map] = '0';
-	vars->player.pos.x = ((player_in_map - vars->map) % vars->size.x) * vars->min_map_mult;
-	vars->player.pos.y = ((player_in_map - vars->map) / vars->size.x) * vars->min_map_mult;
+	vars->player.pos.x = (player_in_map - vars->map) % vars->size.x + .0;
+	vars->player.pos.y = (player_in_map - vars->map) / vars->size.x + .0;
 	return (0);
 }
 
 void	init_imgs(t_vars *vars)
 {
-	mlx_xpm_file_to_image(vars->mlx, vars->textures.no, &vars->textures.img_no.size.x, &vars->textures.img_no.size.y);
+	t_textures	*imgs;
+
+	imgs = &vars->textures;
+	imgs->img_no.img = mlx_xpm_file_to_image(vars->mlx, imgs->no, &imgs->img_no.size.x,
+		&imgs->img_no.size.y);
+	imgs->img_no.addr = mlx_get_data_addr(imgs->img_no.img, &imgs->img_no.bits_per_pixel,
+		&imgs->img_no.line_length, &imgs->img_no.endian);
+	imgs->img_so.img = mlx_xpm_file_to_image(vars->mlx, imgs->so, &imgs->img_so.size.x,
+		&imgs->img_so.size.y);
+	imgs->img_so.addr = mlx_get_data_addr(imgs->img_so.img, &imgs->img_so.bits_per_pixel,
+		&imgs->img_so.line_length, &imgs->img_so.endian);
+	imgs->img_ea.img = mlx_xpm_file_to_image(vars->mlx, imgs->ea, &imgs->img_ea.size.x,
+		&imgs->img_ea.size.y);
+	imgs->img_ea.addr = mlx_get_data_addr(imgs->img_ea.img, &imgs->img_ea.bits_per_pixel,
+		&imgs->img_ea.line_length, &imgs->img_ea.endian);
+	imgs->img_we.img = mlx_xpm_file_to_image(vars->mlx, imgs->we, &imgs->img_we.size.x,
+		&imgs->img_we.size.y);
+	imgs->img_we.addr = mlx_get_data_addr(imgs->img_we.img, &imgs->img_we.bits_per_pixel,
+		&imgs->img_we.line_length, &imgs->img_we.endian);
 }
 
 static void	fill_vars(t_vars *vars, int fd)
 {
 	t_data	img;
 
+	vars->mlx = mlx_init();
 	vars->win_size.x = 1920;
 	vars->win_size.y = 1080;
 	vars->map = parse(fd, vars);
 	if (init_player(vars))
 		return ; //NO PLAYER IN MAP
 	init_imgs(vars);
-	vars->mlx = mlx_init();
 	vars->plane.x = 0.0;
 	vars->plane.y = 0.66;
 	img.img = mlx_new_image(vars->mlx, vars->win_size.x, vars->win_size.y);
