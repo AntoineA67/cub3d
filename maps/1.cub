@@ -1,5 +1,5 @@
-NO ./textures/xpm/dirt.xpm
-SO ./textures/xpm/gravel.xpm
+NO ./textures/xpm/oui.xpm
+SO ./textures/xpm/banane.xpm
 WE ./textures/xpm/leaves.xpm
 EA ./textures/xpm/bookshelf.xpm
 C 83,24,135
