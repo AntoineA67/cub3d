@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:03:35 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 16:36:29 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/30 16:50:33 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, double dist, t_data *im
 			- (vars->win_size.y / 2 - dist));
 	// printf("%d %d %f %d\n", i, vars->win_size.y / 2 + (int)dist,
 	// 	step, img->size.y);
+	// printf("%d\n", img_x);
 	while (++i < vars->win_size.y / 2 + dist)
 	{
 		// printf("%d %d %d %.2f\n", screen_x, i, (int)y, y);

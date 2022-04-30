@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 16:40:17 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/30 16:53:52 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ void	project_rays(t_vars *vars, double render_ratio)
 		// printf("MIN DIST %.2f %.2f\n", min_dist, min_dist * cos(ca));
 		min_dist *= cos(ca);
 		int	wall_height = vars->win_size.y / 2 / min_dist;
-
+		// printf("OUI %d	%.3f	%d\n", vars->textures.img_no.size.x, (rx - (int)rx), vars->textures.img_no.size.x);
 		// printf("height %d\n", wall_height);
 		(void)color;
 		if (dist(vars->player.pos.x, vars->player.pos.y, disV.x, disV.y, ra2) <
@@ -201,7 +201,7 @@ void	project_rays(t_vars *vars, double render_ratio)
 			else
 			{
 				color = gen_color(0, 255, 0, 0);
-				line_texture(vars, i, (rx - (int)rx) * (vars->textures.img_so.size.x + .0),
+				line_texture(vars, i, (rx - (int)rx) * (vars->textures.img_no.size.x + .0),
 					wall_height, &vars->textures.img_no);
 				//nord
 			}
@@ -212,14 +212,14 @@ void	project_rays(t_vars *vars, double render_ratio)
 			if (ra2 > M_PI_2 && ra2 < M_PI_2 + M_PI)
 			{
 				color = gen_color(0, 0, 255, 0);
-				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_so.size.x + .0),
+				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_ea.size.x + .0),
 					wall_height, &vars->textures.img_ea);
 				//est
 			}
 			else
 			{
 				color = gen_color(255, 255, 0, 0);
-				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_so.size.x + .0),
+				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_we.size.x + .0),
 					wall_height, &vars->textures.img_we);
 				//ouest
 			}
