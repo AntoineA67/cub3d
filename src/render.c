@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 14:57:25 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/30 15:01:13 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,21 +229,36 @@ void	project_rays(t_vars *vars, double render_ratio)
 					gen_coord(rx + size, size + ry, 0, gen_color(10, 10, 10, 200)));
 
 		}
+		//plot_line(vars,
+			//	gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(10, 10, 10, 200)),
+			//	gen_coord(rx + size, size + ry, 0, gen_color(10, 10, 10, 200)));
+
+		//MERGE
+		// min_dist = dist(vars->player.pos.x, vars->player.pos.y, rx, ry, ra2);
+		// double ca = vars->player.rot - ra2;
+		// if (ca < 0)
+		// 	ca += M_PI * 2;
+		// if (ca > M_PI * 2)
+		// 	ca -= M_PI * 2;
+		// min_dist *= cos(ca);
+
+
 		// while (++i % 10 != 9)
 		// {
 		// 	plot_line(vars,
 		// 		gen_coord(i, 540 - (int)(10000 / min_dist), 0),
 		// 		gen_coord(i, 540 + (int)(10000 / min_dist), 0));
 		// }
+		// printf("%.2f\n", ra2);
 		// plot_line(vars,
-		// 		gen_coord(i, 540 - (int)(10000 / min_dist), 0, color),
-		// 		gen_coord(i, 540 + (int)(10000 / min_dist), 0, gen_color(0, 0, 0, 0)));
-		//printf("%.2f %d\n", min_dist, (int)(10000 / min_dist));
+		// 		gen_coord(i, 540 - (int)(10000 / (min_dist * (render_ratio / vars->min_map_mult))), 0, color),
+		// 		gen_coord(i, 540 + (int)(10000 / (min_dist * (render_ratio / vars->min_map_mult))), 0, gen_color(0, 0, 0, 0)));
+		// printf("%.2f %d\n", min_dist, (int)(10000 / min_dist));
 		ra += M_PI_2 / vars->win_size.x;
 	}
-	// plot_line(vars,
-	// 		gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(255, 0, 100, 0)),
-	// 		gen_coord(rx + size, size + ry, 0, gen_color(255, 0, 100, 0)));
+	//plot_line(vars,
+		//	gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(255, 0, 100, 0)),
+		//	gen_coord(rx + size, size + ry, 0, gen_color(255, 0, 100, 0)));
 }
 
 void	draw_square_center(t_vars *vars, t_coord p)
