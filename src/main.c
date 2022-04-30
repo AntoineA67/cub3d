@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 14:17:04 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/30 16:33:40 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,105 @@ static int	test_hook(t_vars *vars)
 	return (0);
 }
 
+void	change_ui(void		*v, void	*data)
+{
+	t_vars	*vars;
+
+	vars = (t_vars *)v;
+	vars->ui = *((int*)data);
+}
+
+void	change_setting(void		*v, void	*dat)
+{
+	t_vars	*vars;
+	int	data;
+
+	data = *((int*)dat);
+	vars = (t_vars *)v;
+	if (data == 1)
+	{
+		vars->settings.map_type++;
+		if (vars->settings.map_type == 3)
+			vars->settings.map_type = 0;
+	}
+}
+
+void	button(t_vars *vars, t_coords p, char *txt,void (*f)(void*, void*))
+{
+	int	dy;
+	int	dx;
+	int	data;
+
+	dy = p.a.y;
+	data = (int)(*txt - '0');
+	while (++dy < p.b.y)
+	{
+		dx = p.a.x;
+		while (++dx < p.b.x)
+			pixel_put(&vars->img, dx,
+					dy, to_rgb(p.a.c, 0));
+	}
+	(void)txt;
+	//printf("%d\n", mlx_string_put(vars->mlx, vars->win,100,100,0xff00ff, "PLAY"));
+	if (vars->clicked)
+	{
+		if (vars->clicked_co.x >= p.a.x && vars->clicked_co.x <= p.b.x)
+			if (vars->clicked_co.y >= p.a.y && vars->clicked_co.y <= p.b.y)
+				f(vars, &data);
+	}
+}
+
+t_coords screen_pc(double off, double wh, t_rgb colore, t_vars *vars)
+{
+	t_coords res;
+	int	width;
+	int	height;
+	int	off_l;
+	int	off_d;
+
+	width = (int)wh;
+	height = fmod(wh * 100.0, 100.0);
+	off_l = (int)off;
+	off_d = fmod(off * 100.0, 100.0);
+	res.a.x = vars->win_size.x * off_l / 100;
+	res.a.y = vars->win_size.y * off_d / 100;
+	res.b.x = res.a.x + (vars->win_size.x * width / 100);
+	res.b.y = res.a.y + (vars->win_size.x * height / 100);
+	res.a.c = colore;
+	//printf("%d|%d|%d\n", res.x, res.y, res.z);
+	return (res);
+}
+
+int	ui_frame1(t_vars	*vars)
+{ 
+	button(vars, screen_pc(25.15,50.05, gen_color(255,0,100, 100), vars), "0Play", &change_ui);
+	button(vars, screen_pc(25.30,25.025, gen_color(255,255,100, 0), vars), "2Maps", &change_ui);
+	button(vars, screen_pc(25.40,25.025, gen_color(25,60,100, 0), vars), "3TexturePack", &change_ui);
+	button(vars, screen_pc(25.50,25.025, gen_color(56,69,10, 0), vars), "4Parameter", &change_ui);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
+	return (0);
+}
+
+int	ui_frame2(t_vars	*vars)
+{ 
+	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "1Return", &change_ui);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
+	return (0);
+}
+int	ui_frame3(t_vars	*vars)
+{ 
+	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "1Return", &change_ui);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
+	return (0);
+}
+int	ui_frame4(t_vars	*vars)
+{ 
+	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "1Return", &change_ui);
+	button(vars, screen_pc(25.30,25.025, gen_color(255,0,100, 0), vars), "1Change_minimap", &change_setting);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
+	return (0);
+}
+
 long	gettime(long initime)
 {
 	long			res;
@@ -114,16 +213,44 @@ int	frame(void *data)
 	char	*itoa;
 
 	vars = (t_vars *)data;
-	if (!vars->fps_cap || !(gettime(vars->n1) % (1000 / vars->fps_cap)))
+	if (!vars->ui)
+	{
+	if (!vars->settings.fps_cap || !(gettime(vars->n1) % (1000 / vars->settings.fps_cap)))
 	{
 		render(vars);
 		temp = gettime(vars->n1);
 		itoa = ft_itoa(1000 / (temp - vars->n2));
 		fps = ft_strjoin("FPS: ", itoa);
-		mlx_string_put(vars->mlx, vars->win, 100, 100, 0xff, fps);
+		mlx_string_put(vars->mlx, vars->win, 100, 100, 0xff00ff, fps);
 		free(itoa);
 		free(fps);
 		vars->n2 = temp;
+	}
+	}
+	else
+	{
+			ft_int_memset(vars->img.addr, 0x000000,
+		vars->img.line_length * vars->win_size.y / 4);
+	if (vars->ui == 1)
+	{
+		ui_frame1(vars);
+		vars->clicked = 0;
+	}
+	else if (vars->ui == 2)
+	{
+		ui_frame2(vars);
+		vars->clicked = 0;
+	}
+	else if (vars->ui == 3)
+	{
+		ui_frame3(vars);
+		vars->clicked = 0;
+	}
+	else if (vars->ui == 4)
+	{
+		ui_frame4(vars);
+		vars->clicked = 0;
+	}
 	}
 	return (0);
 }
@@ -145,12 +272,12 @@ int	main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 	vars.min_map_mult = 16.0;
+	vars.ui = 1;
 	fill_vars(&vars, fd);
 	(void)extract_name;
 	vars.rays_number = 0;
 	vars.plane_rays = ft_calloc(sizeof(t_vector2), vars.rays_number);
-	vars.render_dist = 30;
-	vars.fps_cap = 144;
+	vars.settings.fps_cap = 144;
 	vars.win = mlx_new_window(vars.mlx, vars.win_size.x,
 			vars.win_size.y, extract_name(argv[1]));
 	printf("EA: %s\nNO: %s\nSO: %s\nWE: %s\nF: %#x\nC: %#x\n",
@@ -161,7 +288,7 @@ int	main(int argc, char **argv)
 	mlx_hook(vars.win, 2, 0, key_hook, &vars);
 	mlx_hook(vars.win, 17, 0, test_hook, &vars);
 	mlx_loop_hook(vars.mlx, frame, &vars);
-	// mlx_mouse_hook(vars.win, mouse_hook, &vars);
+	mlx_mouse_hook(vars.win, mouse_hook, &vars);
 	//project(&vars);
 	// mlx_loop_hook(vars.mlx, raycasting, &vars);
 	vars.n1 = gettime(0);

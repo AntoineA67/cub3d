@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 12:21:05 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/30 16:25:31 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,12 @@ typedef struct s_coord
 	int		z;
 	t_rgb	c;
 }		t_coord;
+
+typedef struct s_coords
+{
+	t_coord	a;
+	t_coord	b;
+}		t_coords;
 
 typedef struct s_data {
 	void	*img;
@@ -72,6 +78,12 @@ typedef struct s_player {
 	double	rot;
 }		t_player;
 
+typedef struct	s_settings
+{
+	int				fps_cap;
+	int				map_type;
+}	t_settings;
+
 typedef struct s_vars {
 	int				rays_number;
 	t_coord			win_size;
@@ -84,9 +96,11 @@ typedef struct s_vars {
 	void			*win;
 	char			*map;
 	double 			rays;
-	int				render_dist;
-	int				fps_cap;
 	int				start_rot;
+	int				ui;
+	int				clicked;
+	t_coord			clicked_co;
+	t_settings		settings;
 	double			min_map_mult;
 	long			n1;
 	long			n2;
@@ -139,7 +153,7 @@ void	plot_line(t_vars *vars, t_coord p1, t_coord p2);
 int		key_hook(int keycode, t_vars *vars);
 // int		grad_color(t_rgb *c1, t_rgb *c2, float val, t_rgb map_color);
 // int		base_color(t_rgb *c1, t_rgb *c2, float val, t_rgb map_color);
-// int		mouse_hook(int keycode, int x, int y, t_vars *vars);
+ int		mouse_hook(int keycode, int x, int y, t_vars *vars);
 // void	out(t_vars *vars);
 void	esc(t_vars *vars, int err);
 // void	reset(t_vars *vars);
