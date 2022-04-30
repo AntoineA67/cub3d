@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:03:35 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 18:23:37 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/30 19:04:30 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,40 +84,40 @@ void	plot_line(t_vars *vars, t_coord p1, t_coord p2)
 	}
 }
 
-unsigned int	add_shade(t_vars *vars, unsigned int c, double dist)
+unsigned int	add_shade(t_vars *vars, unsigned int c, unsigned int dist_int)
 {
-	int	dist_int;
+	unsigned int	r;
+	unsigned int	g;
+	unsigned int	b;
 
 	(void)vars;
 	(void)c;
-	dist_int = (int)dist / 2;
-	return (c * (dist_int * 256 * 256 + dist_int * 256 + dist_int));
+	r = (c>>16) & 0xff;
+	g = (c>>8) & 0xff;
+	b = c & 0xff;
+	// return ((dist_int<<16) + (dist_int<<8) + dist_int);
+	return ((((r > dist_int) * (r - dist_int))<<16)
+		+ (((g > dist_int) * (g - dist_int)<<8))
+		+ (b > dist_int) * (b - dist_int));
 }
 
-void	line_texture(t_vars *vars, int screen_x, int img_x, double wall_height, t_data *img)
+void	line_texture(t_vars *vars, int screen_x, int img_x, double wall_height, t_data *img, int dist_int)
 {
-	int		i;
-	double	y;
-	double	step;
+	int				i;
+	double			y;
+	double			step;
 
 	i = vars->win_size.y / 2 - wall_height;
 	y = 0.0;
 	step = (img->size.y * 1.0) / ((vars->win_size.y / 2 + wall_height)
 			- (vars->win_size.y / 2 - wall_height));
-	// printf("%d %d %f %d\n", i, vars->win_size.y / 2 + (int)wall_height,
-	// 	step, img->size.y);
-	// printf("%d\n", img_x);
 	while (++i < vars->win_size.y / 2 + wall_height)
 	{
 		if (screen_x == vars->win_size.x / 2)
-			printf("%.2f	%x\n", wall_height, add_shade(vars, 1, wall_height));
-			// printf("%x %x\n", *(unsigned int *)(img->addr + (img_x
-				// * (img->bits_per_pixel / 8) + (int)y * img->line_length)),
-				// add_shade(vars, *(unsigned int *)(img->addr + (img_x
-				// * (img->bits_per_pixel / 8) + (int)y * img->line_length)), wall_height));
+			printf("%d\n", dist_int);
 		pixel_put(vars->img, screen_x, i,
 			add_shade(vars, *(unsigned int *)(img->addr + (img_x
-			* (img->bits_per_pixel / 8) + (int)y * img->line_length)), wall_height));
+			* (img->bits_per_pixel / 8) + (int)y * img->line_length)), dist_int));
 		y += step;
 	}
 }

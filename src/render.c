@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 18:04:39 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/30 19:05:01 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,14 +199,14 @@ void	project_rays(t_vars *vars, double render_ratio)
 			{
 				color = gen_color(255, 0, 0, 0);
 				line_texture(vars, i, (rx - (int)rx) * (vars->textures.img_so.size.x + .0),
-					wall_height, &vars->textures.img_so);
+					wall_height, &vars->textures.img_so, (int)min_dist * 10);
 				//sud
 			}
 			else
 			{
 				color = gen_color(0, 255, 0, 0);
 				line_texture(vars, i, (rx - (int)rx) * (vars->textures.img_no.size.x + .0),
-					wall_height, &vars->textures.img_no);
+					wall_height, &vars->textures.img_no, (int)min_dist * 10);
 				//nord
 			}
 		}
@@ -217,14 +217,14 @@ void	project_rays(t_vars *vars, double render_ratio)
 			{
 				color = gen_color(0, 0, 255, 0);
 				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_ea.size.x + .0),
-					wall_height, &vars->textures.img_ea);
+					wall_height, &vars->textures.img_ea, (int)min_dist * 10);
 				//est
 			}
 			else
 			{
 				color = gen_color(255, 255, 0, 0);
 				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_we.size.x + .0),
-					wall_height, &vars->textures.img_we);
+					wall_height, &vars->textures.img_we, (int)min_dist * 10);
 				//ouest
 			}
 		}
