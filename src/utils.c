@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:24:04 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 19:23:06 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/30 17:35:51 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ void	esc(t_vars *vars, int err)
 {
 	if (err)
 		write(2, "Error\n", 6);
-	if (vars->img.img)
-		mlx_destroy_image(vars->mlx, vars->img.img);
+	if (vars->img->img)
+		mlx_destroy_image(vars->mlx, vars->img->img);
 	if (vars->win)
 		mlx_destroy_window(vars->mlx, vars->win);
 	exit(err);

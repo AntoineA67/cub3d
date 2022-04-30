@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_hooks.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 17:19:21 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/30 17:35:25 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,8 +139,8 @@ int	key_hook(int keycode, t_vars *vars)
 			esc(vars, 0);
 		else
 		{
-				ft_int_memset(vars->img.addr, 0x000000,
-		vars->img.line_length * vars->win_size.y / 4);
+				ft_int_memset(vars->img->addr, 0x000000,
+		vars->img->line_length * vars->win_size.y / 4);
 			vars->ui = 1;
 		}
 	}

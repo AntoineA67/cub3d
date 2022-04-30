@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 05:55:10 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/22 21:48:10 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/04/30 17:35:49 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@ void	project(t_vars *vars)
 	int		i;
 	float	r[9];
 
-	ft_int_memset(vars->img.addr, 0x1D1443,
-		vars->img.line_length * vars->size.y / 4);
+	ft_int_memset(vars->img->addr, 0x1D1443,
+		vars->img->line_length * vars->size.y / 4);
 	i = 0;
 	mult_matrix(r, &vars->rotation);
 	while (++i < vars->l_pts[0].z + 1)
@@ -102,6 +102,6 @@ void	project(t_vars *vars)
 		project_back(vars);
 	else
 		project_front(vars);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	tag(vars);
 }

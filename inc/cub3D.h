@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 16:40:11 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/30 17:32:43 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,9 @@ typedef struct s_vars {
 	t_textures		textures;
 	t_data			textures_img[4];
 	t_coord			size;
-	t_data			img;
+	t_data			*img;
+	t_data			*img2;
+	int				img_int;
 	void			*mlx;
 	void			*win;
 	char			*map;

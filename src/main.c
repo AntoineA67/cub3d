@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 16:40:00 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/04/30 17:39:07 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void	init_imgs(t_vars *vars)
 {
 	t_textures	*imgs;
 
+	vars->img = ft_calloc(1, sizeof(t_data));
+	vars->img2 = ft_calloc(1, sizeof(t_data));
 	imgs = &vars->textures;
 	imgs->img_no.img = mlx_xpm_file_to_image(vars->mlx, imgs->no, &imgs->img_no.size.x,
 		&imgs->img_no.size.y);
@@ -76,8 +78,6 @@ void	init_imgs(t_vars *vars)
 
 static void	fill_vars(t_vars *vars, int fd)
 {
-	t_data	img;
-
 	vars->mlx = mlx_init();
 	vars->win_size.x = 1920;
 	vars->win_size.y = 1080;
@@ -87,13 +87,12 @@ static void	fill_vars(t_vars *vars, int fd)
 	init_imgs(vars);
 	vars->plane.x = 0.0;
 	vars->plane.y = 0.66;
-	img.img = mlx_new_image(vars->mlx, vars->win_size.x, vars->win_size.y);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel,
-	 		&img.line_length, &img.endian);
-	if (!img.addr)
+	vars->img->img = mlx_new_image(vars->mlx, vars->win_size.x, vars->win_size.y);
+	vars->img->addr = mlx_get_data_addr(vars->img->img, &vars->img->bits_per_pixel,
+	 		&vars->img->line_length, &vars->img->endian);
+	if (!vars->img->addr)
 		return ;
-	img.bits_per_pixel /= 8;
-	vars->img = img;
+	vars->img->bits_per_pixel /= 8;
 	close(fd);
 }
 
@@ -147,7 +146,7 @@ void	button(t_vars *vars, t_coords p, char *txt,void (*f)(void*, void*))
 	{
 		dx = p.a.x;
 		while (++dx < p.b.x)
-			pixel_put(&vars->img, dx,
+			pixel_put(vars->img, dx,
 					dy, to_rgb(p.a.c, 0));
 	}
 	(void)txt;
@@ -187,27 +186,27 @@ int	ui_frame1(t_vars	*vars)
 	button(vars, screen_pc(25.30,25.025, gen_color(255,255,100, 0), vars), "2Maps", &change_ui);
 	button(vars, screen_pc(25.40,25.025, gen_color(25,60,100, 0), vars), "3TexturePack", &change_ui);
 	button(vars, screen_pc(25.50,25.025, gen_color(56,69,10, 0), vars), "4Parameter", &change_ui);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	return (0);
 }
 
 int	ui_frame2(t_vars	*vars)
 { 
 	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "1Return", &change_ui);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	return (0);
 }
 int	ui_frame3(t_vars	*vars)
 { 
 	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "1Return", &change_ui);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	return (0);
 }
 int	ui_frame4(t_vars	*vars)
 { 
 	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "1Return", &change_ui);
 	button(vars, screen_pc(25.30,25.025, gen_color(255,0,100, 0), vars), "1Change_minimap", &change_setting);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	return (0);
 }
 
@@ -247,8 +246,8 @@ int	frame(void *data)
 	}
 	else
 	{
-			ft_int_memset(vars->img.addr, 0x000000,
-		vars->img.line_length * vars->win_size.y / 4);
+			ft_int_memset(vars->img->addr, 0x000000,
+		vars->img->line_length * vars->win_size.y / 4);
 	if (vars->ui == 1)
 	{
 		ui_frame1(vars);
