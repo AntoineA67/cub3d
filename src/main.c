@@ -78,6 +78,8 @@ void	init_imgs(t_vars *vars)
 
 static void	fill_vars(t_vars *vars, int fd)
 {
+	vars->mult_fd = 0;
+	vars->mult_n_players = 0;
 	vars->mlx = mlx_init();
 	vars->win_size.x = 1920;
 	vars->win_size.y = 1080;

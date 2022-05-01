@@ -1,68 +1,82 @@
-/* --- client.c --- */
 # include "../inc/cub3D.h"
 
-int serv_connect()
+void	print_tab_pos(t_vector2 tab[10])
 {
-	int sockfd = 0, n = 0;
-	char recvBuff[1024];
-	struct sockaddr_in serv_addr;
+	int	i;
 
-	if(argc != 2)
+	i = -1;
+	while (++i < 10)
+		printf("%d, %.2f %.2f\n", i, tab[i].x, tab[i].y);
+}
+
+int	serv_process(t_vars *vars)
+{
+	int	n;
+
+	send(vars->mult_fd, &vars->player.pos, sizeof(t_vector2), 0);
+	printf("Sent |%.2f %.2f|\n", vars->player.pos.x, vars->player.pos.y);
+	n = read(vars->mult_fd, vars->buffer, 1024);
+	if (n < 0)
 	{
-		printf("\n Usage: %s <ip of server> \n",argv[0]);
-		return 1;
+		printf("Read failed\n");
+		return (1);
 	}
-
-	memset(recvBuff, '0',sizeof(recvBuff));
-
-	/* a socket is created through call to socket() function */
-	if((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+	if (n == 0)
 	{
-		printf("\n Error : Could not create socket \n");
-		return 1;
+		printf("Server closed\n");
+		return (1);
 	}
-
-	memset(&serv_addr, '0', sizeof(serv_addr));
-
-	serv_addr.sin_family = AF_INET;
-	serv_addr.sin_port = htons(5000);
-
-	if(inet_pton(AF_INET, argv[1], &serv_addr.sin_addr)<=0)
+	vars->buffer[n] = 0;
+	vars->mult_n_players = *(int *)vars->buffer;
+	printf("Players: %d\n", vars->mult_n_players);
+	ft_memmove(vars->buffer, vars->buffer + sizeof(int), sizeof(vars->buffer));
+	// print_tab_pos((t_vector2 *)vars->buffer);
+	// ft_memcpy(vars->mult_positions,
+	//  		vars->buffer, sizeof(vars->mult_positions));
+	n = -1;
+	while (++n < MAX_CLIENT)
 	{
-		printf("\n inet_pton error occured\n");
-		return 1;
+		printf("Player: %d	%.2f %.2f\n", n,
+			((t_vector2 *)(vars->buffer + n * sizeof(t_vector2)))->x,
+			((t_vector2 *)(vars->buffer + n * sizeof(t_vector2)))->y);
+		ft_memcpy(&vars->mult_positions[n], vars->buffer + n * sizeof(t_vector2), sizeof(t_vector2));
 	}
-
-	/* Information like IP address of the remote host and its port is
-	 * bundled up in a structure and a call to function connect() is made
-	 * which tries to connect this socket with the socket (IP address and port)
-	 * of the remote host
-	 */
-	if( connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+	ft_bzero(vars->buffer, sizeof(vars->buffer));
+	n = -1;
+	while (++n < MAX_CLIENT)
 	{
-		printf("\n Error : Connect Failed \n");
-		return 1;
+		// if (vars->mult_positions[n].x > 0)
+		printf("Player: %d	%.2f %.2f\n", n, vars->mult_positions[n].x, vars->mult_positions[n].y);
 	}
+}
 
-	/* Once the sockets are connected, the server sends the data (date+time)
-	 * on clients socket through clients socket descriptor and client can read it
-	 * through normal read call on the its socket descriptor.
-	 */
-	while ( (n = read(0, recvBuff, sizeof(recvBuff)-1)) > 0)
+int serv_connect(t_vars *vars)
+{
+	int	n;
+
+	ft_bzero(vars->buffer, 1025);
+	vars->mult_fd = socket(AF_INET, SOCK_STREAM, 0);
+	if(vars->mult_fd < 0)
 	{
-		recvBuff[n] = 0;
-		dprintf(sockfd, "%s", recvBuff);
-		dprintf(1, "CLIENT: %s", recvBuff);
-		if(fputs(recvBuff, stdout) == EOF)
-		{
-			printf("\n Error : Fputs error\n");
-		}
+		perror("Could not create socket");
+		return (1);
 	}
-
-	if(n < 0)
+	ft_bzero(&vars->serv_addr, sizeof(vars->serv_addr));
+	vars->serv_addr.sin_family = AF_INET;
+	vars->serv_addr.sin_port = htons(PORT);
+	if(inet_pton(AF_INET, "127.0.0.1", &vars->serv_addr.sin_addr) <= 0)
 	{
-		printf("\n Read error \n");
+		perror("inet_pton error\n");
+		return (1);
 	}
-
+	if(connect(vars->mult_fd, (struct sockaddr *)&vars->serv_addr, sizeof(vars->serv_addr)) < 0)
+	{
+		printf("Connect Failed\n");
+		return (1);
+	}
+	n = read(vars->mult_fd, vars->buffer, 1024);
+	vars->buffer[n] = 0;
+	printf("%s\n", vars->buffer);
+	ft_bzero(vars->buffer, sizeof(vars->buffer));
 	return 0;
 }

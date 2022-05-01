@@ -155,6 +155,8 @@ int	key_hook(int keycode, t_vars *vars) //WSL2 VERSION
 		rotate_player(vars, 1);
 	else if (keycode == 122)
 		move_player(vars, 1);
+	else if (keycode == 44 && !vars->mult_fd && serv_connect(vars))
+		esc(vars, 1);
 	//project(vars);
 	printf("Pos: %.2f %.2f - %3d %3d	Rot: %.2f Delta: %.2f %.2f\n",
 			vars->player.pos.x, vars->player.pos.y, (int)vars->player.pos.x / 64, (int)vars->player.pos.y / 64,
