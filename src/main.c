@@ -46,8 +46,8 @@ int	init_player(t_vars *vars)
 	vars->player.delta.y = 0;
 	player_in_map = ft_strchr(vars->map, 'P');
 	vars->map[player_in_map - vars->map] = '0';
-	vars->player.pos.x = (player_in_map - vars->map) % vars->size.x + .0;
-	vars->player.pos.y = (player_in_map - vars->map) / vars->size.x + .0;
+	vars->player.pos.x = (player_in_map - vars->map) % vars->size.x + .5;
+	vars->player.pos.y = (player_in_map - vars->map) / vars->size.x + .5;
 	return (0);
 }
 
@@ -302,7 +302,8 @@ int	main(int argc, char **argv)
 	// raycasting(&vars);
 	// if (!vars.win)
 	// 	esc(&vars, 1);
-	mlx_hook(vars.win, 2, 0, key_hook, &vars);
+	mlx_key_hook(vars.win, key_hook, &vars);
+	// mlx_hook(vars.win, 2, 0, key_hook, &vars);
 	mlx_hook(vars.win, 17, 0, test_hook, &vars);
 	mlx_loop_hook(vars.mlx, frame, &vars);
 	mlx_mouse_hook(vars.win, mouse_hook, &vars);

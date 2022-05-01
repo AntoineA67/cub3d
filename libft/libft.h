@@ -15,6 +15,7 @@
 
 # define PI 3.14159265359
 # define BUFFER_SIZE 4096
+# define OPEN_MAX 1000
 
 # include <stdlib.h>
 # include <unistd.h>

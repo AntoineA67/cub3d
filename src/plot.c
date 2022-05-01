@@ -113,8 +113,8 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, double wall_height, t_d
 			- (vars->win_size.y / 2 - wall_height));
 	while (++i < vars->win_size.y / 2 + wall_height)
 	{
-		if (screen_x == vars->win_size.x / 2)
-			printf("%d\n", dist_int);
+		// if (screen_x == vars->win_size.x / 2)
+		// 	printf("%d\n", dist_int);
 		pixel_put(vars->img, screen_x, i,
 			add_shade(vars, *(unsigned int *)(img->addr + (img_x
 			* (img->bits_per_pixel / 8) + (int)y * img->line_length)), dist_int));

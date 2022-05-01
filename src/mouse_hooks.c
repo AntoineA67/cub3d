@@ -14,10 +14,10 @@
 
 int	mouse_hook(int keycode, int x, int y, t_vars *vars)
 {
-	printf("%d\n", keycode);
+	// printf("%d\n", keycode);
 	if (keycode == 1)
 	{
-		printf("%d|%d\n", x, y);
+		// printf("%d|%d\n", x, y);
 		vars->clicked = 1;
 		vars->clicked_co.x = x;
 		vars->clicked_co.y = y;

@@ -187,8 +187,8 @@ void	project_rays(t_vars *vars, double render_ratio)
 		if (min_dist < 1.0)
 			min_dist = 1.0;
 		int	wall_height = vars->win_size.y / 2 / min_dist;
-		if (i == vars->win_size.x / 2)
-			printf("height %d min_dist %.3f\n", wall_height, min_dist);
+		// if (i == vars->win_size.x / 2)
+		// 	printf("height %d min_dist %.3f\n", wall_height, min_dist);
 		// printf("MIN DIST %.2f %.2f\n", min_dist, min_dist * cos(ca));
 		// printf("OUI %d	%.3f	%d\n", vars->textures.img_no.size.x, (rx - (int)rx), vars->textures.img_no.size.x);
 		(void)color;
