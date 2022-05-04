@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 14:12:09 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 14:59:25 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ void	button(t_vars *vars, t_coords p, char *txt,void (*f)(void*, void*))
 	int	dy;
 	int	dx;
 	int	data;
+	unsigned int	add;
 
 	dy = p.a.y;
 	data = (int)(*txt - '0');
@@ -154,10 +155,13 @@ void	button(t_vars *vars, t_coords p, char *txt,void (*f)(void*, void*))
 		dx = p.a.x;
 		while (++dx < p.b.x && dy - p.a.y < 95)
 		{
+			add =  *(unsigned int *)(vars->textures.img_sta.addr + ((int)(((dx - p.a.x) * vars->textures.img_sta.size.x) / (p.b.x - p.a.x))
+						* (vars->textures.img_sta.bits_per_pixel / 8) + ((int)(((dy - p.a.y) * vars->textures.img_sta.size.y) / (p.b.y - p.a.y)) * vars->textures.img_sta.line_length)));
 			//printf("%d\\%d|%d\\%d\n", (((dx - p.a.x) * vars->textures.img_sta.size.x) / (p.b.x - p.a.x)), vars->textures.img_sta.size.x, dy - p.a.y, vars->textures.img_sta.size.y);
-			pixel_put(&vars->img, dx,
-					dy, *(unsigned int *)(vars->textures.img_sta.addr + ((int)(((dx - p.a.x) * vars->textures.img_sta.size.x) / (p.b.x - p.a.x))
-			* (vars->textures.img_sta.bits_per_pixel / 8) + ((int)(dy - p.a.y) * vars->textures.img_sta.line_length))));
+			if (vars->clicked && vars->clicked_co.x >= p.a.x && vars->clicked_co.x <= p.b.x && vars->clicked_co.y >= p.a.y && vars->clicked_co.y <= p.b.y)
+				pixel_put(vars->img, dx, dy, add + 10<<8 + 10<<4 + 10);
+			else
+				pixel_put(vars->img, dx, dy, add);
 		}
 	}
 	(void)txt;

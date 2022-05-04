@@ -64,7 +64,7 @@ int serv_connect(t_vars *vars)
 	ft_bzero(&vars->serv_addr, sizeof(vars->serv_addr));
 	vars->serv_addr.sin_family = AF_INET;
 	vars->serv_addr.sin_port = htons(PORT);
-	if(inet_pton(AF_INET, "127.0.0.1", &vars->serv_addr.sin_addr) <= 0)
+	if(inet_pton(AF_INET, "10.1.4.5", &vars->serv_addr.sin_addr) <= 0)
 	{
 		perror("inet_pton error\n");
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 14:11:40 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 16:06:24 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,11 @@ void	project_rays(t_vars *vars, double render_ratio)
 			mp = my * vars->size.x + mx;
 			if (mp < vars->size.x * vars->size.y && mp >= 0 && (vars->map[mp] == '1' || vars->map[mp] == 'C'))
 				dof = size;
+			else if (mx >= vars->mult_positions[1].x - 0.1 && mx <= vars->mult_positions[1].x + 0.1 && my >= vars->mult_positions[1].y - 0.1 && my <= vars->mult_positions[1].y + 0.1)
+			{
+				//printf("tested\n");
+				draw_square(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, 0, gen_color(100,100,100,100)));
+			}
 			else
 			{
 				rx += xo;
@@ -360,9 +365,9 @@ void	draw_2d_map(t_vars *vars, int size)
 		else if (y >= ((int)vars->player.pos.y - 2) && y <= ((int)vars->player.pos.y + 2)&&
 			x >= ((int)vars->player.pos.x - 2) && x <= ((int)vars->player.pos.x + 2))
 		{
-			k++;
-			if (k != 1)
-			{
+			//k++;
+			//if (k != 1)
+			//{
 			if (vars->map[pos] == '0')
 				draw_square(vars, gen_coord((x1++ * size) + size, y1 * size + size, size, gen_color(100, 100, 100, 0)));
 			else if (vars->map[pos] == '1')
@@ -370,9 +375,9 @@ void	draw_2d_map(t_vars *vars, int size)
 			else if (vars->map[pos] == 'O' || vars->map[pos] == 'C')
 				draw_square(vars, gen_coord((x1++ * size) + size, y1 * size + size, size,
 					gen_color(150, 20, 150, 0)));
-			}
-			else
-				x++;
+			//}
+			//else
+			//	x++;
 			if (x1 == 5)
 			{
 				x1 = 0;
