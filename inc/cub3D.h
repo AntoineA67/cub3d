@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 16:07:08 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 17:41:44 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # include "../mlx_opengl/mlx.h"
 
 # define MAX_CLIENT 10
-# define PORT 6000
+# define PORT 5000
 
 typedef struct s_rgb
 {
@@ -75,6 +75,9 @@ typedef struct s_textures {
 	char	*we;
 	char	*ea;
 	t_data	img_sta;
+	t_data	img_settings;
+	t_data	img_maps;
+	t_data	img_textures;
 	t_data	img_no;
 	t_data	img_so;
 	t_data	img_we;
@@ -123,8 +126,6 @@ typedef struct s_vars {
 	double			min_map_mult;
 	long			n1;
 	long			n2;
-	t_vector2		plane;
-	t_vector2		*plane_rays;
 	t_vector2		camera;
 }			t_vars;
 

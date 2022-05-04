@@ -14,7 +14,7 @@ int	serv_process(t_vars *vars)
 	int	n;
 
 	send(vars->mult_fd, &vars->player.pos, sizeof(t_vector2), 0);
-	printf("Sent |%.2f %.2f|\n", vars->player.pos.x, vars->player.pos.y);
+	// printf("Sent |%.2f %.2f|\n", vars->player.pos.x, vars->player.pos.y);
 	n = read(vars->mult_fd, vars->buffer, 1024);
 	if (n < 0)
 	{
@@ -28,7 +28,8 @@ int	serv_process(t_vars *vars)
 	}
 	vars->buffer[n] = 0;
 	vars->mult_n_players = *(int *)vars->buffer;
-	printf("Players: %d\n", vars->mult_n_players);
+	vars->mult_id = vars->mult_n_players - 1;
+	printf("Players: %d, id: %d\n", vars->mult_n_players, vars->mult_id);
 	ft_memmove(vars->buffer, vars->buffer + sizeof(int), sizeof(vars->buffer));
 	// print_tab_pos((t_vector2 *)vars->buffer);
 	// ft_memcpy(vars->mult_positions,
@@ -36,18 +37,18 @@ int	serv_process(t_vars *vars)
 	n = -1;
 	while (++n < MAX_CLIENT)
 	{
-		printf("Player: %d	%.2f %.2f\n", n,
-			((t_vector2 *)(vars->buffer + n * sizeof(t_vector2)))->x,
-			((t_vector2 *)(vars->buffer + n * sizeof(t_vector2)))->y);
+		// printf("Player: %d	%.2f %.2f\n", n,
+		// 	((t_vector2 *)(vars->buffer + n * sizeof(t_vector2)))->x,
+		// 	((t_vector2 *)(vars->buffer + n * sizeof(t_vector2)))->y);
 		ft_memcpy(&vars->mult_positions[n], vars->buffer + n * sizeof(t_vector2), sizeof(t_vector2));
 	}
 	ft_bzero(vars->buffer, sizeof(vars->buffer));
-	n = -1;
-	while (++n < MAX_CLIENT)
-	{
-		// if (vars->mult_positions[n].x > 0)
-		printf("Player: %d	%.2f %.2f\n", n, vars->mult_positions[n].x, vars->mult_positions[n].y);
-	}
+	// n = -1;
+	// while (++n < MAX_CLIENT)
+	// {
+	// 	// if (vars->mult_positions[n].x > 0)
+	// 	printf("Player: %d	%.2f %.2f\n", n, vars->mult_positions[n].x, vars->mult_positions[n].y);
+	// }
 	return (0);
 }
 
@@ -65,7 +66,7 @@ int serv_connect(t_vars *vars)
 	ft_bzero(&vars->serv_addr, sizeof(vars->serv_addr));
 	vars->serv_addr.sin_family = AF_INET;
 	vars->serv_addr.sin_port = htons(PORT);
-	if(inet_pton(AF_INET, "10.1.4.5", &vars->serv_addr.sin_addr) <= 0)
+	if(inet_pton(AF_INET, "127.0.0.1", &vars->serv_addr.sin_addr) <= 0)
 	{
 		perror("inet_pton error\n");
 		return (1);

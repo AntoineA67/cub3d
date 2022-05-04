@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 19:50:25 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 14:50:37 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/04 17:50:34 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	mouse_hook(int keycode, int x, int y, t_vars *vars)
 {
-	printf("%d %d\n", x, y);
+	// printf("%d %d\n", x, y);
 	// printf("%d\n", keycode);
 	if (keycode == 1)
 	{

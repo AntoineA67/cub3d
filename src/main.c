@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 16:07:02 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 17:44:35 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,22 @@ void	init_imgs(t_vars *vars)
 	vars->img2 = ft_calloc(1, sizeof(t_data));
 	imgs = &vars->textures;
 	printf("%s\n", vars->textures.no);
-	imgs->img_sta.img = mlx_xpm_file_to_image(vars->mlx, "./textures/xpm/start.xpm", &imgs->img_sta.size.x,
+	imgs->img_sta.img = mlx_xpm_file_to_image(vars->mlx, "./textures/pack_blue_pink/start.xpm", &imgs->img_sta.size.x,
 		&imgs->img_sta.size.y);
+	imgs->img_settings.img = mlx_xpm_file_to_image(vars->mlx, "./textures/pack_blue_pink/settings.xpm", &imgs->img_settings.size.x,
+		&imgs->img_settings.size.y);
+	imgs->img_maps.img = mlx_xpm_file_to_image(vars->mlx, "./textures/pack_blue_pink/maps.xpm", &imgs->img_maps.size.x,
+		&imgs->img_maps.size.y);
+	imgs->img_textures.img = mlx_xpm_file_to_image(vars->mlx, "./textures/pack_blue_pink/textures.xpm", &imgs->img_textures.size.x,
+		&imgs->img_textures.size.y);
 	imgs->img_sta.addr = mlx_get_data_addr(imgs->img_sta.img, &imgs->img_sta.bits_per_pixel,
 		&imgs->img_sta.line_length, &imgs->img_sta.endian);
+	imgs->img_settings.addr = mlx_get_data_addr(imgs->img_settings.img, &imgs->img_settings.bits_per_pixel,
+		&imgs->img_settings.line_length, &imgs->img_settings.endian);
+	imgs->img_maps.addr = mlx_get_data_addr(imgs->img_maps.img, &imgs->img_maps.bits_per_pixel,
+		&imgs->img_maps.line_length, &imgs->img_maps.endian);
+	imgs->img_textures.addr = mlx_get_data_addr(imgs->img_textures.img, &imgs->img_textures.bits_per_pixel,
+		&imgs->img_textures.line_length, &imgs->img_textures.endian);
 	imgs->img_no.img = mlx_xpm_file_to_image(vars->mlx, imgs->no, &imgs->img_no.size.x,
 		&imgs->img_no.size.y);
 	imgs->img_no.addr = mlx_get_data_addr(imgs->img_no.img, &imgs->img_no.bits_per_pixel,
@@ -92,8 +104,6 @@ static void	fill_vars(t_vars *vars, int fd)
 	if (init_player(vars))
 		return ; //NO PLAYER IN MAP
 	init_imgs(vars);
-	vars->plane.x = 0.0;
-	vars->plane.y = 0.66;
 	vars->img->img = mlx_new_image(vars->mlx, vars->win_size.x, vars->win_size.y);
 	vars->img->addr = mlx_get_data_addr(vars->img->img, &vars->img->bits_per_pixel,
 	 		&vars->img->line_length, &vars->img->endian);
@@ -165,7 +175,7 @@ void	button(t_vars *vars, t_coords p, char *txt,void (*f)(void*, void*))
 						* (vars->textures.img_sta.bits_per_pixel / 8) + ((int)(((dy - p.a.y) * vars->textures.img_sta.size.y) / (p.b.y - p.a.y)) * vars->textures.img_sta.line_length)));
 			//printf("%d\\%d|%d\\%d\n", (((dx - p.a.x) * vars->textures.img_sta.size.x) / (p.b.x - p.a.x)), vars->textures.img_sta.size.x, dy - p.a.y, vars->textures.img_sta.size.y);
 			if (vars->clicked && vars->clicked_co.x >= p.a.x && vars->clicked_co.x <= p.b.x && vars->clicked_co.y >= p.a.y && vars->clicked_co.y <= p.b.y)
-				pixel_put(vars->img, dx, dy, add + 10<<8 + 10<<4 + 10);
+				pixel_put(vars->img, dx, dy, add + (10<<8) + (10<<4) + 10);
 			else
 				pixel_put(vars->img, dx, dy, add);
 		}
@@ -314,7 +324,6 @@ int	main(int argc, char **argv)
 	fill_vars(&vars, fd);
 	(void)extract_name;
 	vars.rays_number = 0;
-	vars.plane_rays = ft_calloc(sizeof(t_vector2), vars.rays_number);
 	vars.settings.fps_cap = 144;
 	vars.win = mlx_new_window(vars.mlx, vars.win_size.x,
 			vars.win_size.y, extract_name(argv[1]));
@@ -328,7 +337,6 @@ int	main(int argc, char **argv)
 	mlx_hook(vars.win, 17, 0, test_hook, &vars);
 	mlx_loop_hook(vars.mlx, frame, &vars);
 	mlx_mouse_hook(vars.win, mouse_hook, &vars);
-	//project(&vars);
 	// mlx_loop_hook(vars.mlx, raycasting, &vars);
 	vars.n1 = gettime(0);
 	mlx_loop(vars.mlx);
