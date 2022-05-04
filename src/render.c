@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 17:56:47 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 18:11:51 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,7 +330,7 @@ void	draw_multi(t_vars *vars, int size)
 	int	i;
 
 	i = -1;
-	while (++i < MAX_CLIENT)
+	while (++i < vars->mult_n_players && i < MAX_CLIENT)
 	{
 		if (vars->mult_positions[i].x > 0)
 			draw_square_center(vars,
