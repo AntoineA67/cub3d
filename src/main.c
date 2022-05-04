@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 14:59:25 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 16:07:02 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ static void	fill_vars(t_vars *vars, int fd)
 		return ;
 	vars->img->bits_per_pixel /= 8;
 	close(fd);
+	// mlx_mouse_hide();
+	// mlx_mouse_move(vars->win, 0, 0);
 }
 
 static char	*extract_name(char *str)
@@ -124,6 +126,10 @@ void	change_ui(void		*v, void	*data)
 
 	vars = (t_vars *)v;
 	vars->ui = *((int*)data);
+	if (vars->ui)
+		mlx_mouse_show();
+	else
+		mlx_mouse_hide();
 }
 
 void	change_setting(void		*v, void	*dat)

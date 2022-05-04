@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 16:06:24 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 16:06:50 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -397,6 +397,24 @@ void	render(t_vars *vars)
 
 	// img = vars->img;
 	// vars->img = vars->img2;
+	int	x;
+	int	y;
+
+	mlx_mouse_get_pos(vars->win, &x, &y);
+	if (!vars->ui)
+	{
+		// printf("MOUSE %d %d\n", x, y);
+		if (x > vars->win_size.x / 2)
+		{
+			rotate_player(vars, 5);
+			mlx_mouse_move(vars->win, vars->win_size.x / 2, 0);
+		}
+		else if (x < vars->win_size.x / 2)
+		{
+			rotate_player(vars, -5);
+			mlx_mouse_move(vars->win, vars->win_size.x / 2, 0);
+		}
+	}
 	if (vars->mult_fd)
 		serv_process(vars);
 	ft_int_memset(vars->img->addr, to_rgb(vars->textures.c, 0),

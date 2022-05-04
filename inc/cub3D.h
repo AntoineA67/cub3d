@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 14:12:15 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 16:07:08 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,7 @@ typedef struct s_line {
 	float	dist;
 }		t_line;
 
+void	rotate_player(t_vars *vars, int dir);
 void	print_tab_pos(t_vector2 tab[10]);
 int		serv_connect(t_vars *vars);
 int		serv_process(t_vars *vars);

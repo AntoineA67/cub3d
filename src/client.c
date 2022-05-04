@@ -48,6 +48,7 @@ int	serv_process(t_vars *vars)
 		// if (vars->mult_positions[n].x > 0)
 		printf("Player: %d	%.2f %.2f\n", n, vars->mult_positions[n].x, vars->mult_positions[n].y);
 	}
+	return (0);
 }
 
 int serv_connect(t_vars *vars)
