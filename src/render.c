@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 16:06:50 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 17:56:47 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	project_rays(t_vars *vars, double render_ratio)
 	double		rx;
 	double		yo;
 	double		xo;
+	double		start;
 	double		end;
 	double		min_dist;
 	t_vector2	disV;
@@ -85,6 +86,7 @@ void	project_rays(t_vars *vars, double render_ratio)
 	size = (int)vars->min_map_mult;
 	i = -1;
 	ra = fmod(vars->player.rot - M_PI_4 + (M_PI * 2) , M_PI * 2);
+	start = ra;
 	end = fmod(vars->player.rot + M_PI_4 + (M_PI * 2) , M_PI * 2);
 	if (ra > end)
 		end += (M_PI * 2);
@@ -121,11 +123,6 @@ void	project_rays(t_vars *vars, double render_ratio)
 			mp = my * vars->size.x + mx;
 			if (mp < vars->size.x * vars->size.y && mp >= 0 && (vars->map[mp] == '1' || vars->map[mp] == 'C'))
 				dof = size;
-			else if (mx >= vars->mult_positions[1].x - 0.1 && mx <= vars->mult_positions[1].x + 0.1 && my >= vars->mult_positions[1].y - 0.1 && my <= vars->mult_positions[1].y + 0.1)
-			{
-				//printf("tested\n");
-				draw_square(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, 0, gen_color(100,100,100,100)));
-			}
 			else
 			{
 				rx += xo;
@@ -270,6 +267,29 @@ void	project_rays(t_vars *vars, double render_ratio)
 		// printf("%.2f %d\n", min_dist, (int)(10000 / min_dist));
 		ra += M_PI_2 / vars->win_size.x;
 	}
+	i = -1;
+	//printf("%d\n", vars->mult_n_players);
+	while (++i < vars->mult_n_players && i < 10)
+	{
+		if (vars->mult_id != i)
+		{
+		if (vars->mult_positions[i].y > 0.0 && vars->mult_positions[i].x > 0.0)
+		{
+			//asin(vars->mult_positions[i].y - vars->player.pos.y / dist) = angle;
+		//	vars->mult_positions[i].x - vars->player.pos.x / cos(angle) = dist;
+		double angle = atan((vars->player.pos.y - vars->mult_positions[i].y) / (vars->player.pos.x - vars->mult_positions[i].x));
+		if (angle < 0.0 && vars->player.pos.y - vars->mult_positions[i].y > 0.0)
+			angle = -angle;
+		else if (angle > 0.0 && vars->player.pos.y - vars->mult_positions[i].y > 0.0)
+			angle = M_PI - angle;
+		else if (angle < 0.0 && vars->player.pos.y - vars->mult_positions[i].y < 0.0)
+			angle = M_PI + (-angle);
+		else
+			angle = M_PI_2 + (-angle);
+		printf("player%d:%f|%f|%f\\%f\n",i,ra,angle,end, vars->player.pos.y - vars->mult_positions[i].y);
+		}
+		}
+	}
 	//plot_line(vars,
 		//	gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(255, 0, 100, 0)),
 		//	gen_coord(rx + size, size + ry, 0, gen_color(255, 0, 100, 0)));
@@ -401,20 +421,20 @@ void	render(t_vars *vars)
 	int	y;
 
 	mlx_mouse_get_pos(vars->win, &x, &y);
-	if (!vars->ui)
-	{
-		// printf("MOUSE %d %d\n", x, y);
-		if (x > vars->win_size.x / 2)
-		{
-			rotate_player(vars, 5);
-			mlx_mouse_move(vars->win, vars->win_size.x / 2, 0);
-		}
-		else if (x < vars->win_size.x / 2)
-		{
-			rotate_player(vars, -5);
-			mlx_mouse_move(vars->win, vars->win_size.x / 2, 0);
-		}
-	}
+	// if (!vars->ui)
+	// {
+	// 	// printf("MOUSE %d %d\n", x, y);
+	// 	if (x > vars->win_size.x / 2)
+	// 	{
+	// 		rotate_player(vars, 5);
+	// 		mlx_mouse_move(vars->win, vars->win_size.x / 2, 0);
+	// 	}
+	// 	else if (x < vars->win_size.x / 2)
+	// 	{
+	// 		rotate_player(vars, -5);
+	// 		mlx_mouse_move(vars->win, vars->win_size.x / 2, 0);
+	// 	}
+	// }
 	if (vars->mult_fd)
 		serv_process(vars);
 	ft_int_memset(vars->img->addr, to_rgb(vars->textures.c, 0),

@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 16:07:02 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 17:09:12 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,10 +126,10 @@ void	change_ui(void		*v, void	*data)
 
 	vars = (t_vars *)v;
 	vars->ui = *((int*)data);
-	if (vars->ui)
-		mlx_mouse_show();
-	else
-		mlx_mouse_hide();
+	// if (vars->ui)
+	// 	mlx_mouse_show();
+	// else
+	// 	mlx_mouse_hide();
 }
 
 void	change_setting(void		*v, void	*dat)
@@ -316,6 +316,7 @@ int	main(int argc, char **argv)
 	vars.rays_number = 0;
 	vars.plane_rays = ft_calloc(sizeof(t_vector2), vars.rays_number);
 	vars.settings.fps_cap = 144;
+	vars.settings.map_type = 1;
 	vars.win = mlx_new_window(vars.mlx, vars.win_size.x,
 			vars.win_size.y, extract_name(argv[1]));
 	printf("EA: %s\nNO: %s\nSO: %s\nWE: %s\nF: %#x\nC: %#x\n",
