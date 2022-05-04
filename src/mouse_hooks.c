@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mouse_hooks.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 19:50:25 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 15:32:42 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 14:50:37 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	mouse_hook(int keycode, int x, int y, t_vars *vars)
 {
+	printf("%d %d\n", x, y);
 	// printf("%d\n", keycode);
 	if (keycode == 1)
 	{

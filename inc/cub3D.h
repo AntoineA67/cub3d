@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/03 14:30:37 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/04 15:54:21 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,7 @@ typedef struct s_line {
 	float	dist;
 }		t_line;
 
+void	rotate_player(t_vars *vars, int dir);
 void	print_tab_pos(t_vector2 tab[10]);
 int		serv_connect(t_vars *vars);
 int		serv_process(t_vars *vars);

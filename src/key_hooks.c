@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/03 10:58:06 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/04 16:05:28 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,9 @@ static void	move_player(t_vars *vars, int dir)
 	 //	(int)newposX / 64, (int)newposY / 64, vars->map[(int)((newposX / 64) + (newposY / 64) * vars->size.x)], (int)(((int)newposX / 64) + ((int)newposY / 64) * vars->size.x));
 }
 
-static void	rotate_player(t_vars *vars, int dir)
+void	rotate_player(t_vars *vars, int dir)
 {
-	vars->player.rot += dir / 10.0;
+	vars->player.rot += dir / 100.0;
 	// printf("%.2f\n", vars->player.rot);
 	if (vars->player.rot < 0.0)
 		vars->player.rot += 2.0 * M_PI;
@@ -166,13 +166,14 @@ static void	rotate_player(t_vars *vars, int dir)
 
 int	key_hook(int keycode, t_vars *vars)
 {
-	dprintf(1, "%d\n", keycode);
+	// dprintf(1, "%d\n", keycode);
 	if (keycode == 53)
 	{
 		if (vars->ui == 1)
 			esc(vars, 0);
 		else
 		{
+			mlx_mouse_show();
 				ft_int_memset(vars->img->addr, 0x000000,
 		vars->img->line_length * vars->win_size.y / 4);
 			vars->ui = 1;
@@ -181,18 +182,18 @@ int	key_hook(int keycode, t_vars *vars)
 	if (vars->ui)
 		return (0);
 	else if (keycode == 0)
-		rotate_player(vars, -1);
+		rotate_player(vars, -10);
 	else if (keycode == 1)
 		move_player(vars, -1);
 	else if (keycode == 2)
-		rotate_player(vars, 1);
+		rotate_player(vars, 10);
 	else if (keycode == 13)
 		move_player(vars, 1);
 	else if (keycode == 46 && !vars->mult_fd && serv_connect(vars))
  		esc(vars, 1);
 	//project(vars);
-	printf("Pos: %.2f %.2f - %3d %3d	Rot: %.2f Delta: %.2f %.2f\n",
-			vars->player.pos.x, vars->player.pos.y, (int)vars->player.pos.x / 64, (int)vars->player.pos.y / 64,
-			 vars->player.rot, vars->player.delta.x, vars->player.delta.y);
+	// printf("Pos: %.2f %.2f - %3d %3d	Rot: %.2f Delta: %.2f %.2f\n",
+			// vars->player.pos.x, vars->player.pos.y, (int)vars->player.pos.x / 64, (int)vars->player.pos.y / 64,
+			//  vars->player.rot, vars->player.delta.x, vars->player.delta.y);
 	return (0);
 }

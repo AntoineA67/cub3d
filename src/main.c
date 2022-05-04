@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/03 10:59:54 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/04 14:56:55 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ static void	fill_vars(t_vars *vars, int fd)
 		return ;
 	vars->img->bits_per_pixel /= 8;
 	close(fd);
+	// mlx_mouse_hide();
+	// mlx_mouse_move(vars->win, 0, 0);
 }
 
 static char	*extract_name(char *str)
@@ -119,6 +121,10 @@ void	change_ui(void		*v, void	*data)
 
 	vars = (t_vars *)v;
 	vars->ui = *((int*)data);
+	if (vars->ui)
+		mlx_mouse_show();
+	else
+		mlx_mouse_hide();
 }
 
 void	change_setting(void		*v, void	*dat)
