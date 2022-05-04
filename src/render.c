@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 18:11:51 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/04 18:39:48 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,8 +305,9 @@ void	draw_square_center(t_vars *vars, t_coord p)
 	{
 		dx = p.x - p.z / 2;
 		while (++dx < p.x + p.z / 2)
-			pixel_put(vars->img, dx,
-					dy, to_rgb(p.c, 0));
+			if (is_in_window(vars, dx, dy))
+				pixel_put(vars->img, dx,
+						dy, to_rgb(p.c, 0));
 	}
 }
 
@@ -320,8 +321,9 @@ void	draw_square(t_vars *vars, t_coord p)
 	{
 		dx = p.x;
 		while (++dx < p.x + p.z)
-			pixel_put(vars->img, dx,
-					dy, to_rgb(p.c, 0));
+			if (is_in_window(vars, dx, dy))
+				pixel_put(vars->img, dx,
+						dy, to_rgb(p.c, 0));
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 17:41:44 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/04 18:36:00 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ void	draw_square_center(t_vars *vars, t_coord p);
 int		f_loop(t_vars *vars);
 void	render(t_vars *vars);
 void	plot_line(t_vars *vars, t_coord p1, t_coord p2);
-// int		is_in_window(t_coord *point);
+int		is_in_window(t_vars *vars, int x, int y);
 int		key_hook(int keycode, t_vars *vars);
 // int		grad_color(t_rgb *c1, t_rgb *c2, float val, t_rgb map_color);
 // int		base_color(t_rgb *c1, t_rgb *c2, float val, t_rgb map_color);

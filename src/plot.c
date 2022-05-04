@@ -6,19 +6,19 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:03:35 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 19:04:30 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/04 18:35:36 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
 
-// int	is_in_window(t_coord *point)
-// {
-// 	return (point->x >= 0
-// 		&& point->x < 1920
-// 		&& point->y >= 0
-// 		&& point->y < 1080);
-// }
+int	is_in_window(t_vars *vars, int x, int y)
+{
+	return (x >= 0
+		&& x < vars->win_size.x
+		&& y >= 0
+		&& y < vars->win_size.y);
+}
 
 static void	fill_line_struct(t_line *l, t_coord *p1, t_coord *p2)
 {
