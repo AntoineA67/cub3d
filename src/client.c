@@ -27,9 +27,14 @@ int	serv_process(t_vars *vars)
 		return (1);
 	}
 	vars->buffer[n] = 0;
+	if (vars->mult_n_players == 0)
+	{
+		vars->mult_id = (*(int *)vars->buffer) - 1;
+		printf("Players: %d %d\n", *(int *)vars->buffer, vars->mult_id);
+	}
+	if (*(int *)vars->buffer != vars->mult_n_players && vars->mult_n_players != 0)
+		printf("A player joined the game!\n");
 	vars->mult_n_players = *(int *)vars->buffer;
-	vars->mult_id = vars->mult_n_players - 1;
-	// printf("Players: %d\n", vars->mult_n_players);
 	ft_memmove(vars->buffer, vars->buffer + sizeof(int), sizeof(vars->buffer));
 	// print_tab_pos((t_vector2 *)vars->buffer);
 	// ft_memcpy(vars->mult_positions,
@@ -56,7 +61,6 @@ int serv_connect(t_vars *vars)
 {
 	int	n;
 
-	ft_bzero(vars->buffer, 1025);
 	vars->mult_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if(vars->mult_fd < 0)
 	{
@@ -64,6 +68,7 @@ int serv_connect(t_vars *vars)
 		return (1);
 	}
 	ft_bzero(&vars->serv_addr, sizeof(vars->serv_addr));
+	ft_bzero(vars->buffer, 1025);
 	vars->serv_addr.sin_family = AF_INET;
 	vars->serv_addr.sin_port = htons(PORT);
 	if(inet_pton(AF_INET, "127.0.0.1", &vars->serv_addr.sin_addr) <= 0)
@@ -78,6 +83,7 @@ int serv_connect(t_vars *vars)
 	}
 	n = read(vars->mult_fd, vars->buffer, 1024);
 	vars->buffer[n] = 0;
+	// vars->mult_id = vars->buffer;
 	printf("%s\n", vars->buffer);
 	ft_bzero(vars->buffer, sizeof(vars->buffer));
 	return 0;

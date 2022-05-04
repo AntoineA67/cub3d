@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 18:46:15 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 18:46:34 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,8 +315,9 @@ void	draw_square_center(t_vars *vars, t_coord p)
 	{
 		dx = p.x - p.z / 2;
 		while (++dx < p.x + p.z / 2)
-			pixel_put(vars->img, dx,
-					dy, to_rgb(p.c, 0));
+			if (is_in_window(vars, dx, dy))
+				pixel_put(vars->img, dx,
+						dy, to_rgb(p.c, 0));
 	}
 }
 
@@ -330,8 +331,9 @@ void	draw_square(t_vars *vars, t_coord p)
 	{
 		dx = p.x;
 		while (++dx < p.x + p.z)
-			pixel_put(vars->img, dx,
-					dy, to_rgb(p.c, 0));
+			if (is_in_window(vars, dx, dy))
+				pixel_put(vars->img, dx,
+						dy, to_rgb(p.c, 0));
 	}
 }
 
@@ -340,9 +342,9 @@ void	draw_multi(t_vars *vars, int size)
 	int	i;
 
 	i = -1;
-	while (++i < MAX_CLIENT)
+	while (++i < vars->mult_n_players && i < MAX_CLIENT)
 	{
-		if (vars->mult_positions[i].x > 0)
+		if (vars->mult_positions[i].x > 0 && vars->mult_positions[i].y > 0)
 			draw_square_center(vars,
 				gen_coord(vars->mult_positions[i].x * size + size, vars->mult_positions[i].y * size + size, size / 2,
 				gen_color(255, 255, 255, 0)));
