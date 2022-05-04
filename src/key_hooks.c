@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 17:35:25 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/03 10:58:06 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,43 +131,10 @@ static void	rotate_player(t_vars *vars, int dir)
 	vars->player.delta.y = sin(vars->player.rot) * 5.0;
 }
 
-int	key_hook(int keycode, t_vars *vars) //WSL2 VERSION
-{
-	dprintf(1, "%d\n", keycode);
-	if (keycode == 65307)
-	{
-		if (vars->ui == 1)
-			esc(vars, 0);
-		else
-		{
-				ft_int_memset(vars->img->addr, 0x000000,
-		vars->img->line_length * vars->win_size.y / 4);
-			vars->ui = 1;
-		}
-	}
-	if (vars->ui)
-		return (0);
-	else if (keycode == 113)
-		rotate_player(vars, -1);
-	else if (keycode == 115)
-		move_player(vars, -1);
-	else if (keycode == 100)
-		rotate_player(vars, 1);
-	else if (keycode == 122)
-		move_player(vars, 1);
-	else if (keycode == 44 && !vars->mult_fd && serv_connect(vars))
-		esc(vars, 1);
-	//project(vars);
-	printf("Pos: %.2f %.2f - %3d %3d	Rot: %.2f Delta: %.2f %.2f\n",
-			vars->player.pos.x, vars->player.pos.y, (int)vars->player.pos.x / 64, (int)vars->player.pos.y / 64,
-			 vars->player.rot, vars->player.delta.x, vars->player.delta.y);
-	return (0);
-}
-
-// int	key_hook(int keycode, t_vars *vars)
+// int	key_hook(int keycode, t_vars *vars) //WSL2 VERSION
 // {
 // 	dprintf(1, "%d\n", keycode);
-// 	if (keycode == 53)
+// 	if (keycode == 65307)
 // 	{
 // 		if (vars->ui == 1)
 // 			esc(vars, 0);
@@ -180,17 +147,52 @@ int	key_hook(int keycode, t_vars *vars) //WSL2 VERSION
 // 	}
 // 	if (vars->ui)
 // 		return (0);
-// 	else if (keycode == 0)
+// 	else if (keycode == 113)
 // 		rotate_player(vars, -1);
-// 	else if (keycode == 1)
+// 	else if (keycode == 115)
 // 		move_player(vars, -1);
-// 	else if (keycode == 2)
+// 	else if (keycode == 100)
 // 		rotate_player(vars, 1);
-// 	else if (keycode == 13)
+// 	else if (keycode == 122)
 // 		move_player(vars, 1);
+// 	else if (keycode == 44 && !vars->mult_fd && serv_connect(vars))
+// 		esc(vars, 1);
 // 	//project(vars);
 // 	printf("Pos: %.2f %.2f - %3d %3d	Rot: %.2f Delta: %.2f %.2f\n",
 // 			vars->player.pos.x, vars->player.pos.y, (int)vars->player.pos.x / 64, (int)vars->player.pos.y / 64,
 // 			 vars->player.rot, vars->player.delta.x, vars->player.delta.y);
 // 	return (0);
 // }
+
+int	key_hook(int keycode, t_vars *vars)
+{
+	dprintf(1, "%d\n", keycode);
+	if (keycode == 53)
+	{
+		if (vars->ui == 1)
+			esc(vars, 0);
+		else
+		{
+				ft_int_memset(vars->img->addr, 0x000000,
+		vars->img->line_length * vars->win_size.y / 4);
+			vars->ui = 1;
+		}
+	}
+	if (vars->ui)
+		return (0);
+	else if (keycode == 0)
+		rotate_player(vars, -1);
+	else if (keycode == 1)
+		move_player(vars, -1);
+	else if (keycode == 2)
+		rotate_player(vars, 1);
+	else if (keycode == 13)
+		move_player(vars, 1);
+	else if (keycode == 46 && !vars->mult_fd && serv_connect(vars))
+ 		esc(vars, 1);
+	//project(vars);
+	printf("Pos: %.2f %.2f - %3d %3d	Rot: %.2f Delta: %.2f %.2f\n",
+			vars->player.pos.x, vars->player.pos.y, (int)vars->player.pos.x / 64, (int)vars->player.pos.y / 64,
+			 vars->player.rot, vars->player.delta.x, vars->player.delta.y);
+	return (0);
+}

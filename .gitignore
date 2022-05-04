@@ -6,3 +6,5 @@ cub3D
 *test*
 libft/libft.a
 *non*
+server
+*.dSYM

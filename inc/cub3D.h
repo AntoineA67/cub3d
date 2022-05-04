@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 19:59:24 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/03 14:30:37 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # include "../mlx_opengl/mlx.h"
 
 # define MAX_CLIENT 10
-# define PORT 5000
+# define PORT 6000
 
 typedef struct s_rgb
 {
