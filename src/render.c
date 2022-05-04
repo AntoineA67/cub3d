@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 18:39:48 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/04 18:45:56 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,7 +334,7 @@ void	draw_multi(t_vars *vars, int size)
 	i = -1;
 	while (++i < vars->mult_n_players && i < MAX_CLIENT)
 	{
-		if (vars->mult_positions[i].x > 0)
+		if (vars->mult_positions[i].x > 0 && vars->mult_positions[i].y > 0)
 			draw_square_center(vars,
 				gen_coord(vars->mult_positions[i].x * size + size, vars->mult_positions[i].y * size + size, size / 2,
 				gen_color(255, 255, 255, 0)));
