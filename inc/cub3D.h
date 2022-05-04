@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 18:36:00 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/04 20:45:44 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # include "../mlx_opengl/mlx.h"
 
 # define MAX_CLIENT 10
-# define PORT 5000
+# define PORT 5500
 
 typedef struct s_rgb
 {
@@ -97,6 +97,13 @@ typedef struct	s_settings
 	int				fps_cap;
 	int				map_type;
 }	t_settings;
+
+typedef struct	s_packet
+{
+	int				n_players;
+	t_vector2		players_pos[MAX_CLIENT];
+	double			players_rot[MAX_CLIENT];
+}	t_packet;
 
 typedef struct s_vars {
 	struct			sockaddr_in serv_addr;
