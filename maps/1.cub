@@ -1,6 +1,6 @@
-NO ./textures/xpm/dirt.xpm
+NO ./textures/xpm/bg.xpm
 SO ./textures/xpm/banane.xpm
-WE ./textures/xpm/leaves.xpm
+WE ./textures/xpm/oui.xpm
 EA ./textures/xpm/bookshelf.xpm
 C 83,24,135
 F 220,100,0

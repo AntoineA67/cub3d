@@ -6,13 +6,20 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 19:03:08 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/03 14:30:37 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <string.h>
+#include <errno.h>
+#include <arpa/inet.h>
 
 # include <stdio.h>
 # include <unistd.h>
@@ -22,6 +29,9 @@
 # include <sys/time.h>
 # include "../libft/libft.h"
 # include "../mlx_opengl/mlx.h"
+
+# define MAX_CLIENT 10
+# define PORT 6000
 
 typedef struct s_rgb
 {
@@ -85,6 +95,12 @@ typedef struct	s_settings
 }	t_settings;
 
 typedef struct s_vars {
+	struct			sockaddr_in serv_addr;
+	int				mult_fd;
+	int				mult_id;
+	int				mult_n_players;
+	t_vector2		mult_positions[MAX_CLIENT];
+	char			buffer[1025];
 	int				rays_number;
 	t_coord			win_size;
 	t_player		player;
@@ -142,6 +158,9 @@ typedef struct s_line {
 	float	dist;
 }		t_line;
 
+void	print_tab_pos(t_vector2 tab[10]);
+int		serv_connect(t_vars *vars);
+int		serv_process(t_vars *vars);
 unsigned int	to_rgb(t_rgb c, unsigned char grey);
 void	show_player(t_vars *vars, double size);
 void	draw_direction(t_vars *vars, int ratio);

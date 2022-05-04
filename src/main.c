@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 17:39:07 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/03 10:59:54 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ int	init_player(t_vars *vars)
 	vars->player.delta.y = 0;
 	player_in_map = ft_strchr(vars->map, 'P');
 	vars->map[player_in_map - vars->map] = '0';
-	vars->player.pos.x = (player_in_map - vars->map) % vars->size.x + .0;
-	vars->player.pos.y = (player_in_map - vars->map) / vars->size.x + .0;
+	vars->player.pos.x = (player_in_map - vars->map) % vars->size.x + .5;
+	vars->player.pos.y = (player_in_map - vars->map) / vars->size.x + .5;
 	return (0);
 }
 
@@ -78,6 +78,8 @@ void	init_imgs(t_vars *vars)
 
 static void	fill_vars(t_vars *vars, int fd)
 {
+	vars->mult_fd = 0;
+	vars->mult_n_players = 0;
 	vars->mlx = mlx_init();
 	vars->win_size.x = 1920;
 	vars->win_size.y = 1080;
@@ -302,6 +304,7 @@ int	main(int argc, char **argv)
 	// raycasting(&vars);
 	// if (!vars.win)
 	// 	esc(&vars, 1);
+	//mlx_key_hook(vars.win, key_hook, &vars);
 	mlx_hook(vars.win, 2, 0, key_hook, &vars);
 	mlx_hook(vars.win, 17, 0, test_hook, &vars);
 	mlx_loop_hook(vars.mlx, frame, &vars);

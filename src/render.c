@@ -187,8 +187,8 @@ void	project_rays(t_vars *vars, double render_ratio)
 		if (min_dist < 1.0)
 			min_dist = 1.0;
 		int	wall_height = vars->win_size.y / 2 / min_dist;
-		if (i == vars->win_size.x / 2)
-			printf("height %d min_dist %.3f\n", wall_height, min_dist);
+		// if (i == vars->win_size.x / 2)
+		// 	printf("height %d min_dist %.3f\n", wall_height, min_dist);
 		// printf("MIN DIST %.2f %.2f\n", min_dist, min_dist * cos(ca));
 		// printf("OUI %d	%.3f	%d\n", vars->textures.img_no.size.x, (rx - (int)rx), vars->textures.img_no.size.x);
 		(void)color;
@@ -300,6 +300,20 @@ void	draw_square(t_vars *vars, t_coord p)
 	}
 }
 
+void	draw_multi(t_vars *vars, int size)
+{
+	int	i;
+
+	i = -1;
+	while (++i < MAX_CLIENT)
+	{
+		if (vars->mult_positions[i].x > 0)
+			draw_square_center(vars,
+				gen_coord(vars->mult_positions[i].x * size + size, vars->mult_positions[i].y * size + size, size / 2,
+				gen_color(255, 255, 255, 0)));
+	}
+}
+
 void	draw_2d_map(t_vars *vars, int size)
 {
 	int	x;
@@ -328,6 +342,7 @@ void	draw_2d_map(t_vars *vars, int size)
 			else if (vars->map[pos] == 'O' || vars->map[pos] == 'C')
 				draw_square(vars, gen_coord(x * size + size, y * size + size, size,
 					gen_color(150, 20, 150, 0)));
+			
 		}
 		else if (vars->settings.map_type == 2)
 		{
@@ -369,6 +384,8 @@ void	render(t_vars *vars)
 
 	// img = vars->img;
 	// vars->img = vars->img2;
+	if (vars->mult_fd)
+		serv_process(vars);
 	ft_int_memset(vars->img->addr, to_rgb(vars->textures.c, 0),
 		vars->img->line_length * vars->win_size.y / 8);
 	ft_int_memset(vars->img->addr + vars->img->line_length * vars->win_size.y / 2
@@ -376,6 +393,8 @@ void	render(t_vars *vars)
 	project_rays(vars, 64.0);
 	draw_2d_map(vars, vars->min_map_mult);
 	show_player(vars, vars->min_map_mult);
+	if (vars->mult_fd)
+		draw_multi(vars, vars->min_map_mult);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	// vars->img = img;
 }
