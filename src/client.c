@@ -38,17 +38,17 @@ int	serv_process(t_vars *vars)
 	while (++n < MAX_CLIENT)
 	{
 		// printf("Player: %d	%.2f %.2f\n", n,
-			// ((t_vector2 *)(vars->buffer + n * sizeof(t_vector2)))->x,
-			// ((t_vector2 *)(vars->buffer + n * sizeof(t_vector2)))->y);
+		// 	((t_vector2 *)(vars->buffer + n * sizeof(t_vector2)))->x,
+		// 	((t_vector2 *)(vars->buffer + n * sizeof(t_vector2)))->y);
 		ft_memcpy(&vars->mult_positions[n], vars->buffer + n * sizeof(t_vector2), sizeof(t_vector2));
 	}
 	ft_bzero(vars->buffer, sizeof(vars->buffer));
-	n = -1;
-	while (++n < MAX_CLIENT)
-	{
-		// if (vars->mult_positions[n].x > 0)
-		// printf("Player: %d	%.2f %.2f\n", n, vars->mult_positions[n].x, vars->mult_positions[n].y);
-	}
+	// n = -1;
+	// while (++n < MAX_CLIENT)
+	// {
+	// 	// if (vars->mult_positions[n].x > 0)
+	// 	printf("Player: %d	%.2f %.2f\n", n, vars->mult_positions[n].x, vars->mult_positions[n].y);
+	// }
 	return (0);
 }
 
