@@ -5,4 +5,8 @@
 cub3D
 *test*
 libft/libft.a
+*.vscode
 *non*
+server
+client
+*.dSYM

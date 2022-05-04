@@ -6,13 +6,20 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/03 14:10:58 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 14:12:15 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <string.h>
+#include <errno.h>
+#include <arpa/inet.h>
 
 # include <stdio.h>
 # include <unistd.h>
@@ -22,6 +29,9 @@
 # include <sys/time.h>
 # include "../libft/libft.h"
 # include "../mlx_opengl/mlx.h"
+
+# define MAX_CLIENT 10
+# define PORT 6000
 
 typedef struct s_rgb
 {
@@ -86,13 +96,21 @@ typedef struct	s_settings
 }	t_settings;
 
 typedef struct s_vars {
+	struct			sockaddr_in serv_addr;
+	int				mult_fd;
+	int				mult_id;
+	int				mult_n_players;
+	t_vector2		mult_positions[MAX_CLIENT];
+	char			buffer[1025];
 	int				rays_number;
 	t_coord			win_size;
 	t_player		player;
 	t_textures		textures;
 	t_data			textures_img[4];
 	t_coord			size;
-	t_data			img;
+	t_data			*img;
+	t_data			*img2;
+	int				img_int;
 	void			*mlx;
 	void			*win;
 	char			*map;
@@ -141,6 +159,9 @@ typedef struct s_line {
 	float	dist;
 }		t_line;
 
+void	print_tab_pos(t_vector2 tab[10]);
+int		serv_connect(t_vars *vars);
+int		serv_process(t_vars *vars);
 unsigned int	to_rgb(t_rgb c, unsigned char grey);
 void	show_player(t_vars *vars, double size);
 void	draw_direction(t_vars *vars, int ratio);
@@ -165,8 +186,7 @@ void	esc(t_vars *vars, int err);
 t_coord	gen_coord(int x, int y, int z, t_rgb c);
 t_rgb	gen_color(int r, int g, int b, int v);
 t_coord	coord(t_coord *p, int x, int y, int z);
-void	line_texture(t_vars *vars, int screen_x, int img_x, double dist, t_data *img);
-
+void	line_texture(t_vars *vars, int screen_x, int img_x, double wall_height, t_data *img, int dist_int);
 
 void	pixel_put(t_data *data, int x, int y, int color);
 // float	deg_to_rad(int d);

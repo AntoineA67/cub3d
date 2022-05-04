@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 17:32:06 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 14:11:40 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,11 +183,14 @@ void	project_rays(t_vars *vars, double render_ratio)
 			ca += M_PI * 2;
 		if (ca > M_PI * 2)
 			ca -= M_PI * 2;
-		// printf("MIN DIST %.2f %.2f\n", min_dist, min_dist * cos(ca));
 		min_dist *= cos(ca);
+		if (min_dist < 1.0)
+			min_dist = 1.0;
 		int	wall_height = vars->win_size.y / 2 / min_dist;
+		// if (i == vars->win_size.x / 2)
+		// 	printf("height %d min_dist %.3f\n", wall_height, min_dist);
+		// printf("MIN DIST %.2f %.2f\n", min_dist, min_dist * cos(ca));
 		// printf("OUI %d	%.3f	%d\n", vars->textures.img_no.size.x, (rx - (int)rx), vars->textures.img_no.size.x);
-		// printf("height %d\n", wall_height);
 		(void)color;
 		if (dist(vars->player.pos.x, vars->player.pos.y, disV.x, disV.y, ra2) <
 			dist(vars->player.pos.x, vars->player.pos.y, disH.x, disH.y, ra2))
@@ -196,14 +199,14 @@ void	project_rays(t_vars *vars, double render_ratio)
 			{
 				color = gen_color(255, 0, 0, 0);
 				line_texture(vars, i, (rx - (int)rx) * (vars->textures.img_so.size.x + .0),
-					wall_height, &vars->textures.img_so);
+					wall_height, &vars->textures.img_so, (int)min_dist * 10);
 				//sud
 			}
 			else
 			{
 				color = gen_color(0, 255, 0, 0);
 				line_texture(vars, i, (rx - (int)rx) * (vars->textures.img_no.size.x + .0),
-					wall_height, &vars->textures.img_no);
+					wall_height, &vars->textures.img_no, (int)min_dist * 10);
 				//nord
 			}
 		}
@@ -214,14 +217,14 @@ void	project_rays(t_vars *vars, double render_ratio)
 			{
 				color = gen_color(0, 0, 255, 0);
 				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_ea.size.x + .0),
-					wall_height, &vars->textures.img_ea);
+					wall_height, &vars->textures.img_ea, (int)min_dist * 10);
 				//est
 			}
 			else
 			{
 				color = gen_color(255, 255, 0, 0);
 				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_we.size.x + .0),
-					wall_height, &vars->textures.img_we);
+					wall_height, &vars->textures.img_we, (int)min_dist * 10);
 				//ouest
 			}
 		}
@@ -277,7 +280,7 @@ void	draw_square_center(t_vars *vars, t_coord p)
 	{
 		dx = p.x - p.z / 2;
 		while (++dx < p.x + p.z / 2)
-			pixel_put(&vars->img, dx,
+			pixel_put(vars->img, dx,
 					dy, to_rgb(p.c, 0));
 	}
 }
@@ -292,8 +295,22 @@ void	draw_square(t_vars *vars, t_coord p)
 	{
 		dx = p.x;
 		while (++dx < p.x + p.z)
-			pixel_put(&vars->img, dx,
+			pixel_put(vars->img, dx,
 					dy, to_rgb(p.c, 0));
+	}
+}
+
+void	draw_multi(t_vars *vars, int size)
+{
+	int	i;
+
+	i = -1;
+	while (++i < MAX_CLIENT)
+	{
+		if (vars->mult_positions[i].x > 0)
+			draw_square_center(vars,
+				gen_coord(vars->mult_positions[i].x * size + size, vars->mult_positions[i].y * size + size, size / 2,
+				gen_color(255, 255, 255, 0)));
 	}
 }
 
@@ -327,6 +344,7 @@ void	draw_2d_map(t_vars *vars, int size)
 			else if (vars->map[pos] == 'O' || vars->map[pos] == 'C')
 				draw_square(vars, gen_coord(x * size + size, y * size + size, size,
 					gen_color(150, 20, 150, 0)));
+			
 		}
 		else if (vars->settings.map_type == 2)
 		{
@@ -370,12 +388,21 @@ void	draw_2d_map(t_vars *vars, int size)
 
 void	render(t_vars *vars)
 {
-	ft_int_memset(vars->img.addr, to_rgb(vars->textures.c, 0),
-		vars->img.line_length * vars->win_size.y / 8);
-	ft_int_memset(vars->img.addr + vars->img.line_length * vars->win_size.y / 2
-		, to_rgb(vars->textures.f, 0), vars->img.line_length * vars->win_size.y / 8);
+	// t_data	*img;
+
+	// img = vars->img;
+	// vars->img = vars->img2;
+	if (vars->mult_fd)
+		serv_process(vars);
+	ft_int_memset(vars->img->addr, to_rgb(vars->textures.c, 0),
+		vars->img->line_length * vars->win_size.y / 8);
+	ft_int_memset(vars->img->addr + vars->img->line_length * vars->win_size.y / 2
+		, to_rgb(vars->textures.f, 0), vars->img->line_length * vars->win_size.y / 8);
 	project_rays(vars, 64.0);
 	draw_2d_map(vars, vars->min_map_mult);
 	show_player(vars, vars->min_map_mult);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
+	if (vars->mult_fd)
+		draw_multi(vars, vars->min_map_mult);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
+	// vars->img = img;
 }

@@ -1,12 +1,12 @@
-NO ./textures/xpm/oui.xpm
+NO ./textures/xpm/dirt.xpm
 SO ./textures/xpm/banane.xpm
-WE ./textures/xpm/leaves.xpm
+WE ./textures/xpm/oui.xpm
 EA ./textures/xpm/bookshelf.xpm
 C 83,24,135
 F 220,100,0
 
 11111111111
-10010000111
-10P00100011
-11000000001
+10000000001
+10P00000001
+10000000001
 11111111111
