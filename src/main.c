@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 16:40:00 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/03 14:27:04 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,11 @@ void	init_imgs(t_vars *vars)
 	t_textures	*imgs;
 
 	imgs = &vars->textures;
+	printf("%s\n", vars->textures.no);
+	imgs->img_sta.img = mlx_xpm_file_to_image(vars->mlx, "./textures/xpm/start.xpm", &imgs->img_sta.size.x,
+		&imgs->img_sta.size.y);
+	imgs->img_sta.addr = mlx_get_data_addr(imgs->img_sta.img, &imgs->img_sta.bits_per_pixel,
+		&imgs->img_sta.line_length, &imgs->img_sta.endian);
 	imgs->img_no.img = mlx_xpm_file_to_image(vars->mlx, imgs->no, &imgs->img_no.size.x,
 		&imgs->img_no.size.y);
 	imgs->img_no.addr = mlx_get_data_addr(imgs->img_no.img, &imgs->img_no.bits_per_pixel,
@@ -146,9 +151,13 @@ void	button(t_vars *vars, t_coords p, char *txt,void (*f)(void*, void*))
 	while (++dy < p.b.y)
 	{
 		dx = p.a.x;
-		while (++dx < p.b.x)
+		while (++dx < p.b.x && dy - p.a.y < 95)
+		{
+			//printf("%d\\%d|%d\\%d\n", (((dx - p.a.x) * vars->textures.img_sta.size.x) / (p.b.x - p.a.x)), vars->textures.img_sta.size.x, dy - p.a.y, vars->textures.img_sta.size.y);
 			pixel_put(&vars->img, dx,
-					dy, to_rgb(p.a.c, 0));
+					dy, *(unsigned int *)(vars->textures.img_sta.addr + ((int)(((dx - p.a.x) * vars->textures.img_sta.size.x) / (p.b.x - p.a.x))
+			* (vars->textures.img_sta.bits_per_pixel / 8) + ((int)(dy - p.a.y) * vars->textures.img_sta.line_length))));
+		}
 	}
 	(void)txt;
 	//printf("%d\n", mlx_string_put(vars->mlx, vars->win,100,100,0xff00ff, "PLAY"));

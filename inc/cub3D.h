@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/30 16:40:11 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/03 14:10:58 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct s_textures {
 	char	*so;
 	char	*we;
 	char	*ea;
+	t_data	img_sta;
 	t_data	img_no;
 	t_data	img_so;
 	t_data	img_we;
