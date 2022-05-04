@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 17:56:47 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 18:46:15 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,6 +268,8 @@ void	project_rays(t_vars *vars, double render_ratio)
 		ra += M_PI_2 / vars->win_size.x;
 	}
 	i = -1;
+	//start = fmod(start , M_PI * 2);
+	//end = fmod(end , M_PI * 2);
 	//printf("%d\n", vars->mult_n_players);
 	while (++i < vars->mult_n_players && i < 10)
 	{
@@ -278,15 +280,23 @@ void	project_rays(t_vars *vars, double render_ratio)
 			//asin(vars->mult_positions[i].y - vars->player.pos.y / dist) = angle;
 		//	vars->mult_positions[i].x - vars->player.pos.x / cos(angle) = dist;
 		double angle = atan((vars->player.pos.y - vars->mult_positions[i].y) / (vars->player.pos.x - vars->mult_positions[i].x));
-		if (angle < 0.0 && vars->player.pos.y - vars->mult_positions[i].y > 0.0)
+		if (angle < 0.0 && vars->player.pos.y - vars->mult_positions[i].y < 0.0)
 			angle = -angle;
-		else if (angle > 0.0 && vars->player.pos.y - vars->mult_positions[i].y > 0.0)
+		else if (angle > 0.0 && vars->player.pos.y - vars->mult_positions[i].y < 0.0)
 			angle = M_PI - angle;
-		else if (angle < 0.0 && vars->player.pos.y - vars->mult_positions[i].y < 0.0)
+		else if (angle < 0.0 && vars->player.pos.y - vars->mult_positions[i].y > 0.0)
 			angle = M_PI + (-angle);
 		else
-			angle = M_PI_2 + (-angle);
-		printf("player%d:%f|%f|%f\\%f\n",i,ra,angle,end, vars->player.pos.y - vars->mult_positions[i].y);
+			angle = (M_PI * 2) - angle;
+		angle += M_PI;
+		angle = fmod(angle , M_PI * 2);
+		end = fmod(end , M_PI * 2);
+		if (angle > start && angle < end)
+		{
+			double dangle = end - angle;
+			draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));
+		printf("player%d:%f|%f|%f\\%f\n",i,start,angle,end, vars->player.pos.y - vars->mult_positions[i].y);
+		}
 		}
 		}
 	}
