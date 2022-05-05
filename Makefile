@@ -13,7 +13,7 @@ CC			= gcc
 # FLAGS		= -I/usr/include
 # FLAGS		= -Wall -Wextra -Werror
 #FLAGS		+= -O2
-FLAGS		+= -fsanitize=address -g
+ FLAGS		+= -fsanitize=address -g
 #FLAGS		+= -Ofast
 
 #	RULES

@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 16:57:51 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/05 17:10:17 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ typedef struct s_textures {
 	char	*so;
 	char	*we;
 	char	*ea;
-	t_data	img_sta;
+
 	t_data	img_settings;
 	t_data	img_maps;
 	t_data	img_textures;
@@ -106,6 +106,7 @@ typedef struct	s_settings
 {
 	int				fps_cap;
 	int				map_type;
+	t_data			*bttext;
 }	t_settings;
 
 typedef struct	s_packet
