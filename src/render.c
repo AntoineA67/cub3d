@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 16:20:45 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/05 17:02:04 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void	project_rays(t_vars *vars, double render_ratio)
 	int			mp;
 	int			size;
 	int			shift;
-	double		ra;
 	double		ra2;
 	double		ca; 
 	double		aTan;
@@ -85,16 +84,16 @@ void	project_rays(t_vars *vars, double render_ratio)
 	}
 	size = (int)vars->min_map_mult;
 	i = -1;
-	ra = fmod(vars->player.rot - M_PI_4 + (M_PI * 2) , M_PI * 2);
-	start = ra;
+	start = fmod(vars->player.rot - M_PI_4 + (M_PI * 2) , M_PI * 2);
 	end = fmod(vars->player.rot + M_PI_4 + (M_PI * 2) , M_PI * 2);
-	if (ra > end)
+	if (start > end)
 		end += (M_PI * 2);
-	while (ra < end)
+	while (i < vars->win_size.x)
 	{
 		i++;
 		dof = 0;
-		ra2 =  fmod(ra , M_PI * 2);
+		ra2 = fmod(vars->player.rot - atan(1.0 - ((2.0 * i )/ vars->win_size.x)) + (M_PI * 2.0) , M_PI * 2.0);
+		//printf("%f,", ra2);
 		aTan = -1.0/tan(ra2);
 		if (ra2 > M_PI) //looking down
 		{
@@ -186,9 +185,10 @@ void	project_rays(t_vars *vars, double render_ratio)
 		if (ca > M_PI * 2)
 			ca -= M_PI * 2;
 		min_dist *= cos(ca);
-		if (min_dist < 1.0)
-			min_dist = 1.0;
+		// if (min_dist < 1.0)
+		// 	min_dist = 1.0;
 		int	wall_height = vars->win_size.y / 2 / min_dist;
+		//int	wall_height = 1000 / min_dist;
 		// if (i == vars->win_size.x / 2)
 		// 	printf("height %d min_dist %.3f\n", wall_height, min_dist);
 		// printf("MIN DIST %.2f %.2f\n", min_dist, min_dist * cos(ca));
@@ -200,15 +200,13 @@ void	project_rays(t_vars *vars, double render_ratio)
 			if (ra2 > M_PI)
 			{
 				color = gen_color(255, 0, 0, 0);
-				line_texture(vars, i, (rx - (int)rx) * (vars->textures.img_so.size.x + .0),
-					wall_height, &vars->textures.img_so, (int)min_dist * 10);
+				line_texture(vars, i, (rx - (int)rx) * (vars->textures.img_so.size.x + .0), &vars->textures.img_so, min_dist);
 				//sud
 			}
 			else
 			{
 				color = gen_color(0, 255, 0, 0);
-				line_texture(vars, i, (rx - (int)rx) * (vars->textures.img_no.size.x + .0),
-					wall_height, &vars->textures.img_no, (int)min_dist * 10);
+				line_texture(vars, i, (rx - (int)rx) * (vars->textures.img_no.size.x + .0), &vars->textures.img_no, min_dist);
 				//nord
 			}
 		}
@@ -218,15 +216,13 @@ void	project_rays(t_vars *vars, double render_ratio)
 			if (ra2 > M_PI_2 && ra2 < M_PI_2 + M_PI)
 			{
 				color = gen_color(0, 0, 255, 0);
-				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_ea.size.x + .0),
-					wall_height, &vars->textures.img_ea, (int)min_dist * 10);
+				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_ea.size.x + .0), &vars->textures.img_ea, min_dist);
 				//est
 			}
 			else
 			{
 				color = gen_color(255, 255, 0, 0);
-				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_we.size.x + .0),
-					wall_height, &vars->textures.img_we, (int)min_dist * 10);
+				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_we.size.x + .0), &vars->textures.img_we, min_dist);
 				//ouest
 			}
 		}
@@ -265,8 +261,8 @@ void	project_rays(t_vars *vars, double render_ratio)
 		// 		gen_coord(i, 540 - (int)(10000 / (min_dist * (render_ratio / vars->min_map_mult))), 0, color),
 		// 		gen_coord(i, 540 + (int)(10000 / (min_dist * (render_ratio / vars->min_map_mult))), 0, gen_color(0, 0, 0, 0)));
 		// printf("%.2f %d\n", min_dist, (int)(10000 / min_dist));
-		ra += M_PI_2 / vars->win_size.x;
 	}
+	//printf("\n");
 	i = -1;
 	//start = fmod(start , M_PI * 2);
 	//end = fmod(end , M_PI * 2);
