@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 18:46:34 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/05 13:04:50 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,7 +279,7 @@ void	project_rays(t_vars *vars, double render_ratio)
 		{
 			//asin(vars->mult_positions[i].y - vars->player.pos.y / dist) = angle;
 		//	vars->mult_positions[i].x - vars->player.pos.x / cos(angle) = dist;
-		double angle = atan((vars->player.pos.y - vars->mult_positions[i].y) / (vars->player.pos.x - vars->mult_positions[i].x));
+		double angle = atan2((vars->player.pos.y - vars->mult_positions[i].y) , (vars->player.pos.x - vars->mult_positions[i].x));
 		if (angle < 0.0 && vars->player.pos.y - vars->mult_positions[i].y < 0.0)
 			angle = -angle;
 		else if (angle > 0.0 && vars->player.pos.y - vars->mult_positions[i].y < 0.0)
