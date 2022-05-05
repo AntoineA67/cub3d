@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 17:08:58 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/05 17:18:52 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,12 @@ static void	fill_vars(t_vars *vars, int fd)
 	if (!vars->img->addr)
 		return ;
 	vars->img->bits_per_pixel /= 8;
+	vars->img2->img = mlx_new_image(vars->mlx, vars->win_size.x, vars->win_size.y);
+	vars->img2->addr = mlx_get_data_addr(vars->img2->img, &vars->img2->bits_per_pixel,
+	 		&vars->img2->line_length, &vars->img2->endian);
+	if (!vars->img2->addr)
+		return ;
+	vars->img2->bits_per_pixel /= 8;
 	close(fd);
 	// mlx_mouse_hide();
 	// mlx_mouse_move(vars->win, 0, 0);

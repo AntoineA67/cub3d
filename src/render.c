@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 16:50:54 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/05 17:19:36 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -528,7 +528,11 @@ void	render(t_vars *vars)
 	// vars->img = vars->img2;
 	int	x;
 	int	y;
+	void *tmp;
 
+	tmp = vars->img;
+	vars->img = vars->img2;
+	vars->img2 = tmp;
 	mlx_mouse_get_pos(vars->win, &x, &y);
 	// if (!vars->ui)
 	// {

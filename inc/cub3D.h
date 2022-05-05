@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 16:59:41 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/05 17:16:23 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ typedef struct s_vars {
 	t_data			textures_img[4];
 	t_coord			size;
 	t_data			*img;
+	t_data			*img1;
 	t_data			*img2;
 	int				img_int;
 	void			*mlx;
