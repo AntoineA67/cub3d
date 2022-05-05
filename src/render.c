@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 13:04:37 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/05 13:27:34 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,35 +275,35 @@ void	project_rays(t_vars *vars, double render_ratio)
 	{
 		if (vars->mult_id != i)
 		{
-			if (vars->mult_positions[i].y > 0.0 && vars->mult_positions[i].x > 0.0)
-			{
-				//asin(vars->mult_positions[i].y - vars->player.pos.y / dist) = angle;
-				//	vars->mult_positions[i].x - vars->player.pos.x / cos(angle) = dist;
-				// double angle = atan((vars->player.pos.y - vars->mult_positions[i].y) / (vars->player.pos.x - vars->mult_positions[i].x));
-				double angle = atan2((vars->player.pos.y - vars->mult_positions[i].y), (vars->player.pos.x - vars->mult_positions[i].x));
-				if (angle < 0)
-					angle = M_PI * 2 + angle;
-				printf("%.2f, %.2f, %.2f, %.2f, %.2f\n", angle, start, end, vars->player.delta.x, vars->player.delta.y);
-				if (fabs(vars->player.rot - angle) < M_PI_4)
+			// if (vars->mult_positions[i].y > 0.0 && vars->mult_positions[i].x > 0.0)
+			// {
+			// 	//asin(vars->mult_positions[i].y - vars->player.pos.y / dist) = angle;
+			// 	//	vars->mult_positions[i].x - vars->player.pos.x / cos(angle) = dist;
+			// 	// double angle = atan((vars->player.pos.y - vars->mult_positions[i].y) / (vars->player.pos.x - vars->mult_positions[i].x));
+			// 	double angle = atan2((vars->player.pos.y - vars->mult_positions[i].y), (vars->player.pos.x - vars->mult_positions[i].x));
+			// 	if (angle < 0)
+			// 		angle = M_PI * 2 + angle;
+			// 	printf("%.2f, %.2f, %.2f, %.2f, %.2f\n", angle, start, end, vars->player.delta.x, vars->player.delta.y);
+			// 	if (fabs(vars->player.rot - angle) < M_PI_4)
 				
-				// if (angle < 0.0 && vars->player.pos.y - vars->mult_positions[i].y < 0.0)
-				// 	angle = -angle;
-				// else if (angle > 0.0 && vars->player.pos.y - vars->mult_positions[i].y < 0.0)
-				// 	angle = M_PI - angle;
-				// else if (angle < 0.0 && vars->player.pos.y - vars->mult_positions[i].y > 0.0)
-				// 	angle = M_PI + (-angle);
-				// else
-				// 	angle = (M_PI * 2) - angle;
-				// angle += M_PI;
-				// angle = fmod(angle , M_PI * 2);
-				// end = fmod(end , M_PI * 2);
-				// if (angle > start && angle < end)
-				// {
-				// 	double dangle = end - angle;
-				// 	draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));
-				// //printf("player%d:%f|%f|%f\\%f\n",i,start,angle,end, vars->player.pos.y - vars->mult_positions[i].y);
-				// }
-			}
+			// 	// if (angle < 0.0 && vars->player.pos.y - vars->mult_positions[i].y < 0.0)
+			// 	// 	angle = -angle;
+			// 	// else if (angle > 0.0 && vars->player.pos.y - vars->mult_positions[i].y < 0.0)
+			// 	// 	angle = M_PI - angle;
+			// 	// else if (angle < 0.0 && vars->player.pos.y - vars->mult_positions[i].y > 0.0)
+			// 	// 	angle = M_PI + (-angle);
+			// 	// else
+			// 	// 	angle = (M_PI * 2) - angle;
+			// 	// angle += M_PI;
+			// 	// angle = fmod(angle , M_PI * 2);
+			// 	// end = fmod(end , M_PI * 2);
+			// 	// if (angle > start && angle < end)
+			// 	// {
+			// 	// 	double dangle = end - angle;
+			// 	// 	draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));
+			// 	// //printf("player%d:%f|%f|%f\\%f\n",i,start,angle,end, vars->player.pos.y - vars->mult_positions[i].y);
+			// 	// }
+			// }
 		}
 	}
 	//plot_line(vars,
@@ -453,6 +453,7 @@ void	render(t_vars *vars)
 	// 		mlx_mouse_move(vars->win, vars->win_size.x / 2, 0);
 	// 	}
 	// }
+	check_inputs(vars);
 	if (vars->mult_fd)
 		serv_process(vars);
 	ft_int_memset(vars->img->addr, to_rgb(vars->textures.c, 0),

@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 11:28:22 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/05 13:34:29 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,8 @@ void	rotate_player(t_vars *vars, int dir)
 		vars->player.rot += 2.0 * M_PI;
 	else if (vars->player.rot > 2.0 * M_PI)
 		vars->player.rot -= 2.0 * M_PI;
-	vars->player.delta.x = cos(vars->player.rot);// * 5.0;
-	vars->player.delta.y = sin(vars->player.rot);// * 5.0;
+	vars->player.delta.x = cos(vars->player.rot);
+	vars->player.delta.y = sin(vars->player.rot);
 }
 
 // int	key_hook(int keycode, t_vars *vars) //WSL2 VERSION
@@ -164,32 +164,44 @@ void	rotate_player(t_vars *vars, int dir)
 // 	return (0);
 // }
 
-int	key_hook(int keycode, t_vars *vars)
+int	key_hook_down(int keycode, t_vars *vars)
+{
+	if (keycode < 200)
+		vars->keyboard[keycode] = 1;
+}
+
+int	key_hook_up(int keycode, t_vars *vars)
+{
+	if (keycode < 200)
+		vars->keyboard[keycode] = 0;
+}
+
+int	check_inputs(t_vars *vars)
 {
 	// dprintf(1, "%d\n", keycode);
-	if (keycode == 53)
+	if (vars->keyboard[53])
 	{
 		if (vars->ui == 1)
 			esc(vars, 0);
 		else
 		{
 			mlx_mouse_show();
-				ft_int_memset(vars->img->addr, 0x000000,
-		vars->img->line_length * vars->win_size.y / 4);
+			ft_int_memset(vars->img->addr, 0x000000,
+				vars->img->line_length * vars->win_size.y / 4);
 			vars->ui = 1;
 		}
 	}
 	if (vars->ui)
 		return (0);
-	else if (keycode == 0)
+	if (vars->keyboard[0])
 		rotate_player(vars, -10);
-	else if (keycode == 1)
+	if (vars->keyboard[1])
 		move_player(vars, -1);
-	else if (keycode == 2)
+	if (vars->keyboard[2])
 		rotate_player(vars, 10);
-	else if (keycode == 13)
+	if (vars->keyboard[13])
 		move_player(vars, 1);
-	else if (keycode == 46 && !vars->mult_fd && serv_connect(vars))
+	if (vars->keyboard[46] && !vars->mult_fd && serv_connect(vars))
  		esc(vars, 1);
 	//project(vars);
 	// printf("Pos: %.2f %.2f - %3d %3d	Rot: %.2f Delta: %.2f %.2f\n",
