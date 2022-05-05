@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 13:35:06 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/05 16:21:25 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void	project_rays(t_vars *vars, double render_ratio)
 	int			mp;
 	int			size;
 	int			shift;
-	double		ra;
 	double		ra2;
 	double		ca; 
 	double		aTan;
@@ -85,16 +84,16 @@ void	project_rays(t_vars *vars, double render_ratio)
 	}
 	size = (int)vars->min_map_mult;
 	i = -1;
-	ra = fmod(vars->player.rot - M_PI_4 + (M_PI * 2) , M_PI * 2);
-	start = ra;
+	start = fmod(vars->player.rot - M_PI_4 + (M_PI * 2) , M_PI * 2);
 	end = fmod(vars->player.rot + M_PI_4 + (M_PI * 2) , M_PI * 2);
-	if (ra > end)
+	if (start > end)
 		end += (M_PI * 2);
-	while (ra < end)
+	while (i < vars->win_size.x)
 	{
 		i++;
 		dof = 0;
-		ra2 =  fmod(ra , M_PI * 2);
+		ra2 = fmod(vars->player.rot - atan(1.0 - ((2.0 * i )/ vars->win_size.x)) + (M_PI * 2.0) , M_PI * 2.0);
+		//printf("%f,", ra2);
 		aTan = -1.0/tan(ra2);
 		if (ra2 > M_PI) //looking down
 		{
@@ -265,8 +264,8 @@ void	project_rays(t_vars *vars, double render_ratio)
 		// 		gen_coord(i, 540 - (int)(10000 / (min_dist * (render_ratio / vars->min_map_mult))), 0, color),
 		// 		gen_coord(i, 540 + (int)(10000 / (min_dist * (render_ratio / vars->min_map_mult))), 0, gen_color(0, 0, 0, 0)));
 		// printf("%.2f %d\n", min_dist, (int)(10000 / min_dist));
-		ra += M_PI_2 / vars->win_size.x;
 	}
+	//printf("\n");
 	i = -1;
 	//start = fmod(start , M_PI * 2);
 	//end = fmod(end , M_PI * 2);
