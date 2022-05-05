@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 16:21:47 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/05 16:50:54 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void	show_player(t_vars *vars, double size)
 		draw_square_center(vars, gen_coord( size * (vars->player.pos.x + 1),
 			size * (vars->player.pos.y + 1), size / 2.0, gen_color(255, 0, 100, 0)));
 		plot_line(vars,
-			gen_coord( size + vars->player.pos.x, size+ vars->player.pos.y , 0, gen_color(255, 0, 100, 0)),
-			gen_coord( (size + vars->player.pos.x) + vars->player.delta.x * 10.0,
-				 (size + vars->player.pos.y) + vars->player.delta.y * 10.0, 0, gen_color(255, 0, 100, 0)));
+			gen_coord( size * (vars->player.pos.x + 1), size* (vars->player.pos.y + 1), 0, gen_color(255, 0, 100, 0)),
+			gen_coord( (size * (vars->player.pos.x +1)) + vars->player.delta.x * 10.0,
+				 (size * (vars->player.pos.y + 1)) + vars->player.delta.y * 10.0, 0, gen_color(255, 0, 100, 0)));
 	}
 	else if (vars->settings.map_type == 2)
 	{
@@ -30,9 +30,9 @@ void	show_player(t_vars *vars, double size)
 		draw_square_center(vars, gen_coord( size * (vars->player.pos.x + 1),
 			size * (vars->player.pos.y + 1), size / 2.0, gen_color(255, 0, 100, 0)));
 		plot_line(vars,
-			gen_coord( size + vars->player.pos.x, size+ vars->player.pos.y , 0, gen_color(255, 0, 100, 0)),
-			gen_coord( (size + vars->player.pos.x) + vars->player.delta.x * 10.0,
-				 (size + vars->player.pos.y) + vars->player.delta.y * 10.0, 0, gen_color(255, 0, 100, 0)));
+			gen_coord( size * (vars->player.pos.x + 1), size* (vars->player.pos.y + 1) , 0, gen_color(255, 0, 100, 0)),
+			gen_coord( (size * (vars->player.pos.x + 1)) + vars->player.delta.x * 10.0,
+				 (size * (vars->player.pos.y + 1)) + vars->player.delta.y * 10.0, 0, gen_color(255, 0, 100, 0)));
 	}
 	else
 	{
@@ -161,7 +161,6 @@ void	project_rays(t_vars *vars, double render_ratio)
 	int			my;
 	int			mp;
 	int			size;
-	int			shift;
 	double		ra2;
 	double		ca; 
 	double		aTan;
@@ -173,29 +172,30 @@ void	project_rays(t_vars *vars, double render_ratio)
 	double		start;
 	double		end;
 	double		min_dist;
+	double		tx;
+	double		rotmpi;
+	int			mapsizei;
 	t_vector2	disV;
 	t_vector2	disH;
 
 	(void)render_ratio;
-	shift = 0;
-	size = (int)vars->min_map_mult;
-	while (size != 1)
-	{
-		size /= 2;
-		shift++;
-	}
 	size = (int)vars->min_map_mult;
 	i = -1;
 	start = fmod(vars->player.rot - M_PI_4 + (M_PI * 2) , M_PI * 2);
 	end = fmod(vars->player.rot + M_PI_4 + (M_PI * 2) , M_PI * 2);
 	if (start > end)
 		end += (M_PI * 2);
+	tx = (2.0 / vars->win_size.x);
+	rotmpi = vars->player.rot + (M_PI * 2.0);
+	mapsizei = vars->size.x * vars->size.y;
 	while (i < vars->win_size.x)
 	{
 		i++;
 		dof = 0;
-		ra2 = fmod(vars->player.rot - atan(1.0 - ((2.0 * i )/ vars->win_size.x)) + (M_PI * 2.0) , M_PI * 2.0);
-		//printf("%f,", ra2);
+		if (i == vars->win_size.x / 2)
+			ra2 = vars->player.rot;
+		else
+			ra2 = fmod(rotmpi - atan(1.0 - (tx * i)), M_PI * 2.0);
 		aTan = -1.0/tan(ra2);
 		if (ra2 > M_PI) //looking down
 		{
@@ -222,7 +222,7 @@ void	project_rays(t_vars *vars, double render_ratio)
 			mx = (int)rx;
 			my = (int)ry;
 			mp = my * vars->size.x + mx;
-			if (mp < vars->size.x * vars->size.y && mp >= 0 && (vars->map[mp] == '1' || vars->map[mp] == 'C'))
+			if (mp < mapsizei && mp >= 0 && (vars->map[mp] == '1' || vars->map[mp] == 'C'))
 				dof = size;
 			else
 			{
@@ -261,7 +261,7 @@ void	project_rays(t_vars *vars, double render_ratio)
 			mx = (int)rx;
 			my = (int)ry;
 			mp = my * vars->size.x + mx;
-			if (mp < vars->size.x * vars->size.y && mp >= 0 && (vars->map[mp] == '1' || vars->map[mp] == 'C'))
+			if (mp < mapsizei && mp >= 0 && (vars->map[mp] == '1' || vars->map[mp] == 'C'))
 				dof = size;
 			else
 			{
@@ -551,8 +551,7 @@ void	render(t_vars *vars)
 		vars->img->line_length * vars->win_size.y / 8);
 	ft_int_memset(vars->img->addr + vars->img->line_length * vars->win_size.y / 2
 		, to_rgb(vars->textures.f, 0), vars->img->line_length * vars->win_size.y / 8);
-	// project_rays(vars, 64.0);
-	test_rays(vars);
+	project_rays(vars, 64.0);
 	draw_2d_map(vars, vars->min_map_mult);
 	show_player(vars, vars->min_map_mult);
 	if (vars->mult_fd)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   plot.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:03:35 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 18:35:36 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/05 16:56:22 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,12 +106,14 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, double wall_height, t_d
 	int				i;
 	double			y;
 	double			step;
+	int				y_2;
 
-	i = vars->win_size.y / 2 - wall_height;
+	y_2 = vars->win_size.y / 2;
+	i = y_2  - wall_height;
 	y = 0.0;
-	step = (img->size.y * 1.0) / ((vars->win_size.y / 2 + wall_height)
-			- (vars->win_size.y / 2 - wall_height));
-	while (++i < vars->win_size.y / 2 + wall_height)
+	step = (img->size.y * 1.0) / ((y_2  + wall_height)
+			- (y_2  - wall_height));
+	while (++i < y_2  + wall_height)
 	{
 		// if (screen_x == vars->win_size.x / 2)
 		// 	printf("%d\n", dist_int);

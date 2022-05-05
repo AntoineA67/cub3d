@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 13:35:21 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/05 16:59:41 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ typedef struct s_textures {
 	char	*so;
 	char	*we;
 	char	*ea;
-	t_data	img_sta;
+
 	t_data	img_settings;
 	t_data	img_maps;
 	t_data	img_textures;
@@ -106,6 +106,7 @@ typedef struct	s_settings
 {
 	int				fps_cap;
 	int				map_type;
+	t_data			*bttext;
 }	t_settings;
 
 typedef struct	s_packet

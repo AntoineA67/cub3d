@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 13:35:15 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/05 17:08:58 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,24 +57,25 @@ void	init_imgs(t_vars *vars)
 
 	vars->img = ft_calloc(1, sizeof(t_data));
 	vars->img2 = ft_calloc(1, sizeof(t_data));
+	vars->settings.bttext = ft_calloc(10, sizeof(t_data));
 	imgs = &vars->textures;
 	printf("%s\n", vars->textures.no);
-	imgs->img_sta.img = mlx_xpm_file_to_image(vars->mlx, "./textures/pack_blue_pink/start.xpm", &imgs->img_sta.size.x,
-		&imgs->img_sta.size.y);
-	imgs->img_settings.img = mlx_xpm_file_to_image(vars->mlx, "./textures/pack_blue_pink/settings.xpm", &imgs->img_settings.size.x,
-		&imgs->img_settings.size.y);
-	imgs->img_maps.img = mlx_xpm_file_to_image(vars->mlx, "./textures/pack_blue_pink/maps.xpm", &imgs->img_maps.size.x,
-		&imgs->img_maps.size.y);
-	imgs->img_textures.img = mlx_xpm_file_to_image(vars->mlx, "./textures/pack_blue_pink/textures.xpm", &imgs->img_textures.size.x,
-		&imgs->img_textures.size.y);
-	imgs->img_sta.addr = mlx_get_data_addr(imgs->img_sta.img, &imgs->img_sta.bits_per_pixel,
-		&imgs->img_sta.line_length, &imgs->img_sta.endian);
-	imgs->img_settings.addr = mlx_get_data_addr(imgs->img_settings.img, &imgs->img_settings.bits_per_pixel,
-		&imgs->img_settings.line_length, &imgs->img_settings.endian);
-	imgs->img_maps.addr = mlx_get_data_addr(imgs->img_maps.img, &imgs->img_maps.bits_per_pixel,
-		&imgs->img_maps.line_length, &imgs->img_maps.endian);
-	imgs->img_textures.addr = mlx_get_data_addr(imgs->img_textures.img, &imgs->img_textures.bits_per_pixel,
-		&imgs->img_textures.line_length, &imgs->img_textures.endian);
+	vars->settings.bttext[0].img = mlx_xpm_file_to_image(vars->mlx, "./textures/pack_blue_pink/start.xpm", &vars->settings.bttext[0].size.x,
+		&vars->settings.bttext[0].size.y);
+	vars->settings.bttext[2].img = mlx_xpm_file_to_image(vars->mlx, "./textures/pack_blue_pink/settings.xpm", &vars->settings.bttext[2].size.x,
+		&vars->settings.bttext[2].size.y);
+	vars->settings.bttext[1].img = mlx_xpm_file_to_image(vars->mlx, "./textures/pack_blue_pink/maps.xpm", &vars->settings.bttext[1].size.x,
+		&vars->settings.bttext[1].size.y);
+	vars->settings.bttext[3].img = mlx_xpm_file_to_image(vars->mlx, "./textures/pack_blue_pink/textures.xpm", &vars->settings.bttext[3].size.x,
+		&vars->settings.bttext[3].size.y);
+	vars->settings.bttext[0].addr = mlx_get_data_addr(vars->settings.bttext[0].img, &vars->settings.bttext[0].bits_per_pixel,
+		&vars->settings.bttext[0].line_length, &vars->settings.bttext[0].endian);
+	vars->settings.bttext[2].addr = mlx_get_data_addr(vars->settings.bttext[2].img, &vars->settings.bttext[2].bits_per_pixel,
+		&vars->settings.bttext[2].line_length, &vars->settings.bttext[2].endian);
+	vars->settings.bttext[1].addr = mlx_get_data_addr(vars->settings.bttext[1].img, &vars->settings.bttext[1].bits_per_pixel,
+		&vars->settings.bttext[1].line_length, &vars->settings.bttext[1].endian);
+	vars->settings.bttext[3].addr = mlx_get_data_addr(vars->settings.bttext[3].img, &vars->settings.bttext[3].bits_per_pixel,
+		&vars->settings.bttext[3].line_length, &vars->settings.bttext[3].endian);
 	imgs->img_no.img = mlx_xpm_file_to_image(vars->mlx, imgs->no, &imgs->img_no.size.x,
 		&imgs->img_no.size.y);
 	imgs->img_no.addr = mlx_get_data_addr(imgs->img_no.img, &imgs->img_no.bits_per_pixel,
@@ -172,9 +173,9 @@ void	button(t_vars *vars, t_coords p, char *txt,void (*f)(void*, void*))
 		dx = p.a.x;
 		while (++dx < p.b.x && dy - p.a.y < 95)
 		{
-			add =  *(unsigned int *)(vars->textures.img_sta.addr + ((int)(((dx - p.a.x) * vars->textures.img_sta.size.x) / (p.b.x - p.a.x))
-						* (vars->textures.img_sta.bits_per_pixel / 8) + ((int)(((dy - p.a.y) * vars->textures.img_sta.size.y) / (p.b.y - p.a.y)) * vars->textures.img_sta.line_length)));
-			//printf("%d\\%d|%d\\%d\n", (((dx - p.a.x) * vars->textures.img_sta.size.x) / (p.b.x - p.a.x)), vars->textures.img_sta.size.x, dy - p.a.y, vars->textures.img_sta.size.y);
+			add =  *(unsigned int *)(vars->settings.bttext[(int)txt[1] - '0'].addr + ((int)(((dx - p.a.x) * vars->settings.bttext[(int)txt[1] - '0'].size.x) / (p.b.x - p.a.x))
+						* (vars->settings.bttext[(int)txt[1] - '0'].bits_per_pixel / 8) + ((int)(((dy - p.a.y) * vars->settings.bttext[(int)txt[1] - '0'].size.y) / (p.b.y - p.a.y)) * vars->settings.bttext[(int)txt[1] - '0'].line_length)));
+			//printf("%d\\%d|%d\\%d\n", (((dx - p.a.x) * vars->settings.bttext[(int)txt[1] - '0'].size.x) / (p.b.x - p.a.x)), vars->settings.bttext[(int)txt[1] - '0'].size.x, dy - p.a.y, vars->settings.bttext[(int)txt[1]].size.y);
 			if (vars->clicked && vars->clicked_co.x >= p.a.x && vars->clicked_co.x <= p.b.x && vars->clicked_co.y >= p.a.y && vars->clicked_co.y <= p.b.y)
 				pixel_put(vars->img, dx, dy, add + (10<<8) + (10<<4) + 10);
 			else
@@ -214,30 +215,30 @@ t_coords screen_pc(double off, double wh, t_rgb colore, t_vars *vars)
 
 int	ui_frame1(t_vars	*vars)
 { 
-	button(vars, screen_pc(25.15,50.05, gen_color(255,0,100, 100), vars), "0Play", &change_ui);
-	button(vars, screen_pc(25.30,25.025, gen_color(255,255,100, 0), vars), "2Maps", &change_ui);
-	button(vars, screen_pc(25.40,25.025, gen_color(25,60,100, 0), vars), "3TexturePack", &change_ui);
-	button(vars, screen_pc(25.50,25.025, gen_color(56,69,10, 0), vars), "4Parameter", &change_ui);
+	button(vars, screen_pc(25.15,50.05, gen_color(255,0,100, 100), vars), "00", &change_ui);
+	button(vars, screen_pc(25.30,25.025, gen_color(255,255,100, 0), vars), "21", &change_ui);
+	button(vars, screen_pc(25.40,25.025, gen_color(25,60,100, 0), vars), "33", &change_ui);
+	button(vars, screen_pc(25.50,25.025, gen_color(56,69,10, 0), vars), "42", &change_ui);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	return (0);
 }
 
 int	ui_frame2(t_vars	*vars)
 { 
-	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "1Return", &change_ui);
+	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "10", &change_ui);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	return (0);
 }
 int	ui_frame3(t_vars	*vars)
 { 
-	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "1Return", &change_ui);
+	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "10", &change_ui);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	return (0);
 }
 int	ui_frame4(t_vars	*vars)
 { 
-	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "1Return", &change_ui);
-	button(vars, screen_pc(25.30,25.025, gen_color(255,0,100, 0), vars), "1Change_minimap", &change_setting);
+	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "10", &change_ui);
+	button(vars, screen_pc(25.30,25.025, gen_color(255,0,100, 0), vars), "10", &change_setting);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	return (0);
 }
