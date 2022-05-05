@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 17:09:56 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/05 19:28:00 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,129 @@ double	dist(double ax, double ay, double bx, double by, double angle)
 	(void)angle;
 	return (sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
 }
+
+// void	test_rays(t_vars *vars)
+// {
+// 	int			x;
+// 	double		camera_x;
+// 	t_vector2	ray_dir;
+// 	t_vector2	plane;
+// 	t_vector2	side_dist;
+// 	t_vector2	delta_dist;
+// 	double		perp_wall_dist;
+// 	t_coord		step;
+// 	int			hit;
+// 	int			side;
+// 	t_coord		map;
+
+	
+// 	plane.x = 0.0;
+// 	plane.y = 0.50;
+// 	x = -1;
+// 	while (++x < vars->win_size.x)
+// 	{
+// 		camera_x = 2 * x / (vars->win_size.x * 1.0) - 1;
+// 		ray_dir.x = vars->player.delta.x + plane.x * camera_x;
+// 		ray_dir.y = vars->player.delta.y + plane.y * camera_x;
+
+// 		if (x == vars->win_size.x / 2)
+// 			printf("RAY DIR %.2f %.2f\n", ray_dir.x, ray_dir.y);
+// 		map.x = (int)vars->player.pos.x;
+// 		map.y = (int)vars->player.pos.y;
+
+// 		if (ray_dir.x == 0)
+// 			delta_dist.x = 1e30;
+// 		else
+// 			delta_dist.x = sqrt(1 + (ray_dir.y * ray_dir.y) / (ray_dir.x * ray_dir.x));
+// 		if (ray_dir.y == 0)
+// 			delta_dist.y = 1e30;
+// 		else
+// 			delta_dist.y = sqrt(1 + (ray_dir.x * ray_dir.x) / (ray_dir.y * ray_dir.y));
+// 		hit = 0;
+
+// 		if (ray_dir.x < 0)
+// 		{
+// 			step.x = -1;
+// 			side_dist.x = (vars->player.pos.x - map.x) * delta_dist.x;
+// 		}
+// 		else
+// 		{
+// 			step.x = 1;
+// 			side_dist.x = (map.x + 1.0 - vars->player.pos.x) * delta_dist.x;
+// 		}
+// 		if (ray_dir.y < 0)
+// 		{
+// 			step.y = -1;
+// 			side_dist.y = (vars->player.pos.y - map.y) * delta_dist.y;
+// 		}
+// 		else
+// 		{
+// 			step.y = 1;
+// 			side_dist.y = (map.y + 1.0 - vars->player.pos.y) * delta_dist.y;
+// 		}
+// 		while (hit == 0)
+// 		{
+// 			if (side_dist.x < side_dist.y)
+// 			{
+// 				side_dist.x += delta_dist.x;
+// 				map.x += step.x;
+// 				side = 0;
+// 			}
+// 			else
+// 			{
+// 				side_dist.y += delta_dist.y;
+// 				map.y += step.y;
+// 				side = 1;
+// 			}
+// 			if (vars->map[map.x + map.y * vars->size.x] == '1')
+// 			{
+// 				hit = 1;
+// 				if (x == vars->win_size.x / 2)
+// 					printf("%d %d\n", map.x, map.y);
+// 			}
+// 		}
+// 		if (x == vars->win_size.x / 2)
+// 			printf("%.2f %.2f\n", side_dist.x, delta_dist.x);
+// 		if (side == 0)
+// 			perp_wall_dist = side_dist.x - delta_dist.x;
+// 		else
+// 			perp_wall_dist = side_dist.y - delta_dist.y;
+// 		int h = vars->win_size.y;
+// 		int line_height = (int)(h / perp_wall_dist);
+// 		int draw_start = -line_height / 2 + h / 2;
+// 		if (draw_start < 0)
+// 			draw_start = 0;
+// 		int draw_end = line_height / 2 + h / 2;
+// 		if (draw_end >= h)
+// 			draw_start = h - 1;
+// 		int color;
+// 		color = 0xffffff;
+// 		if (side == 1)
+// 			color = 0x808080;
+// 		if (x == vars->win_size.x / 2)
+// 			printf("%.2f %.2f line_height %d\n", vars->player.delta.x, vars->player.delta.y, line_height);
+// 		while (draw_start < draw_end)
+// 		{
+// 			pixel_put(vars->img, x, draw_start, color);
+// 			draw_start++;
+// 		}
+		
+// 		// 	plot_line(vars,
+// 		// 		gen_coord(x, draw_start, 0, gen_color(100, 100, 100, 0)),
+// 		// 		gen_coord(x, draw_end, 0, gen_color(0, 0, 0, 0)));
+// 		// plot_line(vars,
+// 		// 	gen_coord(x, draw_start, 0, gen_color(255, 200, 200, 0)),
+// 		// 	gen_coord(x, draw_end, 0, gen_color(0, 0, 0, 0)));
+// 		// double wall_x;
+// 		// if (side == 0)
+// 		// 	wall_x = vars->player.pos.y + perp_wall_dist * ray_dir.y;
+// 		// else
+// 		// 	wall_x = vars->player.pos.x + perp_wall_dist * ray_dir.x;
+// 		// wall_x += floor(wall_x);
+// 		// int tex_x = (int)(wall_x * )
+// 	}
+	
+// }
 
 void	project_rays(t_vars *vars, double render_ratio)
 {
@@ -185,8 +308,6 @@ void	project_rays(t_vars *vars, double render_ratio)
 		if (ca > M_PI * 2)
 			ca -= M_PI * 2;
 		min_dist *= cos(ca);
-		// if (min_dist < 1.0)
-		// 	min_dist = 1.0;
 		int	wall_height = vars->win_size.y / 2 / min_dist;
 		//int	wall_height = 1000 / min_dist;
 		// if (i == vars->win_size.x / 2)
@@ -200,12 +321,14 @@ void	project_rays(t_vars *vars, double render_ratio)
 			if (ra2 > M_PI)
 			{
 				color = gen_color(255, 0, 0, 0);
+				//vert_line(vars, i, wall_height, 0xff0000);
 				line_texture(vars, i, (rx - (int)rx) * (vars->textures.img_so.size.x + .0), &vars->textures.img_so, min_dist);
 				//sud
 			}
 			else
 			{
 				color = gen_color(0, 255, 0, 0);
+				// vert_line(vars, i, wall_height, 0x00ff00);
 				line_texture(vars, i, (rx - (int)rx) * (vars->textures.img_no.size.x + .0), &vars->textures.img_no, min_dist);
 				//nord
 			}
@@ -216,57 +339,20 @@ void	project_rays(t_vars *vars, double render_ratio)
 			if (ra2 > M_PI_2 && ra2 < M_PI_2 + M_PI)
 			{
 				color = gen_color(0, 0, 255, 0);
+				// vert_line(vars, i, wall_height, 0xff00ff);
 				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_ea.size.x + .0), &vars->textures.img_ea, min_dist);
 				//est
 			}
 			else
 			{
 				color = gen_color(255, 255, 0, 0);
+				// vert_line(vars, i, wall_height, 0xffff00);
 				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_we.size.x + .0), &vars->textures.img_we, min_dist);
 				//ouest
 			}
 		}
-		// if (ra2 == fmod(vars->player.rot - M_PI_4 + (M_PI * 2) , M_PI * 2))
-		if (i == vars->win_size.x / 2)
-		{
-			// printf("%.2f %.2f	%.2f %.2f	%d %d	%.2f\n", vars->player.pos.x, vars->player.pos.y, rx, ry,
-				// (int)rx, (int)ry, min_dist);
-			// plot_line(vars,
-			// 		gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(10, 10, 10, 200)),
-			// 		gen_coord(rx + size, size + ry, 0, gen_color(10, 10, 10, 200)));
-
-		}
-		//plot_line(vars,
-			//	gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(10, 10, 10, 200)),
-			//	gen_coord(rx + size, size + ry, 0, gen_color(10, 10, 10, 200)));
-
-		//MERGE
-		// min_dist = dist(vars->player.pos.x, vars->player.pos.y, rx, ry, ra2);
-		// double ca = vars->player.rot - ra2;
-		// if (ca < 0)
-		// 	ca += M_PI * 2;
-		// if (ca > M_PI * 2)
-		// 	ca -= M_PI * 2;
-		// min_dist *= cos(ca);
-
-
-		// while (++i % 10 != 9)
-		// {
-		// 	plot_line(vars,
-		// 		gen_coord(i, 540 - (int)(10000 / min_dist), 0),
-		// 		gen_coord(i, 540 + (int)(10000 / min_dist), 0));
-		// }
-		// printf("%.2f\n", ra2);
-		// plot_line(vars,
-		// 		gen_coord(i, 540 - (int)(10000 / (min_dist * (render_ratio / vars->min_map_mult))), 0, color),
-		// 		gen_coord(i, 540 + (int)(10000 / (min_dist * (render_ratio / vars->min_map_mult))), 0, gen_color(0, 0, 0, 0)));
-		// printf("%.2f %d\n", min_dist, (int)(10000 / min_dist));
 	}
-	//printf("\n");
 	i = -1;
-	//start = fmod(start , M_PI * 2);
-	//end = fmod(end , M_PI * 2);
-	//printf("%d\n", vars->mult_n_players);
 	while (++i < vars->mult_n_players && i < MAX_CLIENT)
 	{
 		if (vars->mult_id != i)
@@ -278,7 +364,7 @@ void	project_rays(t_vars *vars, double render_ratio)
 					angle = M_PI * 2 + angle;
 				angle =  angle + M_PI;
 				angle = fmod(angle, M_PI * 2);
-				printf("player%d:%f|%f|%f\\%f\n",i,start,angle,end, angle + (M_PI * 2.0));
+				// printf("player%d:%f|%f|%f\\%f\n",i,start,angle,end, angle + (M_PI * 2.0));
 				if (angle > start && angle < end )
 				{
 					double dangle = end - angle;
@@ -415,6 +501,27 @@ void	draw_2d_map(t_vars *vars, int size)
 		//printf("\n");
 }
 
+void	shade_floor_ceil(t_vars *vars)
+{
+	// int	i;
+
+	// i = -1;
+	// while (++i < vars->win_size.y * 2)
+	// {
+	// 	//ft_int_memset(vars->img->addr + i * vars->win_size.x, to_rgb(vars->textures.c, 0), vars->win_size.x);
+	// 	ft_int_memset(vars->img->addr + i * vars->win_size.x, add_shade(vars, to_rgb(vars->textures.c, 0), i / 10), vars->win_size.x);
+	// }
+	// while (i < vars->win_size.y * 4 - 1)
+	// {
+	// 	ft_int_memset(vars->img->addr + i * vars->win_size.x, add_shade(vars, to_rgb(vars->textures.f, 0), 255 / i), vars->win_size.x);
+	// 	i++;
+	// }
+	ft_int_memset(vars->img->addr, to_rgb(vars->textures.c, 0),
+		vars->img->line_length * vars->win_size.y / 8);
+	ft_int_memset(vars->img->addr + vars->img->line_length * vars->win_size.y / 2
+		, to_rgb(vars->textures.f, 0), vars->img->line_length * vars->win_size.y / 8);
+}
+
 void	render(t_vars *vars)
 {
 	// t_data	*img;
@@ -425,28 +532,26 @@ void	render(t_vars *vars)
 	int	y;
 
 	mlx_mouse_get_pos(vars->win, &x, &y);
-	// if (!vars->ui)
-	// {
-	// 	// printf("MOUSE %d %d\n", x, y);
-	// 	if (x > vars->win_size.x / 2)
-	// 	{
-	// 		rotate_player(vars, 5);
-	// 		mlx_mouse_move(vars->win, vars->win_size.x / 2, 0);
-	// 	}
-	// 	else if (x < vars->win_size.x / 2)
-	// 	{
-	// 		rotate_player(vars, -5);
-	// 		mlx_mouse_move(vars->win, vars->win_size.x / 2, 0);
-	// 	}
-	// }
+	if (!vars->ui)
+	{
+		// printf("MOUSE %d %d\n", x, y);
+		if (x > vars->win_size.x / 2)
+		{
+			rotate_player(vars, 5);
+			mlx_mouse_move(vars->win, vars->win_size.x / 2, 0);
+		}
+		else if (x < vars->win_size.x / 2)
+		{
+			rotate_player(vars, -5);
+			mlx_mouse_move(vars->win, vars->win_size.x / 2, 0);
+		}
+	}
 	check_inputs(vars);
 	if (vars->mult_fd)
 		serv_process(vars);
-	ft_int_memset(vars->img->addr, to_rgb(vars->textures.c, 0),
-		vars->img->line_length * vars->win_size.y / 8);
-	ft_int_memset(vars->img->addr + vars->img->line_length * vars->win_size.y / 2
-		, to_rgb(vars->textures.f, 0), vars->img->line_length * vars->win_size.y / 8);
+	shade_floor_ceil(vars);
 	project_rays(vars, 64.0);
+	//test_rays(vars);
 	draw_2d_map(vars, vars->min_map_mult);
 	show_player(vars, vars->min_map_mult);
 	if (vars->mult_fd)

@@ -14,7 +14,7 @@ CC			= gcc
 # FLAGS		= -Wall -Wextra -Werror
 #FLAGS		+= -O2
  FLAGS		+= -fsanitize=address -g
-#FLAGS		+= -Ofast
+# FLAGS		+= -Ofast
 
 #	RULES
 all: ${OBJDIR} ${NAME}

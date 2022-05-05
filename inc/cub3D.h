@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 17:10:17 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/05 19:17:21 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,9 @@ typedef struct s_line {
 	float	dist;
 }		t_line;
 
+void	vert_line(t_vars *vars, int x, int size, int color);
 void	rotate_player(t_vars *vars, int dir);
+unsigned int	add_shade(t_vars *vars, unsigned int c, unsigned int dist_int);
 void	print_tab_pos(t_vector2 tab[10]);
 int		serv_connect(t_vars *vars);
 int		serv_process(t_vars *vars);
