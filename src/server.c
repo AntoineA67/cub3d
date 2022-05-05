@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 19:13:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 17:43:52 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/04 20:42:29 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,17 @@ int main(int argc, char *argv[])
 	int					addrlen;
 	char				client_message[2000];
 	struct sockaddr_in	serv_addr;
-	int					n_players;
 	char				buffer[1025];
+	t_vector2			read_buf;
 	time_t				ticks;
 	fd_set				read_fds;
-	t_vector2			players_pos[MAX_CLIENT];
+	t_packet			packet;
+	int	id;
+	int	valread;
 
 	(void)argc;
 	(void)argv;
-	n_players = 0;
+	packet.n_players = 0;
 	printf("Cub3D server\n");
 	i = -1;
 	while (++i < MAX_CLIENT)
@@ -83,7 +85,7 @@ int main(int argc, char *argv[])
 	int	activity;
 	i = -1;
 	while (++i < MAX_CLIENT)
-		players_pos[i].x = -1.0;
+		packet.players_pos[i].x = -1.0;
 	while(1)
 	{
 		usleep(1000);
@@ -115,9 +117,11 @@ int main(int argc, char *argv[])
 			}
 			printf("New connection fd%d , ip: %s\n",
 				new_socket , inet_ntoa(serv_addr.sin_addr));
+			if (send(new_socket, &packet.n_players, sizeof(int), 0) != sizeof(int))
+				perror("Send");
 			if (send(new_socket, "Connected to Cub3D server!\n", 28, 0) != 28)
 				perror("Send");
-			n_players++;
+			packet.n_players++;
 			i = -1;
 			while (++i < MAX_CLIENT)
 			{
@@ -131,21 +135,21 @@ int main(int argc, char *argv[])
 				}
 			}
 		}
-		int	id;
 		id = -1;
-		int	valread;
-		while (++id < MAX_CLIENT)
+		while (++id < packet.n_players)
         {
+			usleep(1000);
             sd = client_socket[id];
             if (FD_ISSET(sd, &read_fds))
             {
-				ft_bzero(buffer, sizeof(buffer));
-				valread = read(sd, buffer, 1024);
-				write(sd, &n_players, sizeof(n_players));
+				// ft_bzero(buffer, sizeof(buffer));
+				// valread = read(sd, buffer, 1024);
+				ft_bzero(&read_buf, sizeof(t_vector2));
+				valread = read(sd, &read_buf, sizeof(t_vector2));
                 if (valread == 0)
                 {
-					players_pos[id].x = -1.0;
-					n_players--;
+					packet.players_pos[id].x = -1.0;
+					packet.n_players--;
                     getpeername(sd , (struct sockaddr*)&serv_addr,
 						(socklen_t*)&addrlen);
                     printf("Host disconnected , id %d , fd %d\n",
@@ -153,24 +157,40 @@ int main(int argc, char *argv[])
                     close(sd);
                     client_socket[id] = 0;
                 }
+				else if (valread != sizeof(t_vector2))
+				{
+					printf("Size error\n");
+					*(int *)buffer = -1;
+					send(sd, buffer, sizeof(int), 0);
+				}
                 else
                 {
 					// RESPONSE
                     buffer[valread] = '\0';
                     // send(sd , buffer , strlen(buffer) , 0 );
-					ft_memcpy(&players_pos[id], buffer, sizeof(t_vector2));
-					printf("Id:%d fd:%d	%.2f %.2f\n", id, sd, players_pos[sd].x, players_pos[sd].y);
+					if (packet.players_pos[id].x < 0
+						|| (fabs(packet.players_pos[id].x - read_buf.x) < 1
+						&& fabs(packet.players_pos[id].y - read_buf.y) < 1))
+					{
+						packet.players_pos[id].x = read_buf.x;
+						packet.players_pos[id].y = read_buf.y;
+					}
+					// ft_memcpy(&packet.players_pos[id], &read_buf, sizeof(t_vector2));
+					printf("Id:%d fd:%d	%.2f %.2f\n", id, sd, packet.players_pos[id].x, packet.players_pos[id].y);
 					ft_bzero(buffer, sizeof(buffer));
 					j = -1;
-					while (++j < 10)
-						ft_memcpy(buffer + j * (sizeof(t_vector2)), &players_pos[j], sizeof(t_vector2));
+					while (++j < MAX_CLIENT)
+						ft_memcpy(buffer + j * (sizeof(t_vector2)), &packet.players_pos[j], sizeof(t_vector2));
 					j = -1;
-					while (++j < 10)
+					while (++j < packet.n_players)
 						printf("Player: %d	%.2f %.2f\n", j,
 							((t_vector2 *)(buffer + j * sizeof(t_vector2)))->x,
 							((t_vector2 *)(buffer + j * sizeof(t_vector2)))->y);
-					print_tab_pos(players_pos);
-					write(sd, buffer, ft_strlen(buffer));
+					if (send(sd, &packet, sizeof(t_packet), 0) != sizeof(packet))
+						printf("Error while sending\n");
+					// write(sd, &packet.n_players, sizeof(packet.n_players));
+					// print_tab_pos(packet.players_pos);
+					// write(sd, buffer, ft_strlen(buffer));
                 }
             }
         }

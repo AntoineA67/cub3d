@@ -11,43 +11,61 @@ void	print_tab_pos(t_vector2 tab[10])
 
 int	serv_process(t_vars *vars)
 {
-	int	n;
+	int			n;
+	int			r;
+	t_packet	buf;
 
+	n = 0;
+	r = 0;
 	send(vars->mult_fd, &vars->player.pos, sizeof(t_vector2), 0);
-	// printf("Sent |%.2f %.2f|\n", vars->player.pos.x, vars->player.pos.y);
-	n = read(vars->mult_fd, vars->buffer, 1024);
-	if (n < 0)
+	//printf("Sent |%.2f %.2f|\n", vars->player.pos.x, vars->player.pos.y);
+	while (n < sizeof(t_packet))
 	{
-		printf("Read failed\n");
-		return (1);
+		r = read(vars->mult_fd, &(buf) + n, sizeof(t_packet));
+		if (r < 0)
+		{
+			printf("Read failed\n");
+			return (1);
+		}
+		if (r == 0)
+		{
+			printf("Server closed\n");
+			return (1);
+		}
+		if (n == 0 && *(int *)(&buf) == -1)
+		{
+			printf("Size error\n");
+			return (0);
+		}
+		n += r;
 	}
-	if (n == 0)
-	{
-		printf("Server closed\n");
-		return (1);
-	}
-	vars->buffer[n] = 0;
-	if (vars->mult_n_players == 0)
-	{
-		vars->mult_id = (*(int *)vars->buffer) - 1;
-		printf("Players: %d %d\n", *(int *)vars->buffer, vars->mult_id);
-	}
-	if (*(int *)vars->buffer != vars->mult_n_players && vars->mult_n_players != 0)
+	if (buf.n_players > vars->mult_n_players &&
+		vars->mult_n_players > 0 && buf.n_players <= MAX_CLIENT)
 		printf("A player joined the game!\n");
-	vars->mult_n_players = *(int *)vars->buffer;
-	ft_memmove(vars->buffer, vars->buffer + sizeof(int), sizeof(vars->buffer));
-	// print_tab_pos((t_vector2 *)vars->buffer);
+	vars->mult_n_players = buf.n_players;
+	ft_memcpy(vars->mult_positions, buf.players_pos, sizeof(t_vector2) * MAX_CLIENT);
+	// print_tab_pos(vars->mult_positions);
+	// printf("Players: %d id %d\n", buf.n_players, vars->mult_id);
+
+
+	// if (vars->mult_n_players == 0)
+	// {
+	// 	vars->mult_id = (*(int *)vars->buffer) - 1;
+	// 	printf("Players: %d %d\n", *(int *)vars->buffer, vars->mult_id);
+	// }
+	// ft_memmove(vars->buffer, vars->buffer + sizeof(int), sizeof(vars->buffer));
+	//print_tab_pos((t_vector2 *)vars->buffer);
 	// ft_memcpy(vars->mult_positions,
 	//  		vars->buffer, sizeof(vars->mult_positions));
-	n = -1;
-	while (++n < MAX_CLIENT)
-	{
-		// printf("Player: %d	%.2f %.2f\n", n,
-		// 	((t_vector2 *)(vars->buffer + n * sizeof(t_vector2)))->x,
-		// 	((t_vector2 *)(vars->buffer + n * sizeof(t_vector2)))->y);
-		ft_memcpy(&vars->mult_positions[n], vars->buffer + n * sizeof(t_vector2), sizeof(t_vector2));
-	}
-	ft_bzero(vars->buffer, sizeof(vars->buffer));
+	// n = -1;
+	// while (++n < MAX_CLIENT)
+	// {
+	// 	// printf("Player: %d	%.2f %.2f\n", n,
+	// 	// 	((t_vector2 *)(vars->buffer + n * sizeof(t_vector2)))->x,
+	// 	// 	((t_vector2 *)(vars->buffer + n * sizeof(t_vector2)))->y);
+	// 	ft_memcpy(&vars->mult_positions[n], vars->buffer + n * sizeof(t_vector2), sizeof(t_vector2));
+	// }
+	// ft_bzero(vars->buffer, sizeof(vars->buffer));
 	// n = -1;
 	// while (++n < MAX_CLIENT)
 	// {
@@ -81,10 +99,18 @@ int serv_connect(t_vars *vars)
 		printf("Connect Failed\n");
 		return (1);
 	}
-	n = read(vars->mult_fd, vars->buffer, 1024);
-	vars->buffer[n] = 0;
-	// vars->mult_id = vars->buffer;
+	n = 0;
+	printf("Connected\n");
+	// while (n < 28 + sizeof(int))
+	// {
+	// 	n += read(vars->mult_fd, vars->buffer + n, sizeof(vars->buffer));
+	// }
+	n = read(vars->mult_fd, vars->buffer, sizeof(vars->buffer));
+	vars->mult_id = *(int *)vars->buffer;
+	printf("ID %d\n", vars->mult_id);
+	ft_memmove(vars->buffer, vars->buffer + sizeof(int), sizeof(vars->buffer));
 	printf("%s\n", vars->buffer);
+	// ft_memmove(vars->buffer, ft_strchr(vars->buffer, '\0'), sizeof(vars->buffer));
 	ft_bzero(vars->buffer, sizeof(vars->buffer));
 	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 16:05:28 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/05 11:28:22 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,8 @@ void	rotate_player(t_vars *vars, int dir)
 		vars->player.rot += 2.0 * M_PI;
 	else if (vars->player.rot > 2.0 * M_PI)
 		vars->player.rot -= 2.0 * M_PI;
-	vars->player.delta.x = cos(vars->player.rot) * 5.0;
-	vars->player.delta.y = sin(vars->player.rot) * 5.0;
+	vars->player.delta.x = cos(vars->player.rot);// * 5.0;
+	vars->player.delta.y = sin(vars->player.rot);// * 5.0;
 }
 
 // int	key_hook(int keycode, t_vars *vars) //WSL2 VERSION
