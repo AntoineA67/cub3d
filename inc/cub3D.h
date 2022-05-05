@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 13:29:38 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/05 13:35:21 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,16 @@
 
 # define MAX_CLIENT 10
 # define PORT 6300
+
+enum	e_mlx_events {
+	ON_KEYDOWN = 2,
+	ON_KEYUP = 3,
+	ON_MOUSEDOWN = 4,
+	ON_MOUSEUP = 5,
+	ON_MOUSEMOVE = 6,
+	ON_EXPOSE = 12,
+	ON_DESTROY = 17
+};
 
 typedef struct s_rgb
 {
@@ -107,6 +117,7 @@ typedef struct	s_packet
 
 typedef struct s_vars {
 	struct			sockaddr_in serv_addr;
+	char			keyboard[200];
 	int				mult_fd;
 	int				mult_id;
 	int				mult_n_players;
@@ -181,7 +192,9 @@ int		f_loop(t_vars *vars);
 void	render(t_vars *vars);
 void	plot_line(t_vars *vars, t_coord p1, t_coord p2);
 int		is_in_window(t_vars *vars, int x, int y);
-int		key_hook(int keycode, t_vars *vars);
+int		check_inputs(t_vars *vars);
+int	key_hook_down(int keycode, t_vars *vars);
+int	key_hook_up(int keycode, t_vars *vars);
 // int		grad_color(t_rgb *c1, t_rgb *c2, float val, t_rgb map_color);
 // int		base_color(t_rgb *c1, t_rgb *c2, float val, t_rgb map_color);
  int		mouse_hook(int keycode, int x, int y, t_vars *vars);

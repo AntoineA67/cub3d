@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 13:33:43 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/05 13:35:06 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -443,6 +443,7 @@ void	render(t_vars *vars)
 	// 		mlx_mouse_move(vars->win, vars->win_size.x / 2, 0);
 	// 	}
 	// }
+	check_inputs(vars);
 	if (vars->mult_fd)
 		serv_process(vars);
 	ft_int_memset(vars->img->addr, to_rgb(vars->textures.c, 0),

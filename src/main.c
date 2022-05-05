@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 13:05:50 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/05 13:35:15 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void	init_imgs(t_vars *vars)
 static void	fill_vars(t_vars *vars, int fd)
 {
 	vars->mult_fd = 0;
+	ft_bzero(vars->keyboard, sizeof(vars->keyboard));
 	vars->mult_n_players = 0;
 	vars->mlx = mlx_init();
 	vars->win_size.x = 1920;
@@ -334,8 +335,9 @@ int	main(int argc, char **argv)
 	// if (!vars.win)
 	// 	esc(&vars, 1);
 	//mlx_key_hook(vars.win, key_hook, &vars);
-	mlx_hook(vars.win, 2, 0, key_hook, &vars);
-	mlx_hook(vars.win, 17, 0, test_hook, &vars);
+	mlx_hook(vars.win, ON_KEYDOWN, 0, key_hook_down, &vars);
+	mlx_hook(vars.win, ON_KEYUP, 0, key_hook_up, &vars);
+	mlx_hook(vars.win, ON_DESTROY, 0, test_hook, &vars);
 	mlx_loop_hook(vars.mlx, frame, &vars);
 	mlx_mouse_hook(vars.win, mouse_hook, &vars);
 	// mlx_loop_hook(vars.mlx, raycasting, &vars);
