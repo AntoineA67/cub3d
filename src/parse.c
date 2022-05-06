@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/04/29 18:29:33 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/06 12:57:07 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	str_to_rgb(t_rgb *col, char *str)
 	return (0);
 }
 
-int	elem_textures(char **l, t_textures *textures, int fd)
+int	elem_textures(char **l, t_vars *vars, int fd)
 {
 	char	*t;
 
@@ -70,17 +70,17 @@ int	elem_textures(char **l, t_textures *textures, int fd)
 		return (0);
 	}
 	else if (!ft_strncmp(*l, "NO ", 3))
-		textures->no = ft_strtrim(*l + 3, "\n ");
+		vars->no = ft_strtrim(*l + 3, "\n ");
 	else if (!ft_strncmp(*l, "SO ", 3))
-		textures->so = ft_strtrim(*l + 3, "\n ");
+		vars->so = ft_strtrim(*l + 3, "\n ");
 	else if (!ft_strncmp(*l, "WE ", 3))
-		textures->we = ft_strtrim(*l + 3, "\n ");
+		vars->we = ft_strtrim(*l + 3, "\n ");
 	else if (!ft_strncmp(*l, "EA ", 3))
-		textures->ea = ft_strtrim(*l + 3, "\n ");
+		vars->ea = ft_strtrim(*l + 3, "\n ");
 	else if (!ft_strncmp(*l, "F ", 2))
-		str_to_rgb(&textures->f, *l + 2);
+		str_to_rgb(&vars->f, *l + 2);
 	else if (!ft_strncmp(*l, "C ", 2))
-		str_to_rgb(&textures->c, *l + 2);
+		str_to_rgb(&vars->c, *l + 2);
 	else
 		return (1);
 	free(*l);
@@ -88,18 +88,17 @@ int	elem_textures(char **l, t_textures *textures, int fd)
 	return (0);
 }
 
-static void	fill_lst(t_list **lst, int fd, t_textures *textures)
+static void	fill_lst(t_list **lst, int fd, t_vars *vars)
 {
 	char		*l;
 	t_list		*node;
 
-	ft_bzero(textures, sizeof(t_textures));
 	node = *lst;
 	l = get_next_line(fd);
 	if (!l)
 		exit_lst(lst);
 	while (l)
-		if (elem_textures(&l, textures, fd))
+		if (elem_textures(&l, vars, fd))
 			break;
 	while (l)
 	{
@@ -138,7 +137,7 @@ char	*parse(int fd, t_vars *vars)
 	lst = ft_lstnew(NULL);
 	if (!lst)
 		exit(EXIT_FAILURE);
-	fill_lst(&lst, fd, &vars->textures);
+	fill_lst(&lst, fd, vars);
 	node = lst->next;
 	vars->size.x = 0;
 	vars->size.y = 0;

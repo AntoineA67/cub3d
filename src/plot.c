@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:03:35 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 16:56:22 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/05 17:39:14 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,25 +101,33 @@ unsigned int	add_shade(t_vars *vars, unsigned int c, unsigned int dist_int)
 		+ (b > dist_int) * (b - dist_int));
 }
 
-void	line_texture(t_vars *vars, int screen_x, int img_x, double wall_height, t_data *img, int dist_int)
+void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit_dist)
 {
 	int				i;
 	double			y;
 	double			step;
-	int				y_2;
+	double			wall_height;
 
-	y_2 = vars->win_size.y / 2;
-	i = y_2  - wall_height;
+	wall_height = vars->win_size.y / 2 / hit_dist;
 	y = 0.0;
-	step = (img->size.y * 1.0) / ((y_2  + wall_height)
-			- (y_2  - wall_height));
-	while (++i < y_2  + wall_height)
+	i = vars->win_size.y / 2 - wall_height;
+	// if (wall_height >= 540.0)
+	// 	y = 
+	step = (img->size.y * 1.0) / ((vars->win_size.y / 2 + wall_height)
+			- (vars->win_size.y / 2 - wall_height));
+	while (i < 0)
 	{
-		// if (screen_x == vars->win_size.x / 2)
-		// 	printf("%d\n", dist_int);
-		pixel_put(vars->img, screen_x, i,
-			add_shade(vars, *(unsigned int *)(img->addr + (img_x
-			* (img->bits_per_pixel / 8) + (int)y * img->line_length)), dist_int));
+		i++;
+		y += step;
+	}
+	if (screen_x == 0)
+		printf("%d %d %d %.2f\n", screen_x, i, img_x, hit_dist);
+	while (++i < vars->win_size.y / 2 + wall_height)
+	{
+		if (is_in_window(vars, screen_x, i))
+			pixel_put(vars->img, screen_x, i, 
+				add_shade(vars, *(unsigned int *)(img->addr + (img_x
+				* (img->bits_per_pixel / 8) + (int)y * img->line_length)), (int)hit_dist * 10));
 		y += step;
 	}
 }

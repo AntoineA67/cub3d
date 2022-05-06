@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 17:19:36 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/06 13:01:52 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,108 +49,6 @@ double	dist(double ax, double ay, double bx, double by, double angle)
 {
 	(void)angle;
 	return (sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
-}
-
-void	test_rays(t_vars *vars)
-{
-	int			x;
-	double		camera_x;
-	t_vector2	ray_dir;
-	t_vector2	plane;
-	t_vector2	side_dist;
-	t_vector2	delta_dist;
-	double		perp_wall_dist;
-	t_coord		step;
-	int			hit;
-	int			side;
-	t_coord		map;
-
-	
-	plane.x = 0.0;
-	plane.y = 0.66;
-	x = -1;
-	while (++x < vars->win_size.x)
-	{
-		map.x = (int)vars->player.pos.x;
-		map.y = (int)vars->player.pos.y;
-		camera_x = 2 * x / (vars->win_size.x * 1.0) - 1;
-		ray_dir.x = vars->player.delta.x + plane.x * camera_x;
-		ray_dir.y = vars->player.delta.y + plane.y * camera_x;
-		if (ray_dir.x == 0)
-			delta_dist.x = 1e30;
-		else
-			delta_dist.x = fabs(1 / ray_dir.x);
-		if (ray_dir.y == 0)
-			delta_dist.y = 1e30;
-		else
-			delta_dist.y = fabs(1 / ray_dir.y);
-		hit = 0;
-		if (ray_dir.x < 0)
-		{
-			step.x = -1;
-			side_dist.x = (vars->player.pos.x - map.x) * delta_dist.x;
-		}
-		else
-		{
-			step.x = 1;
-			side_dist.x = (map.x + 1.0 - vars->player.pos.x) * delta_dist.x;
-		}
-		if (ray_dir.y < 0)
-		{
-			step.y = -1;
-			side_dist.y = (vars->player.pos.y - map.y) * delta_dist.y;
-		}
-		else
-		{
-			step.y = 1;
-			side_dist.y = (map.y + 1.0 - vars->player.pos.y) * delta_dist.y;
-		}
-		while (hit == 0)
-		{
-			if (side_dist.x < side_dist.y)
-			{
-				side_dist.x += delta_dist.x;
-				map.x += step.x;
-				side = 0;
-			}
-			else
-			{
-				side_dist.y += delta_dist.y;
-				map.y += step.y;
-				side = 1;
-			}
-			if (vars->map[map.x + map.y * vars->size.x] == '1')
-				hit = 1;
-		}
-		if (side == 0)
-			perp_wall_dist = side_dist.x - delta_dist.x;
-		else
-			perp_wall_dist = side_dist.y - delta_dist.y;
-		int h = vars->win_size.y;
-		int line_height = (int)(h / perp_wall_dist);
-		int draw_start = -line_height / 2 + h / 2;
-		if (draw_start < 0)
-			draw_start = 0;
-		int draw_end = line_height / 2 + h / 2;
-		if (draw_end >= h)
-			draw_start = h - 1;
-
-		if (side == 1)
-			plot_line(vars,
-				gen_coord(x, draw_start, 0, gen_color(100, 100, 100, 0)),
-				gen_coord(x, draw_end, 0, gen_color(0, 0, 0, 0)));
-		plot_line(vars,
-			gen_coord(x, draw_start, 0, gen_color(255, 200, 200, 0)),
-			gen_coord(x, draw_end, 0, gen_color(0, 0, 0, 0)));
-		// double wall_x;
-		// if (side == 0)
-		// 	wall_x = vars->player.pos.y + perp_wall_dist * ray_dir.y;
-		// else
-		// 	wall_x = vars->player.pos.x + perp_wall_dist * ray_dir.x;
-		// wall_x += floor(wall_x);
-		// int tex_x = (int)(wall_x * )
-	}
-	
 }
 
 void	project_rays(t_vars *vars, double render_ratio)
@@ -287,9 +185,10 @@ void	project_rays(t_vars *vars, double render_ratio)
 		if (ca > M_PI * 2)
 			ca -= M_PI * 2;
 		min_dist *= cos(ca);
-		if (min_dist < 1.0)
-			min_dist = 1.0;
+		// if (min_dist < 1.0)
+		// 	min_dist = 1.0;
 		int	wall_height = vars->win_size.y / 2 / min_dist;
+		//int	wall_height = 1000 / min_dist;
 		// if (i == vars->win_size.x / 2)
 		// 	printf("height %d min_dist %.3f\n", wall_height, min_dist);
 		// printf("MIN DIST %.2f %.2f\n", min_dist, min_dist * cos(ca));
@@ -301,15 +200,13 @@ void	project_rays(t_vars *vars, double render_ratio)
 			if (ra2 > M_PI)
 			{
 				color = gen_color(255, 0, 0, 0);
-				line_texture(vars, i, (rx - (int)rx) * (vars->textures.img_so.size.x + .0),
-					wall_height, &vars->textures.img_so, (int)min_dist * 10);
+				line_texture(vars, i, (rx - (int)rx) * (get_texture(vars, "so", 0)->size.x + .0), get_texture(vars, "so", 0), min_dist);
 				//sud
 			}
 			else
 			{
 				color = gen_color(0, 255, 0, 0);
-				line_texture(vars, i, (rx - (int)rx) * (vars->textures.img_no.size.x + .0),
-					wall_height, &vars->textures.img_no, (int)min_dist * 10);
+				line_texture(vars, i, (rx - (int)rx) * (get_texture(vars, "no", 0)->size.x + .0), get_texture(vars, "no", 0), min_dist);
 				//nord
 			}
 		}
@@ -319,15 +216,13 @@ void	project_rays(t_vars *vars, double render_ratio)
 			if (ra2 > M_PI_2 && ra2 < M_PI_2 + M_PI)
 			{
 				color = gen_color(0, 0, 255, 0);
-				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_ea.size.x + .0),
-					wall_height, &vars->textures.img_ea, (int)min_dist * 10);
+				line_texture(vars, i, (ry - (int)ry) * (get_texture(vars, "ea", 0)->size.x + .0), get_texture(vars, "ea", 0), min_dist);
 				//est
 			}
 			else
 			{
 				color = gen_color(255, 255, 0, 0);
-				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_we.size.x + .0),
-					wall_height, &vars->textures.img_we, (int)min_dist * 10);
+				line_texture(vars, i, (ry - (int)ry) * (get_texture(vars, "we", 0)->size.x + .0), get_texture(vars, "we", 0), min_dist);
 				//ouest
 			}
 		}
@@ -551,10 +446,10 @@ void	render(t_vars *vars)
 	check_inputs(vars);
 	if (vars->mult_fd)
 		serv_process(vars);
-	ft_int_memset(vars->img->addr, to_rgb(vars->textures.c, 0),
+	ft_int_memset(vars->img->addr, to_rgb(vars->c, 0),
 		vars->img->line_length * vars->win_size.y / 8);
 	ft_int_memset(vars->img->addr + vars->img->line_length * vars->win_size.y / 2
-		, to_rgb(vars->textures.f, 0), vars->img->line_length * vars->win_size.y / 8);
+		, to_rgb(vars->f, 0), vars->img->line_length * vars->win_size.y / 8);
 	project_rays(vars, 64.0);
 	draw_2d_map(vars, vars->min_map_mult);
 	show_player(vars, vars->min_map_mult);
