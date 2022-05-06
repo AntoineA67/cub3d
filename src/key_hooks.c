@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 13:34:29 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/05 19:56:03 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,15 +95,23 @@ int	change_case(t_vars	*vars, double newposX, double newposY)
 	return (0);
 }
 
-static void	move_player(t_vars *vars, int dir)
+static void	move_player(t_vars *vars, int dir_x, int dir_y)
 {
 	double	newposX;
 	double	newposY;
 	int		size;
 
 	size = vars->min_map_mult;
-	newposX = vars->player.pos.x + dir * cos(vars->player.rot) * 0.2;
-	newposY = vars->player.pos.y + dir * sin(vars->player.rot) * 0.2;
+	if (dir_x)
+	{
+		newposX = vars->player.pos.x + dir_x * cos(vars->player.rot) * 0.1;
+		newposY = vars->player.pos.y + dir_x * sin(vars->player.rot) * 0.1;
+	}
+	else
+	{
+		newposX = vars->player.pos.x + dir_y * cos(vars->player.rot - M_PI_2) * 0.05;
+		newposY = vars->player.pos.y + dir_y * sin(vars->player.rot - M_PI_2) * 0.05;	
+	}
 	// printf("%.2f	%.2f\n", newposX, newposY);
 	if (vars->map[(int)newposX + (int)newposY * vars->size.x] != '1')
 	{
@@ -178,7 +186,6 @@ int	key_hook_up(int keycode, t_vars *vars)
 
 int	check_inputs(t_vars *vars)
 {
-	// dprintf(1, "%d\n", keycode);
 	if (vars->keyboard[53])
 	{
 		if (vars->ui == 1)
@@ -194,13 +201,17 @@ int	check_inputs(t_vars *vars)
 	if (vars->ui)
 		return (0);
 	if (vars->keyboard[0])
+		move_player(vars, 0, 1);
+	if (vars->keyboard[123])
 		rotate_player(vars, -10);
 	if (vars->keyboard[1])
-		move_player(vars, -1);
+		move_player(vars, -1, 0);
 	if (vars->keyboard[2])
+		move_player(vars, 0, -1);
+	if (vars->keyboard[124])
 		rotate_player(vars, 10);
 	if (vars->keyboard[13])
-		move_player(vars, 1);
+		move_player(vars, 1, 0);
 	if (vars->keyboard[46] && !vars->mult_fd && serv_connect(vars))
  		esc(vars, 1);
 	//project(vars);

@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 12:59:15 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/06 13:39:43 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,9 @@ typedef struct s_line {
 }		t_line;
 
 t_data	*get_texture(t_vars	*vars, char	*name, int nb);
+void	vert_line(t_vars *vars, int x, int size, int color);
 void	rotate_player(t_vars *vars, int dir);
+unsigned int	add_shade(t_vars *vars, unsigned int c, unsigned int dist_int);
 void	print_tab_pos(t_vector2 tab[10]);
 int		serv_connect(t_vars *vars);
 int		serv_process(t_vars *vars);
