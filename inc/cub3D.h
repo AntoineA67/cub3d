@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 13:39:43 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/06 16:50:46 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,7 @@ typedef struct s_line {
 	float	dist;
 }		t_line;
 
+t_data	*get_animtexture(t_vars	*vars, char	*name, double speed);
 t_data	*get_texture(t_vars	*vars, char	*name, int nb);
 void	vert_line(t_vars *vars, int x, int size, int color);
 void	rotate_player(t_vars *vars, int dir);

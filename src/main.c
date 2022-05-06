@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 13:52:41 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/06 17:08:13 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,44 +51,79 @@ int	init_player(t_vars *vars)
 	return (0);
 }
 
+
 void	load_texture(t_vars	*vars , char *name, int nb, char *path)
 {
 	t_data		*actt;
 	t_textures	**act;
 	t_textures	*last;
+	int i;
 
+	printf("LOADING:%s\t...\n", path);
 	act = &vars->textures;
 	if (*act)
 		printf("%s, ", (*act)->name);
-	while ((*act) && (*act)->next)
+	while ((*act) && (*act)->next && ft_strncmp((*act)->name, name, ft_strlen(name)))
 	{
-		printf("%s, ", (*act)->name);
-		// if (!ft_strncmp(*act->name, name, ft_strlen(name)))
-		// {
-		// 	free(*act->texture);
-		// 	vars->textures->texture = ft_calloc(sizeof(t_data), 1);
-		// 	actt = &vars->textures->texture[0];
-		// 	actt->img = mlx_xpm_file_to_image(vars->mlx, path,
-		// 		&actt->size.x, &actt->size.y);
-		// 	actt->addr = mlx_get_data_addr(actt->img, &actt->bits_per_pixel,
-		// 		&actt->line_length, &actt->endian);
-		// 	last->next = *act;
-		// }
 		act = &(*act)->next;
+		printf("%s, ", (*act)->name);
 	}
-	last = ft_calloc(sizeof(t_textures), 1);
-	last->name = name;
-	last->texture = ft_calloc(sizeof(t_data), 1);
-	actt = &last->texture[0];
-	actt->img = mlx_xpm_file_to_image(vars->mlx, path,
-			&actt->size.x, &actt->size.y);
-	actt->addr = mlx_get_data_addr(actt->img, &actt->bits_per_pixel,
-			&actt->line_length, &actt->endian);
-	if (*act)
-		(*act)->next = last;
+	if (!(*act) || ft_strncmp((*act)->name, name, ft_strlen(name)))
+	{
+		last = ft_calloc(sizeof(t_textures), 1);
+		last->name = name;
+		last->texture = ft_calloc(sizeof(t_data), 2);
+		actt = &last->texture[0];
+		actt->img = mlx_xpm_file_to_image(vars->mlx, path,
+				&actt->size.x, &actt->size.y);
+		actt->addr = mlx_get_data_addr(actt->img, &actt->bits_per_pixel,
+				&actt->line_length, &actt->endian);
+		if (*act)
+			(*act)->next = last;
+		else
+			*act = last;
+	}
 	else
-		*act = last;
-	printf("%s:LOADED\n", name);
+	{
+		i = 0;
+		while (i < nb)
+			i++;
+		// if (!(&((*act)->texture[i])))
+		// {
+			//printf("load%d|%d\n", i, nb);
+			void *tmp = ft_calloc(sizeof(t_data), i + 1);
+			ft_memcpy(tmp, (*act)->texture, i * sizeof(t_data));
+			free((*act)->texture);
+			(*act)->texture = tmp;
+		// }
+		// else
+		// 	ft_bzero((*act)->texture + (i * sizeof(t_data)), sizeof(t_data));
+		actt = &((*act)->texture[i]);
+		actt->img = mlx_xpm_file_to_image(vars->mlx, path,
+			&actt->size.x, &actt->size.y);
+		actt->addr = mlx_get_data_addr(actt->img, &actt->bits_per_pixel,
+			&actt->line_length, &actt->endian);
+	}
+	if (!ft_strncmp((*act)->name, name, ft_strlen(name)))
+		printf("%s:REPLACE at :%d\n", name, nb);
+	else
+		printf("%s:LOADED at :%d\n", name, nb);
+}
+
+void	load_animtexture(t_vars	*vars , char *name, int nb, char *path)
+{
+	int	i;
+	char	*pathn;
+
+	i = 0;
+	while (i < nb)
+	{
+		pathn = ft_strjoin(ft_substr(path, 0, ft_strlen(path) - 4)  , ft_itoa(i));
+		pathn = ft_strjoin(pathn, ".xpm");
+		load_texture(vars, name, i, pathn);
+		free(pathn);
+		i++;
+	}
 }
 
 void	free_textures(t_vars *vars)
@@ -109,16 +144,75 @@ t_data	*get_texture(t_vars	*vars, char	*name, int nb)
 {
 	t_data		*actt;
 	t_textures	*act;
+	int i;
 
 	act = vars->textures;
 	while (act && ft_strncmp(act->name, name, ft_strlen(name)) && act->next)
 		act = act->next;
 	if (!ft_strncmp(act->name, name, ft_strlen(name)))
-		return (act->texture);
+	{
+		i = 0;
+	//	if (!ft_strncmp(act->name, "player", ft_strlen(name)))
+		//	printf("%d\n", act->texture[1].size.x);
+		while (i < nb && (&(act->texture[i]) != NULL))
+		{
+			i++;
+		}
+		//printf("etdtstfdsfuugvdf%d\n", i);
+		return (&(act->texture[i]));
+	}
 	printf("NOT FOUND:%s\n", name);
 	free_textures(vars);
 	exit(1);
 	return (NULL);
+}
+
+int	get_animsize(t_vars	*vars, char *name)
+{
+	t_data		*actt;
+	t_textures	*act;
+	int i;
+
+	act = vars->textures;
+	while (act && ft_strncmp(act->name, name, ft_strlen(name)) && act->next)
+		act = act->next;
+	if (act && !ft_strncmp(act->name, name, ft_strlen(name)))
+	{
+		i = 0;
+		// printf("etdtstfdsfuugvdf%d\n", ft_strlen(act->texture));
+		// return (ft_strlen(act->texture ) - 3);
+		while ((act->texture + (i * sizeof(t_data))) != NULL)
+		{
+			i++;
+		}
+	//	printf("etdtstfdsfuugvdf%d\n", i);
+		return (i);
+	}
+	return (0);
+}
+
+long	gettime(long initime)
+{
+	long			res;
+	struct timeval	time;
+
+	gettimeofday(&time, NULL);
+	res = time.tv_usec / 1000;
+	res += time.tv_sec * 1000;
+	res -= initime;
+	return (res);
+}
+
+t_data	*get_animtexture(t_vars	*vars, char	*name, double speed)
+{
+	t_data *r;
+
+//	printf("TIME:%f\n", gettime(vars->n1) / 1000.0);
+//	printf("IM_NUM:%f\n", (speed * 3));
+//	printf("SEARCH:%d\n", (int)fmod((gettime(vars->n1) / 1000.0), (speed * 3)));
+	r = get_texture(vars, name, floor(fmod((gettime(vars->n1) / 1000.0), (speed * 3.0)) / speed));
+	//printf("YES%d\n", r->size.x);
+	return (r);
 }
 
 
@@ -133,8 +227,10 @@ void	init_imgs(t_vars *vars)
 	load_texture(vars, "settings", 0, "./textures/pack_blue_pink/settings.xpm");
 	load_texture(vars, "maps", 0, "./textures/pack_blue_pink/maps.xpm");
 	load_texture(vars, "textures", 0, "./textures/pack_blue_pink/textures.xpm");
+	load_animtexture(vars, "player", 4, "./textures/xpm/dirt.xpm");
 	load_texture(vars, "no", 0, vars->no);
 	load_texture(vars, "so", 0, vars->so);
+	load_texture(vars, "maps", 0, "./textures/pack_blue_pink/maps.xpm");
 	load_texture(vars, "ea", 0, vars->ea);
 	load_texture(vars, "we", 0, vars->we);
 }
@@ -294,18 +390,6 @@ int	ui_frame4(t_vars	*vars)
 	button(vars, screen_pc(25.30,25.025, gen_color(255,0,100, 0), vars), "1start", &change_setting);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	return (0);
-}
-
-long	gettime(long initime)
-{
-	long			res;
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	res = time.tv_usec / 1000;
-	res += time.tv_sec * 1000;
-	res -= initime;
-	return (res);
 }
 
 int	frame(void *data)
