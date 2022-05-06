@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 17:08:13 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/06 17:14:36 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ int	init_player(t_vars *vars)
 {
 	char	*player_in_map;
 
-	vars->player.rot = vars->start_rot;
+	vars->player.rot.x = vars->start_rot;
+	vars->player.rot.y = 0;
 	vars->player.delta.x = 0;
 	vars->player.delta.y = 0;
 	player_in_map = ft_strchr(vars->map, 'P');
@@ -241,8 +242,8 @@ static void	fill_vars(t_vars *vars, int fd)
 	ft_bzero(vars->keyboard, sizeof(vars->keyboard));
 	vars->mult_n_players = 0;
 	vars->mlx = mlx_init();
-	vars->win_size.x = 1920;
-	vars->win_size.y = 1080;
+	vars->win_size.x = 1920 * 0.75;
+	vars->win_size.y = 1080 * 0.75;
 	vars->map = parse(fd, vars);
 	if (init_player(vars))
 		return ; //NO PLAYER IN MAP
@@ -285,10 +286,10 @@ void	change_ui(void		*v, void	*data)
 
 	vars = (t_vars *)v;
 	vars->ui = *((int*)data);
-	// if (vars->ui)
-	// 	mlx_mouse_show();
-	// else
-	// 	mlx_mouse_hide();
+	if (vars->ui)
+		mlx_mouse_show();
+	else
+		mlx_mouse_hide();
 }
 
 void	change_setting(void		*v, void	*dat)
