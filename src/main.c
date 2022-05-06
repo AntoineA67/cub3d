@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 17:14:36 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/06 19:36:52 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,8 +228,9 @@ void	init_imgs(t_vars *vars)
 	load_texture(vars, "settings", 0, "./textures/pack_blue_pink/settings.xpm");
 	load_texture(vars, "maps", 0, "./textures/pack_blue_pink/maps.xpm");
 	load_texture(vars, "textures", 0, "./textures/pack_blue_pink/textures.xpm");
-	load_animtexture(vars, "player", 4, "./textures/xpm/dirt.xpm");
+	load_animtexture(vars, "player", 4, "./textures/nice/photo.xpm");
 	load_texture(vars, "no", 0, vars->no);
+	// load_texture(vars, "oui", 0, "./textures/xpm/pho.xpm");
 	load_texture(vars, "so", 0, vars->so);
 	load_texture(vars, "maps", 0, "./textures/pack_blue_pink/maps.xpm");
 	load_texture(vars, "ea", 0, vars->ea);
@@ -242,8 +243,8 @@ static void	fill_vars(t_vars *vars, int fd)
 	ft_bzero(vars->keyboard, sizeof(vars->keyboard));
 	vars->mult_n_players = 0;
 	vars->mlx = mlx_init();
-	vars->win_size.x = 1920 * 0.75;
-	vars->win_size.y = 1080 * 0.75;
+	vars->win_size.x = 1920;// * 0.75;
+	vars->win_size.y = 1080;// * 0.75;
 	vars->map = parse(fd, vars);
 	if (init_player(vars))
 		return ; //NO PLAYER IN MAP
@@ -464,7 +465,7 @@ int	main(int argc, char **argv)
 	fill_vars(&vars, fd);
 	(void)extract_name;
 	vars.rays_number = 0;
-	vars.settings.fps_cap = 144;
+	vars.settings.fps_cap = 60;
 	vars.settings.map_type = 1;
 	vars.win = mlx_new_window(vars.mlx, vars.win_size.x,
 			vars.win_size.y, extract_name(argv[1]));

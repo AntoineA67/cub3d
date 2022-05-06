@@ -89,7 +89,7 @@ int serv_connect(t_vars *vars)
 	ft_bzero(vars->buffer, 1025);
 	vars->serv_addr.sin_family = AF_INET;
 	vars->serv_addr.sin_port = htons(PORT);
-	if(inet_pton(AF_INET, "10.1.3.3", &vars->serv_addr.sin_addr) <= 0)
+	if(inet_pton(AF_INET, SERVER_IP, &vars->serv_addr.sin_addr) <= 0)
 	{
 		perror("inet_pton error\n");
 		return (1);

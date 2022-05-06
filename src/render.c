@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 17:14:42 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/06 19:47:25 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,41 @@ double	dist(double ax, double ay, double bx, double by, double angle)
 	
 // }
 
+void	draw_square_texture_center(t_vars *vars, t_coord p, t_data *img)
+{
+	int		dy;
+	int		dx;
+	int		square_size;
+	double	ratio_x;
+	double	ratio_y;
+	double	img_x;
+	double	img_y;
+
+	if (!p.z)
+		return ;
+	square_size = p.z;
+	img_y = 0;
+	ratio_x = (img->size.x + .0) / (square_size + .0);
+	ratio_y = (img->size.y + .0) / (square_size + .0);
+	dy = p.y - p.z / 2;
+	// printf("img_x: %d	img_y: %d\nsquare_size: %d\nratio_x: %.2f	ratio_y: %.2f\n", img->size.x, img->size.y, square_size, ratio_x, ratio_y);
+	// draw_square_center(vars, p);
+	while (++dy < p.y + p.z / 2)
+	{
+		dx = p.x - p.z / 2;
+		img_x = 0;
+		while (++dx < p.x + p.z / 2 && img_x < img->size.x && img_y >= 0 && img_x >= 0 && img_y < img->size.y && is_in_window(vars, dx, dy - vars->player.rot.y))
+		{
+			//printf("img_x: %f	img_y: %f\n", img_x, img_y);
+			//printf("%d\n", img->line_length);
+			pixel_put(vars->img, dx, dy - vars->player.rot.y,
+				*(unsigned int *)(img->addr + ((int)((int)img_x * (img->bits_per_pixel / 8)) + (int)((int)img_y * img->line_length))));
+			img_x += ratio_x;
+		}
+		img_y += ratio_y;
+	}
+}
+
 void	project_rays(t_vars *vars, double render_ratio)
 {
 	int			i;
@@ -321,7 +356,7 @@ void	project_rays(t_vars *vars, double render_ratio)
 			if (ra2 > M_PI)
 			{
 				color = gen_color(255, 0, 0, 0);
-				line_texture(vars, i, (rx - (int)rx) * (get_animtexture(vars, "player", 0.02)->size.x + .0), get_animtexture(vars, "player", 0.02), min_dist);
+				line_texture(vars, i, (rx - (int)rx) * (get_animtexture(vars, "player", 0.2)->size.x + .0), get_animtexture(vars, "player", 0.2), min_dist);
 				//sud
 			}
 			else
@@ -364,16 +399,51 @@ void	project_rays(t_vars *vars, double render_ratio)
 				if (angle > start && angle < end )
 				{
 					double dangle = end - angle;
-					draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));
+					draw_square_texture_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) * 200, gen_color(100,100,100,0)), get_animtexture(vars, "player", 0.2));
+					// draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));
 				}
 				else if (( angle + (M_PI * 2.0)) > start && (angle + (M_PI * 2.0)) < end)
 				{
 					double dangle = end - ( angle + (M_PI * 2.0));
-					draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));	
+					draw_square_texture_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) * 200, gen_color(100,100,100,0)), get_animtexture(vars, "player", 0.2));	
+					// draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));	
 				}
 			}
 		}
 	}
+	// while (++i < vars->mult_n_players && i < MAX_CLIENT)
+	// {
+		
+		// if (vars->mult_id != i && vars->mult_positions[i].y > 0.0 && vars->mult_positions[i].x > 0.0)
+		// {
+		// 	double angle = atan2((vars->player.pos.y - vars->mult_positions[i].y), (vars->player.pos.x - vars->mult_positions[i].x));
+		// 	if (angle < 0)
+		// 		angle = M_PI * 2 + angle;
+		// 	angle =  angle + M_PI;
+		// 	angle = fmod(angle, M_PI * 2);
+		// 	// printf("player%d:%f|%f|%f\\%f\n",i,start,angle,end, angle + (M_PI * 2.0));
+		// 	if (angle > start && angle < end )
+		// 	{
+		// 		double dangle = end - angle;
+		// 		draw_square_center(vars,
+		// 			gen_coord(
+		// 				vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2),
+		// 				vars->win_size.y / 2,
+		// 				(1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) * 100,
+		// 			gen_color(100,100,100,0)));
+		// 	}
+		// 	else if (( angle + (M_PI * 2.0)) > start && (angle + (M_PI * 2.0)) < end)
+		// 	{
+		// 		double dangle = end - ( angle + (M_PI * 2.0));
+		// 		draw_square_center(vars,
+		// 			gen_coord(
+		// 				vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2),
+		// 				vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y,
+		// 				vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) * 100,
+		// 			gen_color(100,100,100,0)));	
+		// 	}
+		// }
+	// }
 	//plot_line(vars,
 		//	gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(255, 0, 100, 0)),
 		//	gen_coord(rx + size, size + ry, 0, gen_color(255, 0, 100, 0)));

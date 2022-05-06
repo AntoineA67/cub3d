@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 17:14:34 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/06 19:50:57 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 
 # define MAX_CLIENT 10
 # define PORT 6300
+# define SERVER_IP "127.0.0.1"
 
 enum	e_mlx_events {
 	ON_KEYDOWN = 2,

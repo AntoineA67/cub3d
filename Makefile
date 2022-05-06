@@ -12,9 +12,9 @@ LIB_FILE	= libft/libft.a mlx_opengl/libmlx.a
 CC			= gcc
 # FLAGS		= -I/usr/include
 # FLAGS		= -Wall -Wextra -Werror
-#FLAGS		+= -O2
-#  FLAGS		+= -fsanitize=address -g
-# FLAGS		+= -Ofast
+# FLAGS		+= -O2
+# FLAGS		+= -fsanitize=address -g
+#FLAGS		+= -Ofast
 
 #	RULES
 all: ${OBJDIR} ${NAME}
