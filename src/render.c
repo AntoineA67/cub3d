@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 13:40:52 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/06 13:41:39 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -512,10 +512,10 @@ void	shade_floor_ceil(t_vars *vars)
 	// 	ft_int_memset(vars->img->addr + i * vars->win_size.x, add_shade(vars, to_rgb(vars->textures.f, 0), 255 / i), vars->win_size.x);
 	// 	i++;
 	// }
-	ft_int_memset(vars->img->addr, to_rgb(vars->textures.c, 0),
+	ft_int_memset(vars->img->addr, to_rgb(vars->c, 0),
 		vars->img->line_length * vars->win_size.y / 8);
 	ft_int_memset(vars->img->addr + vars->img->line_length * vars->win_size.y / 2
-		, to_rgb(vars->textures.f, 0), vars->img->line_length * vars->win_size.y / 8);
+		, to_rgb(vars->f, 0), vars->img->line_length * vars->win_size.y / 8);
 }
 
 void	render(t_vars *vars)
@@ -549,14 +549,7 @@ void	render(t_vars *vars)
 	check_inputs(vars);
 	if (vars->mult_fd)
 		serv_process(vars);
-<<<<<<< HEAD
-	ft_int_memset(vars->img->addr, to_rgb(vars->c, 0),
-		vars->img->line_length * vars->win_size.y / 8);
-	ft_int_memset(vars->img->addr + vars->img->line_length * vars->win_size.y / 2
-		, to_rgb(vars->f, 0), vars->img->line_length * vars->win_size.y / 8);
-=======
 	shade_floor_ceil(vars);
->>>>>>> ae2c5cfdf71c89fb22f29dfe52eb7e7fa89249f7
 	project_rays(vars, 64.0);
 	//test_rays(vars);
 	draw_2d_map(vars, vars->min_map_mult);

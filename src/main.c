@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 13:38:07 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/06 13:52:41 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ t_data	*get_texture(t_vars	*vars, char	*name, int nb)
 		return (act->texture);
 	printf("NOT FOUND:%s\n", name);
 	free_textures(vars);
+	exit(1);
 	return (NULL);
 }
 
@@ -277,20 +278,20 @@ int	ui_frame1(t_vars	*vars)
 
 int	ui_frame2(t_vars	*vars)
 { 
-	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "10", &change_ui);
+	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "1start", &change_ui);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	return (0);
 }
 int	ui_frame3(t_vars	*vars)
 { 
-	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "10", &change_ui);
+	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "1start", &change_ui);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	return (0);
 }
 int	ui_frame4(t_vars	*vars)
 { 
-	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "10", &change_ui);
-	button(vars, screen_pc(25.30,25.025, gen_color(255,0,100, 0), vars), "10", &change_setting);
+	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "1start", &change_ui);
+	button(vars, screen_pc(25.30,25.025, gen_color(255,0,100, 0), vars), "1start", &change_setting);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	return (0);
 }
