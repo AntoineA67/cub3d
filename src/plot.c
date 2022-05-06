@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   plot.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:03:35 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 13:40:18 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/06 17:11:44 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,13 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit
 	double			wall_height;
 	int				draw_end;
 
-	wall_height = vars->win_size.y / 2 / hit_dist;
+	wall_height = vars->win_size.y / 2 / hit_dist * .66;
+	if (wall_height < 4)
+		wall_height = 0;
+	if (screen_x == vars->win_size.x / 2)
+		printf("%.2f %.2f\n", wall_height, hit_dist);
 	y = 0.0;
-	i = vars->win_size.y / 2 - wall_height;
+	i = vars->win_size.y / 2 - wall_height - vars->player.rot.y;
 	step = (img->size.y * 1.0) / ((vars->win_size.y / 2 + wall_height)
 			- (vars->win_size.y / 2 - wall_height));
 	if (i < 0)
@@ -130,8 +134,8 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit
 		y = step * (-i);
 		i = 0;
 	}
-	draw_end = vars->win_size.y / 2 + wall_height;
-	if (vars->win_size.y / 2 + wall_height > vars->win_size.y)
+	draw_end = vars->win_size.y / 2 + wall_height - vars->player.rot.y;
+	if (draw_end > vars->win_size.y)
 		draw_end = vars->win_size.y;
 	// if (screen_x == vars->win_size.x / 2)
 	// 	printf("%d %d %d %.2f\n", screen_x, i, img_x, hit_dist);

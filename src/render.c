@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 13:58:05 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/06 17:06:20 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,21 +200,21 @@ void	project_rays(t_vars *vars, double render_ratio)
 	t_vector2	disH;
 
 	(void)render_ratio;
-	size = (int)vars->min_map_mult;
+	size = ft_max(vars->size.x, vars->size.y);
 	i = -1;
-	start = fmod(vars->player.rot - M_PI_4 + (M_PI * 2) , M_PI * 2);
-	end = fmod(vars->player.rot + M_PI_4 + (M_PI * 2) , M_PI * 2);
+	start = fmod(vars->player.rot.x - M_PI_4 + (M_PI * 2) , M_PI * 2);
+	end = fmod(vars->player.rot.x + M_PI_4 + (M_PI * 2) , M_PI * 2);
 	if (start > end)
 		end += (M_PI * 2);
 	tx = (2.0 / vars->win_size.x);
-	rotmpi = vars->player.rot + (M_PI * 2.0);
+	rotmpi = vars->player.rot.x + (M_PI * 2.0);
 	mapsizei = vars->size.x * vars->size.y;
 	while (i < vars->win_size.x)
 	{
 		i++;
 		dof = 0;
 		if (i == vars->win_size.x / 2)
-			ra2 = vars->player.rot;
+			ra2 = vars->player.rot.x;
 		else
 			ra2 = fmod(rotmpi - atan(1.0 - (tx * i)), M_PI * 2.0);
 		aTan = -1.0/tan(ra2);
@@ -302,7 +302,7 @@ void	project_rays(t_vars *vars, double render_ratio)
 			ry = disV.y;
 		}
 		min_dist = dist(vars->player.pos.x, vars->player.pos.y, rx, ry, ra2);
-		ca = vars->player.rot - ra2;
+		ca = vars->player.rot.x - ra2;
 		if (ca < 0)
 			ca += M_PI * 2;
 		if (ca > M_PI * 2)
@@ -512,10 +512,15 @@ void	shade_floor_ceil(t_vars *vars)
 	// 	ft_int_memset(vars->img->addr + i * vars->win_size.x, add_shade(vars, to_rgb(vars->textures.f, 0), 255 / i), vars->win_size.x);
 	// 	i++;
 	// }
-	ft_int_memset(vars->img->addr, to_rgb(vars->c, 0),
-		vars->img->line_length * vars->win_size.y / 8);
-	ft_int_memset(vars->img->addr + vars->img->line_length * vars->win_size.y / 2
-		, to_rgb(vars->f, 0), vars->img->line_length * vars->win_size.y / 8);
+	double	ceiling;
+
+	ceiling = 1.0 - (vars->player.rot.y + vars->win_size.y / 2) / vars->win_size.y;
+	// printf("%.2f\n", vars->win_size.y - ceiling * vars->win_size.y);
+	ft_int_memset(vars->img->addr,
+		to_rgb(vars->f, 0), vars->win_size.y * vars->win_size.x);
+	ft_int_memset(vars->img->addr, to_rgb(vars->c, 0),  vars->win_size.y * ceiling * vars->win_size.x);
+	// ft_int_memset(vars->img->addr + (int)(ceiling * vars->win_size.y * vars->img->line_length),
+	// 	to_rgb(vars->f, 0), (vars->win_size.y - ceiling * vars->win_size.y) * vars->win_size.x);
 }
 
 void	render(t_vars *vars)
@@ -532,19 +537,19 @@ void	render(t_vars *vars)
 	vars->img = vars->img2;
 	vars->img2 = tmp;
 	mlx_mouse_get_pos(vars->win, &x, &y);
+	// printf("%.2f\n", vars->player.rot.y);
 	if (!vars->ui)
 	{
 		// printf("MOUSE %d %d\n", x, y);
 		if (x > vars->win_size.x / 2)
-		{
-			rotate_player(vars, 5);
-			mlx_mouse_move(vars->win, vars->win_size.x / 2, 0);
-		}
+			rotate_player_x(vars, x - vars->win_size.x / 2);
 		else if (x < vars->win_size.x / 2)
-		{
-			rotate_player(vars, -5);
-			mlx_mouse_move(vars->win, vars->win_size.x / 2, 0);
-		}
+			rotate_player_x(vars, x - vars->win_size.x / 2);
+		if (y > vars->win_size.y / 2 && vars->player.rot.y + y - vars->win_size.y / 2 < vars->win_size.y / 2)
+			vars->player.rot.y += y - vars->win_size.y / 2;
+		else if (y < vars->win_size.y / 2 && vars->player.rot.y + y - vars->win_size.y / 2 > -vars->win_size.y / 2)
+			vars->player.rot.y += y - vars->win_size.y / 2;
+		mlx_mouse_move(vars->win, vars->win_size.x / 2,  vars->win_size.y / 2);
 	}
 	check_inputs(vars);
 	if (vars->mult_fd)

@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 19:56:03 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/06 14:35:36 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,13 @@ static void	move_player(t_vars *vars, int dir_x, int dir_y)
 	size = vars->min_map_mult;
 	if (dir_x)
 	{
-		newposX = vars->player.pos.x + dir_x * cos(vars->player.rot) * 0.1;
-		newposY = vars->player.pos.y + dir_x * sin(vars->player.rot) * 0.1;
+		newposX = vars->player.pos.x + dir_x * cos(vars->player.rot.x) * 0.1;
+		newposY = vars->player.pos.y + dir_x * sin(vars->player.rot.x) * 0.1;
 	}
 	else
 	{
-		newposX = vars->player.pos.x + dir_y * cos(vars->player.rot - M_PI_2) * 0.05;
-		newposY = vars->player.pos.y + dir_y * sin(vars->player.rot - M_PI_2) * 0.05;	
+		newposX = vars->player.pos.x + dir_y * cos(vars->player.rot.x - M_PI_2) * 0.05;
+		newposY = vars->player.pos.y + dir_y * sin(vars->player.rot.x - M_PI_2) * 0.05;	
 	}
 	// printf("%.2f	%.2f\n", newposX, newposY);
 	if (vars->map[(int)newposX + (int)newposY * vars->size.x] != '1')
@@ -127,16 +127,16 @@ static void	move_player(t_vars *vars, int dir_x, int dir_y)
 	 //	(int)newposX / 64, (int)newposY / 64, vars->map[(int)((newposX / 64) + (newposY / 64) * vars->size.x)], (int)(((int)newposX / 64) + ((int)newposY / 64) * vars->size.x));
 }
 
-void	rotate_player(t_vars *vars, int dir)
+void	rotate_player_x(t_vars *vars, int dir)
 {
-	vars->player.rot += dir / 100.0;
-	// printf("%.2f\n", vars->player.rot);
-	if (vars->player.rot < 0.0)
-		vars->player.rot += 2.0 * M_PI;
-	else if (vars->player.rot > 2.0 * M_PI)
-		vars->player.rot -= 2.0 * M_PI;
-	vars->player.delta.x = cos(vars->player.rot);
-	vars->player.delta.y = sin(vars->player.rot);
+	vars->player.rot.x += dir / 100.0;
+	// printf("%.2f\n", vars->player.rot.x);
+	if (vars->player.rot.x < 0.0)
+		vars->player.rot.x += 2.0 * M_PI;
+	else if (vars->player.rot.x > 2.0 * M_PI)
+		vars->player.rot.x -= 2.0 * M_PI;
+	vars->player.delta.x = cos(vars->player.rot.x);
+	vars->player.delta.y = sin(vars->player.rot.x);
 }
 
 // int	key_hook(int keycode, t_vars *vars) //WSL2 VERSION
@@ -168,7 +168,7 @@ void	rotate_player(t_vars *vars, int dir)
 // 	//project(vars);
 // 	printf("Pos: %.2f %.2f - %3d %3d	Rot: %.2f Delta: %.2f %.2f\n",
 // 			vars->player.pos.x, vars->player.pos.y, (int)vars->player.pos.x / 64, (int)vars->player.pos.y / 64,
-// 			 vars->player.rot, vars->player.delta.x, vars->player.delta.y);
+// 			 vars->player.rot.x, vars->player.delta.x, vars->player.delta.y);
 // 	return (0);
 // }
 
@@ -203,13 +203,13 @@ int	check_inputs(t_vars *vars)
 	if (vars->keyboard[0])
 		move_player(vars, 0, 1);
 	if (vars->keyboard[123])
-		rotate_player(vars, -10);
+		rotate_player_x(vars, -10);
 	if (vars->keyboard[1])
 		move_player(vars, -1, 0);
 	if (vars->keyboard[2])
 		move_player(vars, 0, -1);
 	if (vars->keyboard[124])
-		rotate_player(vars, 10);
+		rotate_player_x(vars, 10);
 	if (vars->keyboard[13])
 		move_player(vars, 1, 0);
 	if (vars->keyboard[46] && !vars->mult_fd && serv_connect(vars))
@@ -217,6 +217,6 @@ int	check_inputs(t_vars *vars)
 	//project(vars);
 	// printf("Pos: %.2f %.2f - %3d %3d	Rot: %.2f Delta: %.2f %.2f\n",
 			// vars->player.pos.x, vars->player.pos.y, (int)vars->player.pos.x / 64, (int)vars->player.pos.y / 64,
-			//  vars->player.rot, vars->player.delta.x, vars->player.delta.y);
+			//  vars->player.rot.x, vars->player.delta.x, vars->player.delta.y);
 	return (0);
 }
