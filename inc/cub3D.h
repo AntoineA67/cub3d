@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/05 19:17:21 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/06 13:39:43 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,23 +79,6 @@ typedef struct s_vector2 {
 	double	y;
 }			t_vector2;
 
-typedef struct s_textures {
-	char	*no;
-	char	*so;
-	char	*we;
-	char	*ea;
-
-	t_data	img_settings;
-	t_data	img_maps;
-	t_data	img_textures;
-	t_data	img_no;
-	t_data	img_so;
-	t_data	img_we;
-	t_data	img_ea;
-	t_rgb	f;
-	t_rgb	c;
-}			t_textures;
-
 typedef struct s_player {
 	t_vector2	pos;
 	t_vector2	delta;
@@ -116,6 +99,13 @@ typedef struct	s_packet
 	double			players_rot[MAX_CLIENT];
 }	t_packet;
 
+typedef	struct s_texture
+{
+	t_data				*texture;
+	char				*name;
+	struct s_texture 	*next;
+}	t_textures;
+
 typedef struct s_vars {
 	struct			sockaddr_in serv_addr;
 	char			keyboard[200];
@@ -127,8 +117,13 @@ typedef struct s_vars {
 	int				rays_number;
 	t_coord			win_size;
 	t_player		player;
-	t_textures		textures;
-	t_data			textures_img[4];
+	t_textures		*textures;
+	char			*no;
+	char			*so;
+	char			*ea;
+	char			*we;
+	t_rgb			f;
+	t_rgb			c;
 	t_coord			size;
 	t_data			*img;
 	t_data			*img2;
@@ -179,6 +174,7 @@ typedef struct s_line {
 	float	dist;
 }		t_line;
 
+t_data	*get_texture(t_vars	*vars, char	*name, int nb);
 void	vert_line(t_vars *vars, int x, int size, int color);
 void	rotate_player(t_vars *vars, int dir);
 unsigned int	add_shade(t_vars *vars, unsigned int c, unsigned int dist_int);

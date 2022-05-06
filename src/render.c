@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 13:30:35 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/06 13:58:05 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -321,15 +321,13 @@ void	project_rays(t_vars *vars, double render_ratio)
 			if (ra2 > M_PI)
 			{
 				color = gen_color(255, 0, 0, 0);
-				//vert_line(vars, i, wall_height, 0xff0000);
-				line_texture(vars, i, (rx - (int)rx) * (vars->textures.img_so.size.x + .0), &vars->textures.img_so, min_dist);
+				line_texture(vars, i, (rx - (int)rx) * (get_texture(vars, "so", 0)->size.x + .0), get_texture(vars, "so", 0), min_dist);
 				//sud
 			}
 			else
 			{
 				color = gen_color(0, 255, 0, 0);
-				// vert_line(vars, i, wall_height, 0x00ff00);
-				line_texture(vars, i, (rx - (int)rx) * (vars->textures.img_no.size.x + .0), &vars->textures.img_no, min_dist);
+				line_texture(vars, i, (rx - (int)rx) * (get_texture(vars, "no", 0)->size.x + .0), get_texture(vars, "no", 0), min_dist);
 				//nord
 			}
 		}
@@ -339,15 +337,13 @@ void	project_rays(t_vars *vars, double render_ratio)
 			if (ra2 > M_PI_2 && ra2 < M_PI_2 + M_PI)
 			{
 				color = gen_color(0, 0, 255, 0);
-				// vert_line(vars, i, wall_height, 0xff00ff);
-				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_ea.size.x + .0), &vars->textures.img_ea, min_dist);
+				line_texture(vars, i, (ry - (int)ry) * (get_texture(vars, "ea", 0)->size.x + .0), get_texture(vars, "ea", 0), min_dist);
 				//est
 			}
 			else
 			{
 				color = gen_color(255, 255, 0, 0);
-				// vert_line(vars, i, wall_height, 0xffff00);
-				line_texture(vars, i, (ry - (int)ry) * (vars->textures.img_we.size.x + .0), &vars->textures.img_we, min_dist);
+				line_texture(vars, i, (ry - (int)ry) * (get_texture(vars, "we", 0)->size.x + .0), get_texture(vars, "we", 0), min_dist);
 				//ouest
 			}
 		}
@@ -516,10 +512,10 @@ void	shade_floor_ceil(t_vars *vars)
 	// 	ft_int_memset(vars->img->addr + i * vars->win_size.x, add_shade(vars, to_rgb(vars->textures.f, 0), 255 / i), vars->win_size.x);
 	// 	i++;
 	// }
-	ft_int_memset(vars->img->addr, to_rgb(vars->textures.c, 0),
+	ft_int_memset(vars->img->addr, to_rgb(vars->c, 0),
 		vars->img->line_length * vars->win_size.y / 8);
 	ft_int_memset(vars->img->addr + vars->img->line_length * vars->win_size.y / 2
-		, to_rgb(vars->textures.f, 0), vars->img->line_length * vars->win_size.y / 8);
+		, to_rgb(vars->f, 0), vars->img->line_length * vars->win_size.y / 8);
 }
 
 void	render(t_vars *vars)
@@ -530,7 +526,11 @@ void	render(t_vars *vars)
 	// vars->img = vars->img2;
 	int	x;
 	int	y;
+	void *tmp;
 
+	tmp = vars->img;
+	vars->img = vars->img2;
+	vars->img2 = tmp;
 	mlx_mouse_get_pos(vars->win, &x, &y);
 	if (!vars->ui)
 	{
