@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:03:35 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/07 16:23:20 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/07 17:40:46 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,17 @@ unsigned int	add_shade(t_vars *vars, unsigned int c, unsigned int dist_int, doub
 	(void)vars;
 	(void)c;
 	(void)ao;
-	r = (c>>16) + (int)(255 * ao) & 0xff;
-	g = (c>>8) + (int)(255 * ao) & 0xff;
-	b = c + (int)(255 * ao) & 0xff;
+	(void)dist_int;
+	dist_int += ao * 255;
+	if (dist_int > 255)
+		dist_int = 255;
+	r = (c>>16) & 0xff;
+	g = (c>>8) & 0xff;
+	b = c & 0xff;
 	// return ((((r))<<16)
 	// 	+ (((g)<<8))
 	// 	+ (b));
-	// printf("%d %d %d\n", r, g, b);
+	// printf("%.2f %u\n", ao, dist_int);
 	// return ((dist_int<<16) + (dist_int<<8) + dist_int);
 	return ((((r > dist_int) * (r - dist_int))<<16)
 		+ (((g > dist_int) * (g - dist_int)<<8))
@@ -125,18 +129,17 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit
 	double			step;
 	double			wall_height;
 	int				draw_end;
-	double			ao_vert;
 
 	wall_height = vars->win_size.y / 2 / hit_dist * .90;
 	if (wall_height < 2)
 		wall_height = 0;
-	if (screen_x == vars->win_size.x / 2)
-		printf("%.2f\n", ao);
+	// if (screen_x == vars->win_size.x / 2)
+	// 	printf("%.2f\n", ao);
 	// 	printf("%.2f %.2f\n", wall_height, hit_dist);
 	y = 0.0;
-	i = vars->win_size.y / 2 - wall_height - vars->player.rot.y;
 	step = (img->size.y * 1.0) / ((vars->win_size.y / 2 + wall_height)
 			- (vars->win_size.y / 2 - wall_height));
+	i = vars->win_size.y / 2 - wall_height - vars->player.rot.y;
 	if (i < 0)
 	{
 		y = step * (-i);
@@ -149,17 +152,14 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit
 		img_x = 0;
 	if (y < 0.0)
 		y = 0.0;
-	(void)ao_vert;
 	while (++i < draw_end && (int)y < img->size.y && img_x < img->size.x)
 	{
 		// if (y < 0.1)
-		// 	printf("%.2f %.2f\n", y / img->size.y, sin((y / img->size.y) * M_PI));
+		// 	printf("%.2f %.2f	%.2f\n", y / img->size.y, sin((y / img->size.y) * M_PI), ((fabs(1.0 - ao) > .1) * (1.0 - ao) - 1.0));
 		pixel_put(vars->img, screen_x, i,
 			add_shade(vars, *(unsigned int *)(img->addr + (img_x
 			* (img->bits_per_pixel / 8) + (int)y * img->line_length)), (int)(hit_dist * 10.0),
-			(((fabs(1.0 - ao) > .1) * (1.0 - ao) - 1.0) * .5
-			+ (sin((((y + 1) / (img->size.y + 1))) * M_PI)) * .5) * (1 - 1 / hit_dist)));
-			// sin((((y + 1) / (img->size.y + 1))) * M_PI) & 
+			vars->ao * (ao * vars->ao_scale + (1 - sin((((y + 1) / (img->size.y + 1))) * M_PI)) * vars->ao_scale)));
 		y += step;
 	}
 }

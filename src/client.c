@@ -79,9 +79,7 @@ int serv_connect(t_vars *vars)
 {
 	int	n;
 
-	if (gettime(vars->n1) - vars->connect < 2000)
-		return (0);
-	vars->connect = gettime(vars->n1);
+	vars->keyboard[46] = 0;
 	vars->mult_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if(vars->mult_fd < 0)
 	{

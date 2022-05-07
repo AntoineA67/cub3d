@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/07 16:18:33 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/07 17:38:40 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,14 +239,15 @@ void	init_imgs(t_vars *vars)
 
 static void	fill_vars(t_vars *vars, int fd)
 {
+	vars->ao = 1.0;
+	vars->ao_scale = .22;
 	vars->y_ratio_mouse_speed = 1.2;
-	vars->connect = -2000;
 	vars->mult_fd = 0;
 	ft_bzero(vars->keyboard, sizeof(vars->keyboard));
 	vars->mult_n_players = 0;
 	vars->mlx = mlx_init();
-	vars->win_size.x = 1920 * 0.75;
-	vars->win_size.y = 1080 * 0.75;
+	vars->win_size.x = 1920;// * 0.75;
+	vars->win_size.y = 1080;// * 0.75;
 	vars->map = parse(fd, vars);
 	if (init_player(vars))
 		return ; //NO PLAYER IN MAP
@@ -477,6 +478,7 @@ int	main(int argc, char **argv)
 	// if (!vars.win)
 	// 	esc(&vars, 1);
 	//mlx_key_hook(vars.win, key_hook, &vars);
+	mlx_do_key_autorepeatoff(vars.mlx);
 	mlx_hook(vars.win, ON_KEYDOWN, 0, key_hook_down, &vars);
 	mlx_hook(vars.win, ON_KEYUP, 0, key_hook_up, &vars);
 	mlx_hook(vars.win, ON_DESTROY, 0, test_hook, &vars);

@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/07 16:14:34 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/07 17:45:19 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,9 +244,8 @@ void	project_rays(t_vars *vars, double render_ratio)
 	tx = (2.0 / vars->win_size.x);
 	rotmpi = vars->player.rot.x + (M_PI * 2.0);
 	mapsizei = vars->size.x * vars->size.y;
-	while (i < vars->win_size.x)
+	while (++i < vars->win_size.x)
 	{
-		i++;
 		dof = 0;
 		if (i == vars->win_size.x / 2)
 			ra2 = vars->player.rot.x;
@@ -354,8 +353,8 @@ void	project_rays(t_vars *vars, double render_ratio)
 		{
 			if (ra2 > M_PI)
 			{
-				if (i == vars->win_size.x / 2)
-					printf("hit %d %d %.2f %.2f %c\n", (int)rx, (int)ry, rx - (int)rx, ry - (int)ry, 'N');
+				// if (i == vars->win_size.x / 2)
+				// 	printf("hit %d %d %.2f %.2f %c\n", (int)rx, (int)ry, rx - (int)rx, ry - (int)ry, 'N');
 				if (rx - (int)rx < .5 && ((int)rx - 1) >= 0 && ((int)rx - 1) < vars->size.x
 					&& ((int)ry + 1) >= 0 && ((int)ry + 1) < vars->size.y
 					&& (vars->map[(int)rx - 1 + ((int)ry + 1) * vars->size.x] == '1'
@@ -372,8 +371,8 @@ void	project_rays(t_vars *vars, double render_ratio)
 			}
 			else
 			{
-				if (i == vars->win_size.x / 2)
-					printf("hit %d %d %.2f %.2f %c\n", (int)rx, (int)ry, rx - (int)rx, ry - (int)ry, 'S');
+				// if (i == vars->win_size.x / 2)
+				// 	printf("hit %d %d %.2f %.2f %c\n", (int)rx, (int)ry, rx - (int)rx, ry - (int)ry, 'S');
 				if (rx - (int)rx < .5 && ((int)rx - 1) >= 0 && ((int)rx - 1) < vars->size.x
 					&& ((int)ry - 1) >= 0 && ((int)ry - 1) < vars->size.y
 					&& (vars->map[(int)rx - 1 + ((int)ry - 1) * vars->size.x] == '1'
@@ -393,8 +392,8 @@ void	project_rays(t_vars *vars, double render_ratio)
 			//HIT HORIZONTAL
 			if (ra2 > M_PI_2 && ra2 < M_PI_2 + M_PI)
 			{
-				if (i == vars->win_size.x / 2)
-					printf("hit %d %d %.2f %.2f %c\n", (int)rx, (int)ry, rx - (int)rx, ry - (int)ry, 'W');
+				// if (i == vars->win_size.x / 2)
+				// 	printf("hit %d %d %.2f %.2f %c\n", (int)rx, (int)ry, rx - (int)rx, ry - (int)ry, 'W');
 				if (ry - (int)ry < .5 && ((int)rx + 1) >= 0 && ((int)rx + 1) < vars->size.x
 					&& ((int)ry - 1) >= 0 && ((int)ry - 1) < vars->size.y
 					&& (vars->map[(int)rx + 1 + ((int)ry - 1) * vars->size.x] == '1'
@@ -410,8 +409,8 @@ void	project_rays(t_vars *vars, double render_ratio)
 			}
 			else
 			{
-				if (i == vars->win_size.x / 2)
-					printf("hit %d %d %.2f %.2f %c\n", (int)rx, (int)ry, rx - (int)rx, ry - (int)ry, 'E');
+				// if (i == vars->win_size.x / 2)
+				// 	printf("hit %d %d %.2f %.2f %c\n", (int)rx, (int)ry, rx - (int)rx, ry - (int)ry, 'E');
 				if (ry - (int)ry < .5 && ((int)rx - 1) >= 0 && ((int)rx - 1) < vars->size.x
 					&& ((int)ry - 1) >= 0 && ((int)ry - 1) < vars->size.y
 					&& (vars->map[(int)rx - 1 + ((int)ry - 1) * vars->size.x] == '1'
@@ -455,42 +454,6 @@ void	project_rays(t_vars *vars, double render_ratio)
 			}
 		}
 	}
-	// while (++i < vars->mult_n_players && i < MAX_CLIENT)
-	// {
-		
-		// if (vars->mult_id != i && vars->mult_positions[i].y > 0.0 && vars->mult_positions[i].x > 0.0)
-		// {
-		// 	double angle = atan2((vars->player.pos.y - vars->mult_positions[i].y), (vars->player.pos.x - vars->mult_positions[i].x));
-		// 	if (angle < 0)
-		// 		angle = M_PI * 2 + angle;
-		// 	angle =  angle + M_PI;
-		// 	angle = fmod(angle, M_PI * 2);
-		// 	// printf("player%d:%f|%f|%f\\%f\n",i,start,angle,end, angle + (M_PI * 2.0));
-		// 	if (angle > start && angle < end )
-		// 	{
-		// 		double dangle = end - angle;
-		// 		draw_square_center(vars,
-		// 			gen_coord(
-		// 				vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2),
-		// 				vars->win_size.y / 2,
-		// 				(1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) * 100,
-		// 			gen_color(100,100,100,0)));
-		// 	}
-		// 	else if (( angle + (M_PI * 2.0)) > start && (angle + (M_PI * 2.0)) < end)
-		// 	{
-		// 		double dangle = end - ( angle + (M_PI * 2.0));
-		// 		draw_square_center(vars,
-		// 			gen_coord(
-		// 				vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2),
-		// 				vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y,
-		// 				vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) * 100,
-		// 			gen_color(100,100,100,0)));	
-		// 	}
-		// }
-	// }
-	//plot_line(vars,
-		//	gen_coord(vars->player.pos.x + size, size + vars->player.pos.y, 0, gen_color(255, 0, 100, 0)),
-		//	gen_coord(rx + size, size + ry, 0, gen_color(255, 0, 100, 0)));
 }
 
 void	draw_square_center(t_vars *vars, t_coord p)
@@ -532,7 +495,7 @@ void	draw_multi(t_vars *vars, int size)
 	i = -1;
 	while (++i < vars->mult_n_players && i < MAX_CLIENT)
 	{
-		if (vars->mult_positions[i].x > 0 && vars->mult_positions[i].y > 0)
+		if (i != vars->mult_id && vars->mult_positions[i].x > 0 && vars->mult_positions[i].y > 0)
 			draw_square_center(vars,
 				gen_coord(vars->mult_positions[i].x * size + size, vars->mult_positions[i].y * size + size, size / 2,
 				gen_color(255, 255, 255, 0)));

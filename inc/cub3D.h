@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/07 14:58:45 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/07 17:37:02 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,8 @@ typedef struct s_texture
 }	t_textures;
 
 typedef struct s_vars {
-	long			connect;
+	int				ao;
+	double			ao_scale;
 	double			y_ratio_mouse_speed;
 	struct sockaddr_in	serv_addr;
 	char			keyboard[200];
