@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 17:14:42 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/06 17:16:01 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -321,7 +321,7 @@ void	project_rays(t_vars *vars, double render_ratio)
 			if (ra2 > M_PI)
 			{
 				color = gen_color(255, 0, 0, 0);
-				line_texture(vars, i, (rx - (int)rx) * (get_animtexture(vars, "player", 0.02)->size.x + .0), get_animtexture(vars, "player", 0.02), min_dist);
+				line_texture(vars, i, (rx - (int)rx) * (get_animtexture(vars, "player", 1)->size.x + .0), get_animtexture(vars, "player", 1), min_dist);
 				//sud
 			}
 			else
