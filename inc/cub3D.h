@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 17:14:34 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/07 13:00:14 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 
 # define MAX_CLIENT 10
 # define PORT 6300
+# define SERVER_IP "127.0.0.1"
 
 enum	e_mlx_events {
 	ON_KEYDOWN = 2,
@@ -99,11 +100,11 @@ typedef struct	s_packet
 	double			players_rot[MAX_CLIENT];
 }	t_packet;
 
-typedef	struct s_texture
+typedef	struct s_textures
 {
-	t_data				*texture;
+	t_data				**imgtab;
 	char				*name;
-	struct s_texture 	*next;
+	struct s_textures 	*next;
 }	t_textures;
 
 typedef struct s_vars {

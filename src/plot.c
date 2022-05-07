@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:03:35 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 17:11:44 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/06 20:09:38 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ void	vert_line(t_vars *vars, int x, int size, int color)
 		pixel_put(vars->img, x, i, color);
 }
 
+
 void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit_dist)
 {
 	int				i;
@@ -123,8 +124,8 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit
 	wall_height = vars->win_size.y / 2 / hit_dist * .66;
 	if (wall_height < 4)
 		wall_height = 0;
-	if (screen_x == vars->win_size.x / 2)
-		printf("%.2f %.2f\n", wall_height, hit_dist);
+	// if (screen_x == vars->win_size.x / 2)
+	// 	printf("%.2f %.2f\n", wall_height, hit_dist);
 	y = 0.0;
 	i = vars->win_size.y / 2 - wall_height - vars->player.rot.y;
 	step = (img->size.y * 1.0) / ((vars->win_size.y / 2 + wall_height)
@@ -137,9 +138,19 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit
 	draw_end = vars->win_size.y / 2 + wall_height - vars->player.rot.y;
 	if (draw_end > vars->win_size.y)
 		draw_end = vars->win_size.y;
+	if (img_x < 0)
+	{
+		img_x = 0;
+		printf("OSKOUR\n");
+	}
+	if (y < 0)
+	{
+		y = 0;
+		printf("AU SECOURS\n");
+	}
 	// if (screen_x == vars->win_size.x / 2)
 	// 	printf("%d %d %d %.2f\n", screen_x, i, img_x, hit_dist);
-	while (++i < draw_end)
+	while (++i < draw_end && (int)y < img->size.y && img_x < img->size.x)
 	{
 		pixel_put(vars->img, screen_x, i,
 			add_shade(vars, *(unsigned int *)(img->addr + (img_x
