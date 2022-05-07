@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/07 13:42:54 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/07 18:39:46 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ void	free_textures(t_vars *vars)
 
 t_data	*get_texture(t_vars	*vars, char	*name, int nb)
 {
-	t_data		*actt;
+	// t_data		*actt;
 	t_textures	*act;
 	int i;
 
@@ -173,7 +173,7 @@ t_data	*get_texture(t_vars	*vars, char	*name, int nb)
 
 int	get_animsize(t_vars	*vars, char *name)
 {
-	t_data		*actt;
+	// t_data		*actt;
 	t_textures	*act;
 	int i;
 
@@ -218,7 +218,7 @@ t_data	*get_animtexture(t_vars	*vars, char	*name, double speed)
 
 void	init_imgs(t_vars *vars)
 {
-	t_textures	*imgs;
+	// t_textures	*imgs;
 
 	vars->img = ft_calloc(1, sizeof(t_data));
 	vars->img2 = ft_calloc(1, sizeof(t_data));
@@ -238,6 +238,9 @@ void	init_imgs(t_vars *vars)
 
 static void	fill_vars(t_vars *vars, int fd)
 {
+	vars->ao = 1.0;
+	vars->ao_scale = .22;
+	vars->y_ratio_mouse_speed = 1.2;
 	vars->mult_fd = 0;
 	ft_bzero(vars->keyboard, sizeof(vars->keyboard));
 	vars->mult_n_players = 0;
@@ -474,6 +477,7 @@ int	main(int argc, char **argv)
 	// if (!vars.win)
 	// 	esc(&vars, 1);
 	//mlx_key_hook(vars.win, key_hook, &vars);
+	mlx_do_key_autorepeatoff(vars.mlx);
 	mlx_hook(vars.win, ON_KEYDOWN, 0, key_hook_down, &vars);
 	mlx_hook(vars.win, ON_KEYUP, 0, key_hook_up, &vars);
 	mlx_hook(vars.win, ON_DESTROY, 0, test_hook, &vars);
