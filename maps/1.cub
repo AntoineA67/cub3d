@@ -1,12 +1,12 @@
-NO ./textures/xpm/dirt.xpm
-SO ./textures/xpm/banane.xpm
-WE ./textures/xpm/oui.xpm
-EA ./textures/xpm/bookshelf.xpm
+NO ./textures/dir/north.xpm
+SO ./textures/dir/south.xpm
+WE ./textures/dir/west.xpm
+EA ./textures/dir/east.xpm
 C 83,24,135
 F 220,100,0
 
 11111111111
 10000000001
-10P00000001
+10P00100001
 10000000001
 11111111111

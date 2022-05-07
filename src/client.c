@@ -11,9 +11,9 @@ void	print_tab_pos(t_vector2 tab[10])
 
 int	serv_process(t_vars *vars)
 {
-	int			n;
-	int			r;
-	t_packet	buf;
+	unsigned long	n;
+	int				r;
+	t_packet		buf;
 
 	n = 0;
 	r = 0;
@@ -79,6 +79,9 @@ int serv_connect(t_vars *vars)
 {
 	int	n;
 
+	if (gettime(vars->n1) - vars->connect < 2000)
+		return (0);
+	vars->connect = gettime(vars->n1);
 	vars->mult_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if(vars->mult_fd < 0)
 	{
@@ -96,8 +99,9 @@ int serv_connect(t_vars *vars)
 	}
 	if(connect(vars->mult_fd, (struct sockaddr *)&vars->serv_addr, sizeof(vars->serv_addr)) < 0)
 	{
+		vars->mult_fd = 0;
 		printf("Connect Failed\n");
-		return (1);
+		return (0);
 	}
 	n = 0;
 	printf("Connected\n");

@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 19:50:57 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/07 14:58:45 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,21 +86,21 @@ typedef struct s_player {
 	t_vector2	rot;
 }		t_player;
 
-typedef struct	s_settings
+typedef struct s_settings
 {
 	int				fps_cap;
 	int				map_type;
 	t_data			*bttext;
 }	t_settings;
 
-typedef struct	s_packet
+typedef struct s_packet
 {
 	int				n_players;
 	t_vector2		players_pos[MAX_CLIENT];
 	double			players_rot[MAX_CLIENT];
 }	t_packet;
 
-typedef	struct s_texture
+typedef struct s_texture
 {
 	t_data				*texture;
 	char				*name;
@@ -108,7 +108,9 @@ typedef	struct s_texture
 }	t_textures;
 
 typedef struct s_vars {
-	struct			sockaddr_in serv_addr;
+	long			connect;
+	double			y_ratio_mouse_speed;
+	struct sockaddr_in	serv_addr;
 	char			keyboard[200];
 	int				mult_fd;
 	int				mult_id;
@@ -175,11 +177,12 @@ typedef struct s_line {
 	float	dist;
 }		t_line;
 
+long	gettime(long initime);
 t_data	*get_animtexture(t_vars	*vars, char	*name, double speed);
 t_data	*get_texture(t_vars	*vars, char	*name, int nb);
 void	vert_line(t_vars *vars, int x, int size, int color);
 void	rotate_player_x(t_vars *vars, int dir);
-unsigned int	add_shade(t_vars *vars, unsigned int c, unsigned int dist_int);
+unsigned int	add_shade(t_vars *vars, unsigned int c, unsigned int dist_int, double ao);
 void	print_tab_pos(t_vector2 tab[10]);
 int		serv_connect(t_vars *vars);
 int		serv_process(t_vars *vars);
@@ -209,7 +212,7 @@ void	esc(t_vars *vars, int err);
 t_coord	gen_coord(int x, int y, int z, t_rgb c);
 t_rgb	gen_color(int r, int g, int b, int v);
 t_coord	coord(t_coord *p, int x, int y, int z);
-void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit_dist);
+void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit_dist, double ao);
 
 void	pixel_put(t_data *data, int x, int y, int color);
 // float	deg_to_rad(int d);

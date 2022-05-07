@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 19:36:52 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/07 16:18:33 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ void	free_textures(t_vars *vars)
 
 t_data	*get_texture(t_vars	*vars, char	*name, int nb)
 {
-	t_data		*actt;
+	// t_data		*actt;
 	t_textures	*act;
 	int i;
 
@@ -170,7 +170,7 @@ t_data	*get_texture(t_vars	*vars, char	*name, int nb)
 
 int	get_animsize(t_vars	*vars, char *name)
 {
-	t_data		*actt;
+	// t_data		*actt;
 	t_textures	*act;
 	int i;
 
@@ -219,7 +219,7 @@ t_data	*get_animtexture(t_vars	*vars, char	*name, double speed)
 
 void	init_imgs(t_vars *vars)
 {
-	t_textures	*imgs;
+	// t_textures	*imgs;
 
 	vars->img = ft_calloc(1, sizeof(t_data));
 	vars->img2 = ft_calloc(1, sizeof(t_data));
@@ -239,12 +239,14 @@ void	init_imgs(t_vars *vars)
 
 static void	fill_vars(t_vars *vars, int fd)
 {
+	vars->y_ratio_mouse_speed = 1.2;
+	vars->connect = -2000;
 	vars->mult_fd = 0;
 	ft_bzero(vars->keyboard, sizeof(vars->keyboard));
 	vars->mult_n_players = 0;
 	vars->mlx = mlx_init();
-	vars->win_size.x = 1920;// * 0.75;
-	vars->win_size.y = 1080;// * 0.75;
+	vars->win_size.x = 1920 * 0.75;
+	vars->win_size.y = 1080 * 0.75;
 	vars->map = parse(fd, vars);
 	if (init_player(vars))
 		return ; //NO PLAYER IN MAP

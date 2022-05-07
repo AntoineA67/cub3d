@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 14:35:36 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/07 11:59:38 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,12 +176,14 @@ int	key_hook_down(int keycode, t_vars *vars)
 {
 	if (keycode < 200)
 		vars->keyboard[keycode] = 1;
+	return (0);
 }
 
 int	key_hook_up(int keycode, t_vars *vars)
 {
 	if (keycode < 200)
 		vars->keyboard[keycode] = 0;
+	return (0);
 }
 
 int	check_inputs(t_vars *vars)

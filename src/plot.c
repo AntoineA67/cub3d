@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:03:35 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 20:09:38 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/07 16:23:20 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	plot_line(t_vars *vars, t_coord p1, t_coord p2)
 	}
 }
 
-unsigned int	add_shade(t_vars *vars, unsigned int c, unsigned int dist_int)
+unsigned int	add_shade(t_vars *vars, unsigned int c, unsigned int dist_int, double ao)
 {
 	unsigned int	r;
 	unsigned int	g;
@@ -92,9 +92,14 @@ unsigned int	add_shade(t_vars *vars, unsigned int c, unsigned int dist_int)
 
 	(void)vars;
 	(void)c;
-	r = (c>>16) & 0xff;
-	g = (c>>8) & 0xff;
-	b = c & 0xff;
+	(void)ao;
+	r = (c>>16) + (int)(255 * ao) & 0xff;
+	g = (c>>8) + (int)(255 * ao) & 0xff;
+	b = c + (int)(255 * ao) & 0xff;
+	// return ((((r))<<16)
+	// 	+ (((g)<<8))
+	// 	+ (b));
+	// printf("%d %d %d\n", r, g, b);
 	// return ((dist_int<<16) + (dist_int<<8) + dist_int);
 	return ((((r > dist_int) * (r - dist_int))<<16)
 		+ (((g > dist_int) * (g - dist_int)<<8))
@@ -113,18 +118,20 @@ void	vert_line(t_vars *vars, int x, int size, int color)
 }
 
 
-void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit_dist)
+void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit_dist, double ao)
 {
 	int				i;
 	double			y;
 	double			step;
 	double			wall_height;
 	int				draw_end;
+	double			ao_vert;
 
-	wall_height = vars->win_size.y / 2 / hit_dist * .66;
-	if (wall_height < 4)
+	wall_height = vars->win_size.y / 2 / hit_dist * .90;
+	if (wall_height < 2)
 		wall_height = 0;
-	// if (screen_x == vars->win_size.x / 2)
+	if (screen_x == vars->win_size.x / 2)
+		printf("%.2f\n", ao);
 	// 	printf("%.2f %.2f\n", wall_height, hit_dist);
 	y = 0.0;
 	i = vars->win_size.y / 2 - wall_height - vars->player.rot.y;
@@ -139,22 +146,20 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit
 	if (draw_end > vars->win_size.y)
 		draw_end = vars->win_size.y;
 	if (img_x < 0)
-	{
 		img_x = 0;
-		printf("OSKOUR\n");
-	}
-	if (y < 0)
-	{
-		y = 0;
-		printf("AU SECOURS\n");
-	}
-	// if (screen_x == vars->win_size.x / 2)
-	// 	printf("%d %d %d %.2f\n", screen_x, i, img_x, hit_dist);
+	if (y < 0.0)
+		y = 0.0;
+	(void)ao_vert;
 	while (++i < draw_end && (int)y < img->size.y && img_x < img->size.x)
 	{
+		// if (y < 0.1)
+		// 	printf("%.2f %.2f\n", y / img->size.y, sin((y / img->size.y) * M_PI));
 		pixel_put(vars->img, screen_x, i,
 			add_shade(vars, *(unsigned int *)(img->addr + (img_x
-			* (img->bits_per_pixel / 8) + (int)y * img->line_length)), (int)(hit_dist * 10.0)));
+			* (img->bits_per_pixel / 8) + (int)y * img->line_length)), (int)(hit_dist * 10.0),
+			(((fabs(1.0 - ao) > .1) * (1.0 - ao) - 1.0) * .5
+			+ (sin((((y + 1) / (img->size.y + 1))) * M_PI)) * .5) * (1 - 1 / hit_dist)));
+			// sin((((y + 1) / (img->size.y + 1))) * M_PI) & 
 		y += step;
 	}
 }
