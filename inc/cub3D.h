@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/07 17:37:02 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/08 22:42:35 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,11 +108,13 @@ typedef struct s_texture
 }	t_textures;
 
 typedef struct s_vars {
+	double			jump_height;
+	time_t			jump;
 	int				ao;
 	double			ao_scale;
 	double			y_ratio_mouse_speed;
 	struct sockaddr_in	serv_addr;
-	char			keyboard[200];
+	char			keyboard[300];
 	int				mult_fd;
 	int				mult_id;
 	int				mult_n_players;
@@ -215,7 +217,7 @@ t_rgb	gen_color(int r, int g, int b, int v);
 t_coord	coord(t_coord *p, int x, int y, int z);
 void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit_dist, double ao);
 
-void	pixel_put(t_data *data, int x, int y, int color);
+void	pixel_put(t_data *data, int x, int y, unsigned int color);
 // float	deg_to_rad(int d);
 // t_rgb	cycle_color(t_rgb color);
 char	*parse(int fd, t_vars *vars);

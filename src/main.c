@@ -6,36 +6,11 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/07 17:38:40 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/08 22:42:23 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
-
-// static t_coord	*cp_l_pts(t_coord *l_pts)
-// {
-// 	t_coord	*mod_l_pts;
-// 	int		i;
-
-// 	mod_l_pts = ft_calloc(l_pts[0].z + 1, sizeof(t_coord));
-// 	if (!mod_l_pts)
-// 	{
-// 		free(l_pts);
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	i = -1;
-// 	while (++i < l_pts[0].z + 1)
-// 	{
-// 		mod_l_pts[i].x = l_pts[i].x;
-// 		mod_l_pts[i].y = l_pts[i].y;
-// 		mod_l_pts[i].z = l_pts[i].z;
-// 		mod_l_pts[i].c.r = l_pts[i].c.r;
-// 		mod_l_pts[i].c.g = l_pts[i].c.g;
-// 		mod_l_pts[i].c.b = l_pts[i].c.b;
-// 		mod_l_pts[i].c.v = l_pts[i].c.v;
-// 	}
-// 	return (mod_l_pts);
-// }
 
 int	init_player(t_vars *vars)
 {
@@ -51,7 +26,6 @@ int	init_player(t_vars *vars)
 	vars->player.pos.y = (player_in_map - vars->map) / vars->size.x + .5;
 	return (0);
 }
-
 
 void	load_texture(t_vars	*vars , char *name, int nb, char *path)
 {
@@ -230,7 +204,7 @@ void	init_imgs(t_vars *vars)
 	load_texture(vars, "textures", 0, "./textures/pack_blue_pink/textures.xpm");
 	load_animtexture(vars, "player", 4, "./textures/nice/photo.xpm");
 	load_texture(vars, "no", 0, vars->no);
-	// load_texture(vars, "oui", 0, "./textures/xpm/pho.xpm");
+	load_texture(vars, "oui", 0, "./textures/nice/non.xpm");
 	load_texture(vars, "so", 0, vars->so);
 	load_texture(vars, "maps", 0, "./textures/pack_blue_pink/maps.xpm");
 	load_texture(vars, "ea", 0, vars->ea);
@@ -239,6 +213,8 @@ void	init_imgs(t_vars *vars)
 
 static void	fill_vars(t_vars *vars, int fd)
 {
+	vars->jump_height = 0.0;
+	vars->jump = -2000;
 	vars->ao = 1.0;
 	vars->ao_scale = .22;
 	vars->y_ratio_mouse_speed = 1.2;
