@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/08 22:42:35 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/08 23:13:03 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,11 +100,11 @@ typedef struct s_packet
 	double			players_rot[MAX_CLIENT];
 }	t_packet;
 
-typedef struct s_texture
+typedef	struct s_textures
 {
-	t_data				*texture;
+	t_data				**imgtab;
 	char				*name;
-	struct s_texture 	*next;
+	struct s_textures 	*next;
 }	t_textures;
 
 typedef struct s_vars {

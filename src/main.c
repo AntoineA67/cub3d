@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/08 22:42:23 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/08 23:12:44 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,9 @@ void	load_texture(t_vars	*vars , char *name, int nb, char *path)
 	{
 		last = ft_calloc(sizeof(t_textures), 1);
 		last->name = name;
-		last->texture = ft_calloc(sizeof(t_data), 2);
-		actt = &last->texture[0];
+		last->imgtab = ft_calloc(sizeof(t_data *), 2);
+		last->imgtab[0] = ft_calloc(sizeof(t_data), 1);
+		actt = last->imgtab[0];
 		actt->img = mlx_xpm_file_to_image(vars->mlx, path,
 				&actt->size.x, &actt->size.y);
 		actt->addr = mlx_get_data_addr(actt->img, &actt->bits_per_pixel,
@@ -61,19 +62,21 @@ void	load_texture(t_vars	*vars , char *name, int nb, char *path)
 	else
 	{
 		i = 0;
-		while (i < nb)
+		while ((*act)->imgtab[i])
 			i++;
 		// if (!(&((*act)->texture[i])))
 		// {
-			//printf("load%d|%d\n", i, nb);
-			void *tmp = ft_calloc(sizeof(t_data), i + 1);
-			ft_memcpy(tmp, (*act)->texture, i * sizeof(t_data));
-			free((*act)->texture);
-			(*act)->texture = tmp;
+		//printf("load%d|%d\n", i, nb);
+		t_data **tmp = ft_calloc(sizeof(t_data *), i + 2);
+		ft_memcpy(tmp, (*act)->imgtab, i * sizeof(t_data *));
+		free((*act)->imgtab);
+		(*act)->imgtab = tmp;
 		// }
 		// else
-		// 	ft_bzero((*act)->texture + (i * sizeof(t_data)), sizeof(t_data));
-		actt = &((*act)->texture[i]);
+		// 	ft_bzero((*act)->imgtab + (i * sizeof(t_data)), sizeof(t_data));
+		//printf("CHANGE:%d\n", i);
+		(*act)->imgtab[i] = ft_calloc(1, sizeof(t_data));
+		actt = (*act)->imgtab[i];
 		actt->img = mlx_xpm_file_to_image(vars->mlx, path,
 			&actt->size.x, &actt->size.y);
 		actt->addr = mlx_get_data_addr(actt->img, &actt->bits_per_pixel,
@@ -110,7 +113,7 @@ void	free_textures(t_vars *vars)
 		act = vars->textures;
 		while (act->next)
 			act = act->next;
-		free(act->texture);
+		free(act->imgtab);
 		free(act);
 	}
 }
@@ -129,12 +132,12 @@ t_data	*get_texture(t_vars	*vars, char	*name, int nb)
 		i = 0;
 	//	if (!ft_strncmp(act->name, "player", ft_strlen(name)))
 		//	printf("%d\n", act->texture[1].size.x);
-		while (i < nb && (&(act->texture[i]) != NULL))
+		while (i < nb && (act->imgtab[i] != NULL))
 		{
+		//	printf("etdtstfdsfuugvdf%d\n", i);
 			i++;
 		}
-		//printf("etdtstfdsfuugvdf%d\n", i);
-		return (&(act->texture[i]));
+		return (act->imgtab[i]);
 	}
 	printf("NOT FOUND:%s\n", name);
 	free_textures(vars);
@@ -154,13 +157,10 @@ int	get_animsize(t_vars	*vars, char *name)
 	if (act && !ft_strncmp(act->name, name, ft_strlen(name)))
 	{
 		i = 0;
-		// printf("etdtstfdsfuugvdf%d\n", ft_strlen(act->texture));
-		// return (ft_strlen(act->texture ) - 3);
-		while ((act->texture + (i * sizeof(t_data))) != NULL)
-		{
+	//	if (!ft_strncmp(act->name, "player", ft_strlen(name)))
+		//printf("%s\n", act->name);
+		while (act->imgtab[i] != NULL)
 			i++;
-		}
-	//	printf("etdtstfdsfuugvdf%d\n", i);
 		return (i);
 	}
 	return (0);
@@ -183,13 +183,12 @@ t_data	*get_animtexture(t_vars	*vars, char	*name, double speed)
 	t_data *r;
 
 //	printf("TIME:%f\n", gettime(vars->n1) / 1000.0);
-//	printf("IM_NUM:%f\n", (speed * 3));
-//	printf("SEARCH:%d\n", (int)fmod((gettime(vars->n1) / 1000.0), (speed * 3)));
-	r = get_texture(vars, name, floor(fmod((gettime(vars->n1) / 1000.0), (speed * 3.0)) / speed));
+//	printf("IM_NUM:%d\n", get_animsize(vars, name));
+	//printf("SEARCH:%d\n", (int)fmod((gettime(vars->n1) / 1000.0), (speed * get_animsize(vars, name))));
+	r = get_texture(vars, name, floor(fmod((gettime(vars->n1) / 1000.0), (speed * get_animsize(vars, name))) / speed));
 	//printf("YES%d\n", r->size.x);
 	return (r);
 }
-
 
 void	init_imgs(t_vars *vars)
 {
@@ -207,7 +206,7 @@ void	init_imgs(t_vars *vars)
 	load_texture(vars, "oui", 0, "./textures/nice/non.xpm");
 	load_texture(vars, "so", 0, vars->so);
 	load_texture(vars, "maps", 0, "./textures/pack_blue_pink/maps.xpm");
-	load_texture(vars, "ea", 0, vars->ea);
+	load_texture(vars, "ea", 0, "./textures/xpm/photo.xpm");
 	load_texture(vars, "we", 0, vars->we);
 }
 
