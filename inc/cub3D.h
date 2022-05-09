@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/07 18:40:02 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/07 18:41:38 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 
 # define MAX_CLIENT 10
 # define PORT 6300
-# define SERVER_IP "127.0.0.1"
+# define SERVER_IP "10.1.4.5"
 
 enum	e_mlx_events {
 	ON_KEYDOWN = 2,

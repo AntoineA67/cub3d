@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/07 18:39:46 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/07 18:45:05 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,7 +227,7 @@ void	init_imgs(t_vars *vars)
 	load_texture(vars, "settings", 0, "./textures/pack_blue_pink/settings.xpm");
 	load_texture(vars, "maps", 0, "./textures/pack_blue_pink/maps.xpm");
 	load_texture(vars, "textures", 0, "./textures/pack_blue_pink/textures.xpm");
-	load_animtexture(vars, "player", 4, "./textures/nice/photo.xpm");
+	load_texture(vars, "player", 0, "./textures/xpm/photo.xpm");
 	load_texture(vars, "no", 0, vars->no);
 	// load_texture(vars, "oui", 0, "./textures/xpm/pho.xpm");
 	load_texture(vars, "so", 0, vars->so);
