@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/06 12:57:07 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/09 14:11:53 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	str_to_rgb(t_rgb *col, char *str)
 	col->r = ft_atoi(splitted[0]);
 	col->g = ft_atoi(splitted[1]);
 	col->b = ft_atoi(splitted[2]);
+	ft_freetab(splitted);
 	// printf("%d %d %d\n", col->r, col->g, col->b);
 	return (0);
 }

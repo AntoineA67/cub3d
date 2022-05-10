@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/10 20:08:58 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/10 20:14:07 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -633,9 +633,9 @@ void	render(t_vars *vars)
 		else if (x < vars->win_size.x / 2)
 			rotate_player_x(vars, x - vars->win_size.x / 2);
 		if (vars->player.rot.y + (y - vars->win_size.y / 2)
-			* vars->y_ratio_mouse_speed > -vars->win_size.y / 2
-			&& vars->player.rot.y + (y - vars->win_size.y / 2) * vars->y_ratio_mouse_speed < vars->win_size.y / 2)
-			vars->player.rot.y += (y - vars->win_size.y / 2) * vars->y_ratio_mouse_speed;
+			* vars->settings.y_ratio_mouse_speed > -vars->win_size.y / 2
+			&& vars->player.rot.y + (y - vars->win_size.y / 2) * vars->settings.y_ratio_mouse_speed < vars->win_size.y / 2)
+			vars->player.rot.y += (y - vars->win_size.y / 2) * vars->settings.y_ratio_mouse_speed;
 		mlx_mouse_move(vars->win, vars->win_size.x / 2,  vars->win_size.y / 2);
 		// if (vars->player.rot.y + jump_height < vars->win_size.y && vars->player.rot.y + jump_height > 0)
 		// 	vars->player.rot.y += 

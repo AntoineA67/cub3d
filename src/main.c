@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/10 20:12:00 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/10 20:12:59 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,145 +27,6 @@ int	init_player(t_vars *vars)
 	return (0);
 }
 
-void	load_texture(t_vars	*vars , char *name, int nb, char *path)
-{
-	t_data		*actt;
-	t_textures	**act;
-	t_textures	*last;
-	int i;
-
-	printf("LOADING:%s\t...\n", path);
-	act = &vars->textures;
-	if (*act)
-		printf("%s, ", (*act)->name);
-	while ((*act) && (*act)->next && ft_strncmp((*act)->name, name, ft_strlen(name)))
-	{
-		act = &(*act)->next;
-		printf("%s, ", (*act)->name);
-	}
-	if (!(*act) || ft_strncmp((*act)->name, name, ft_strlen(name)))
-	{
-		last = ft_calloc(sizeof(t_textures), 1);
-		last->name = name;
-		last->imgtab = ft_calloc(sizeof(t_data *), 2);
-		last->imgtab[0] = ft_calloc(sizeof(t_data), 1);
-		actt = last->imgtab[0];
-		actt->img = mlx_xpm_file_to_image(vars->mlx, path,
-				&actt->size.x, &actt->size.y);
-		actt->addr = mlx_get_data_addr(actt->img, &actt->bits_per_pixel,
-				&actt->line_length, &actt->endian);
-		if (*act)
-			(*act)->next = last;
-		else
-			*act = last;
-	}
-	else
-	{
-		i = 0;
-		while ((*act)->imgtab[i])
-			i++;
-		// if (!(&((*act)->texture[i])))
-		// {
-		//printf("load%d|%d\n", i, nb);
-		t_data **tmp = ft_calloc(sizeof(t_data *), i + 2);
-		ft_memcpy(tmp, (*act)->imgtab, i * sizeof(t_data *));
-		free((*act)->imgtab);
-		(*act)->imgtab = tmp;
-		// }
-		// else
-		// 	ft_bzero((*act)->imgtab + (i * sizeof(t_data)), sizeof(t_data));
-		//printf("CHANGE:%d\n", i);
-		(*act)->imgtab[i] = ft_calloc(1, sizeof(t_data));
-		actt = (*act)->imgtab[i];
-		actt->img = mlx_xpm_file_to_image(vars->mlx, path,
-			&actt->size.x, &actt->size.y);
-		actt->addr = mlx_get_data_addr(actt->img, &actt->bits_per_pixel,
-			&actt->line_length, &actt->endian);
-	}
-	if (!ft_strncmp((*act)->name, name, ft_strlen(name)))
-		printf("%s:REPLACE at :%d\n", name, nb);
-	else
-		printf("%s:LOADED at :%d\n", name, nb);
-}
-
-void	load_animtexture(t_vars	*vars , char *name, int nb, char *path)
-{
-	int	i;
-	char	*pathn;
-
-	i = 0;
-	while (i < nb)
-	{
-		pathn = ft_strjoin(ft_substr(path, 0, ft_strlen(path) - 4)  , ft_itoa(i));
-		pathn = ft_strjoin(pathn, ".xpm");
-		load_texture(vars, name, i, pathn);
-		free(pathn);
-		i++;
-	}
-}
-
-void	free_textures(t_vars *vars)
-{
-	t_textures	*act;
-
-	while (vars->textures)
-	{
-		act = vars->textures;
-		while (act->next)
-			act = act->next;
-		free(act->imgtab);
-		free(act);
-	}
-}
-
-t_data	*get_texture(t_vars	*vars, char	*name, int nb)
-{
-	// t_data		*actt;
-	t_textures	*act;
-	int i;
-
-	act = vars->textures;
-	while (act && ft_strncmp(act->name, name, ft_strlen(name)) && act->next)
-		act = act->next;
-	if (!ft_strncmp(act->name, name, ft_strlen(name)))
-	{
-		i = 0;
-	//	if (!ft_strncmp(act->name, "player", ft_strlen(name)))
-		//	printf("%d\n", act->texture[1].size.x);
-		while (i < nb && (act->imgtab[i] != NULL))
-		{
-		//	printf("etdtstfdsfuugvdf%d\n", i);
-			i++;
-		}
-		return (act->imgtab[i]);
-	}
-	printf("NOT FOUND:%s\n", name);
-	free_textures(vars);
-	exit(1);
-	return (NULL);
-}
-
-int	get_animsize(t_vars	*vars, char *name)
-{
-	// t_data		*actt;
-	t_textures	*act;
-	int i;
-
-	act = vars->textures;
-	while (act && ft_strncmp(act->name, name, ft_strlen(name)) && act->next)
-		act = act->next;
-	if (act && !ft_strncmp(act->name, name, ft_strlen(name)))
-	{
-		i = 0;
-	//	if (!ft_strncmp(act->name, "player", ft_strlen(name)))
-		//printf("%s\n", act->name);
-		while (act->imgtab[i] != NULL)
-			i++;
-		return (i);
-	}
-	return (0);
-}
-
 long	gettime(long initime)
 {
 	long			res;
@@ -176,18 +37,6 @@ long	gettime(long initime)
 	res += time.tv_sec * 1000;
 	res -= initime;
 	return (res);
-}
-
-t_data	*get_animtexture(t_vars	*vars, char	*name, double speed)
-{
-	t_data *r;
-
-//	printf("TIME:%f\n", gettime(vars->n1) / 1000.0);
-//	printf("IM_NUM:%d\n", get_animsize(vars, name));
-	//printf("SEARCH:%d\n", (int)fmod((gettime(vars->n1) / 1000.0), (speed * get_animsize(vars, name))));
-	r = get_texture(vars, name, floor(fmod((gettime(vars->n1) / 1000.0), (speed * get_animsize(vars, name))) / speed));
-	//printf("YES%d\n", r->size.x);
-	return (r);
 }
 
 void	init_imgs(t_vars *vars)
@@ -203,7 +52,7 @@ void	init_imgs(t_vars *vars)
 	load_texture(vars, "textures", 0, "./textures/pack_blue_pink/textures.xpm");
 	load_animtexture(vars, "player", 4, "./textures/nice/photo.xpm");
 	load_texture(vars, "no", 0, vars->no);
-	load_texture(vars, "oui", 0, "./textures/nice/non.xpm");
+	//load_texture(vars, "oui", 0, "./textures/nice/non.xpm");
 	load_texture(vars, "so", 0, vars->so);
 	load_texture(vars, "maps", 0, "./textures/pack_blue_pink/maps.xpm");
 	load_texture(vars, "ea", 0, "./textures/xpm/photo.xpm");
@@ -216,7 +65,7 @@ static void	fill_vars(t_vars *vars, int fd)
 	vars->jump = -2000;
 	vars->ao = 1.0;
 	vars->ao_scale = .22;
-	vars->y_ratio_mouse_speed = 1.2;
+	vars->settings.y_ratio_mouse_speed = 1.2;
 	vars->mult_fd = 0;
 	affect_ascii(vars);
 	ft_bzero(vars->keyboard, sizeof(vars->keyboard));
@@ -260,89 +109,6 @@ static int	test_hook(t_vars *vars)
 	return (0);
 }
 
-void	change_ui(void		*v, void	*data)
-{
-	t_vars	*vars;
-
-	vars = (t_vars *)v;
-	vars->ui = *((int*)data);
-	if (vars->ui)
-		mlx_mouse_show();
-	else
-		mlx_mouse_hide();
-}
-
-void	change_setting(void		*v, void	*dat)
-{
-	t_vars	*vars;
-	int	data;
-
-	data = *((int*)dat);
-	vars = (t_vars *)v;
-	if (data == 1)
-	{
-		vars->settings.map_type++;
-		if (vars->settings.map_type == 3)
-			vars->settings.map_type = 0;
-	}
-}
-
-void	button(t_vars *vars, t_coords p, char *txt,void (*f)(void*, void*))
-{
-	int	dy;
-	int	dx;
-	int	data;
-	unsigned int	add;
-	t_data	*text;
-
-	text = get_texture(vars, txt + 1, 0);
-	dy = p.a.y;
-	data = (int)(*txt - '0');
-	while (++dy < p.b.y)
-	{
-		dx = p.a.x;
-		while (++dx < p.b.x && dy - p.a.y < 95)
-		{
-			add =  *(unsigned int *)(text->addr + ((int)(((dx - p.a.x) * text->size.x) / (p.b.x - p.a.x))
-						* (text->bits_per_pixel / 8) + ((int)(((dy - p.a.y) * text->size.y) / (p.b.y - p.a.y)) * text->line_length)));
-			//printf("%d\\%d|%d\\%d\n", (((dx - p.a.x) * text->size.x) / (p.b.x - p.a.x)), text->size.x, dy - p.a.y, vars->settings.bttext[(int)txt[1]].size.y);
-			if (vars->clicked && vars->clicked_co.x >= p.a.x && vars->clicked_co.x <= p.b.x && vars->clicked_co.y >= p.a.y && vars->clicked_co.y <= p.b.y)
-				pixel_put(vars->img, dx, dy, add + (10<<8) + (10<<4) + 10);
-			else
-				pixel_put(vars->img, dx, dy, add);
-		}
-	}
-	(void)txt;
-	//printf("%d\n", mlx_string_put(vars->mlx, vars->win,100,100,0xff00ff, "PLAY"));
-	if (vars->clicked)
-	{
-		if (vars->clicked_co.x >= p.a.x && vars->clicked_co.x <= p.b.x)
-			if (vars->clicked_co.y >= p.a.y && vars->clicked_co.y <= p.b.y)
-				f(vars, &data);
-	}
-}
-
-t_coords screen_pc(double off, double wh, t_rgb colore, t_vars *vars)
-{
-	t_coords res;
-	int	width;
-	int	height;
-	int	off_l;
-	int	off_d;
-
-	width = (int)wh;
-	height = fmod(wh * 100.0, 100.0);
-	off_l = (int)off;
-	off_d = fmod(off * 100.0, 100.0);
-	res.a.x = vars->win_size.x * off_l / 100;
-	res.a.y = vars->win_size.y * off_d / 100;
-	res.b.x = res.a.x + (vars->win_size.x * width / 100);
-	res.b.y = res.a.y + (vars->win_size.x * height / 100);
-	res.a.c = colore;
-	//printf("%d|%d|%d\n", res.x, res.y, res.z);
-	return (res);
-}
-
 int	ui_frame1(t_vars	*vars)
 { 
 	button(vars, screen_pc(25.15,50.05, gen_color(255,0,100, 100), vars), "0start", &change_ui);
@@ -365,10 +131,15 @@ int	ui_frame3(t_vars	*vars)
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	return (0);
 }
-int	ui_frame4(t_vars	*vars)
-{ 
+
+int	ui_setting(t_vars	*vars)
+{
 	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "1start", &change_ui);
 	button(vars, screen_pc(25.30,25.025, gen_color(255,0,100, 0), vars), "1start", &change_setting);
+	slider(vars, screen_pc(25.40,25.025, gen_color(255,0,100, 0), vars), slider_param(120.0, 1.0, &vars->settings.fps_cap), 1.0);
+	slider(vars, screen_pc(25.50,25.025, gen_color(255,0,100, 0), vars), slider_param(1.6, 0.2, &vars->settings.y_ratio_mouse_speed), 0.1);
+	slider(vars, screen_pc(25.60,25.025, gen_color(255,0,100, 0), vars), slider_param(2.0, 0.1, &vars->settings.x_ratio_mouse_speed), 0.1);
+	//slider(vars, screen_pc(25.50,25.025, gen_color(255,0,100, 0), vars), slider_param(0.2, 1.6, &vars->settings.y_ratio_mouse_speed), 0.1);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	return (0);
 }
@@ -383,7 +154,7 @@ int	frame(void *data)
 	vars = (t_vars *)data;
 	if (!vars->ui)
 	{
-	if (!vars->settings.fps_cap || !(gettime(vars->n1) % (1000 / vars->settings.fps_cap)))
+	if (!vars->settings.fps_cap || !fmod(gettime(vars->n1), (1000 / (int)vars->settings.fps_cap)))
 	{
 		render(vars);
 		temp = gettime(vars->n1);
@@ -417,7 +188,7 @@ int	frame(void *data)
 	}
 	else if (vars->ui == 4)
 	{
-		ui_frame4(vars);
+		ui_setting(vars);
 		vars->clicked = 0;
 	}
 	}
@@ -458,6 +229,7 @@ int	main(int argc, char **argv)
 	mlx_do_key_autorepeatoff(vars.mlx);
 	mlx_hook(vars.win, ON_KEYDOWN, 0, key_hook_down, &vars);
 	mlx_hook(vars.win, ON_KEYUP, 0, key_hook_up, &vars);
+	mlx_hook(vars.win, ON_MOUSEUP, 0, mouse_hook_up, &vars);
 	mlx_hook(vars.win, ON_DESTROY, 0, test_hook, &vars);
 	mlx_loop_hook(vars.mlx, frame, &vars);
 	mlx_mouse_hook(vars.win, mouse_hook, &vars);

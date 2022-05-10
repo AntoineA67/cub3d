@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_hooks.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/08 23:10:55 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/10 17:23:29 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ static void	move_player(t_vars *vars, int dir_x, int dir_y)
 
 void	rotate_player_x(t_vars *vars, int dir)
 {
-	vars->player.rot.x += dir / 100.0;
+	vars->player.rot.x += dir * 0.002 * vars->settings.x_ratio_mouse_speed;
 	// printf("%.2f\n", vars->player.rot.x);
 	if (vars->player.rot.x < 0.0)
 		vars->player.rot.x += 2.0 * M_PI;
