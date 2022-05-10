@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/08 23:12:44 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/10 15:56:01 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,7 @@ static void	fill_vars(t_vars *vars, int fd)
 	vars->ao_scale = .22;
 	vars->y_ratio_mouse_speed = 1.2;
 	vars->mult_fd = 0;
+	affect_ascii(vars);
 	ft_bzero(vars->keyboard, sizeof(vars->keyboard));
 	vars->mult_n_players = 0;
 	vars->mlx = mlx_init();

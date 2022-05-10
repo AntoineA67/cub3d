@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:03:35 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/08 23:02:33 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/09 13:02:56 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,13 +139,13 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit
 	y = 0.0;
 	step = (img->size.y * 1.0) / ((vars->win_size.y / 2 + wall_height)
 			- (vars->win_size.y / 2 - wall_height));
-	i = vars->win_size.y / 2 - wall_height - vars->player.rot.y - vars->jump_height / hit_dist;
+	i = vars->win_size.y / 2 - wall_height - vars->player.rot.y - (vars->jump_height / hit_dist);
 	if (i < 0)
 	{
 		y = step * (-i);
 		i = 0;
 	}
-	draw_end = vars->win_size.y / 2 + wall_height - vars->player.rot.y - vars->jump_height / hit_dist;
+	draw_end = vars->win_size.y / 2 + wall_height - vars->player.rot.y - (vars->jump_height / hit_dist);
 	if (draw_end > vars->win_size.y)
 		draw_end = vars->win_size.y;
 	if (img_x < 0)
