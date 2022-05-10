@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/10 15:55:52 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/10 16:31:37 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,7 @@ typedef struct s_line {
 }		t_line;
 
 long	gettime(long initime);
+void	img_text(t_vars *vars, char *str, t_coord p);
 void	affect_ascii(t_vars *vars);
 t_data	*get_animtexture(t_vars	*vars, char	*name, double speed);
 t_data	*get_texture(t_vars	*vars, char	*name, int nb);

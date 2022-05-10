@@ -6,83 +6,60 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:07:51 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/10 16:08:23 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/10 19:01:27 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
 
-static void	affect_ascii_3(t_vars *vars)
+void	img_text(t_vars *vars, char *str, t_coord p)
 {
-	int			i;
-	uint64_t	font[34];
-	
-	font = {
-		0x1028000000000000, 0x7E0000, 0x1008000000000000,
-		0x3C023E463A0000, 0x40407C42625C0000, 0x1C20201C0000,
-		0x2023E42463A0000, 0x3C427E403C0000, 0x18103810100000,
-		0x344C44340438, 0x2020382424240000, 0x800080808080000,
-		0x800180808080870, 0x20202428302C0000, 0x1010101010180000,
-		0x665A42420000, 0x2E3222220000, 0x3C42423C0000,
-		0x5C62427C4040, 0x3A46423E0202, 0x2C3220200000,
-		0x1C201804380000, 0x103C1010180000, 0x2222261A0000,
-		0x424224180000, 0x81815A660000, 0x422418660000,
-		0x422214081060, 0x3C08103C0000, 0x1C103030101C0000,
-		0x808080808080800, 0x38080C0C08380000, 0x324C000000,
-		0x7E7E7E7E7E7E0000};
-	i = -1;
-	while (++i < 34)
-		vars->font[94 + i] = font[i];
-}
+	int	i;
+	int	j;
+	int	scale;
 
-static void	affect_ascii_2(t_vars *vars)
-{
-	int			i;
-	uint64_t	font[52] = {
-		0x81828487C080000, 0x7E407C02423C0000, 0x3C407C42423C0000,
-		0x7E04081020400000, 0x3C423C42423C0000, 0x3C42423E023C0000,
-		0x80000080000, 0x80000081000, 0x6186018060000,
-		0x7E007E000000, 0x60180618600000, 0x3844041800100000,
-		0x3C449C945C201C, 0x1818243C42420000, 0x7844784444780000,
-		0x3844808044380000, 0x7844444444780000, 0x7C407840407C0000,
-		0x7C40784040400000, 0x3844809C44380000, 0x42427E4242420000,
-		0x3E080808083E0000, 0x1C04040444380000, 0x4448507048440000,
-		0x40404040407E0000, 0x4163554941410000, 0x4262524A46420000,
-		0x1C222222221C0000, 0x7844784040400000, 0x1C222222221C0200,
-		0x7844785048440000, 0x1C22100C221C0000, 0x7F08080808080000,
-		0x42424242423C0000, 0x8142422424180000, 0x4141495563410000,
-		0x4224181824420000, 0x4122140808080000, 0x7E040810207E0000,
-		0x3820202020380000, 0x4020100804020000, 0x3808080808380000};
+	scale = p.z;
+	if (!scale)
+		return ;
 	i = -1;
-	while (++i < 42)
-		vars->font[i + 52] = font[i];
+	j = 0;
+	while (str[++i])
+	{
+		j = -1;
+		while (++j < 64 * scale * scale)// && is_in_window(vars, p.x + j % 8 + i * 8, p.y + j / 8))
+		{
+			// printf("%d %d\t", p.x + j % (8 * scale) + i * (8 * scale), p.y + j / (8 * scale));
+			if ((vars->font[(int)str[i]]>>(64 - ((j / scale) - (((j / (8 * scale)) % scale) * 8) - (8 * ((j / (8 * scale)) / scale))))) & 1)
+				pixel_put(vars->img, p.x + j % (8 * scale) + i * (8 * scale), p.y + j / (8 * scale), to_rgb(p.c, 0));
+			// printf("%d ", (j / scale) - ((j / (8 * scale)) / scale));
+			printf("%d ", ((j / scale) - (((j / (8 * scale)) % scale) * 8) - (8 * ((j / (8 * scale)) / scale))));	
+		}
+		printf("\n%d %d\n\n", j, j / scale);
+	}
 }
 
 void	affect_ascii(t_vars *vars)
 {
 	int			i;
-	uint64_t	font[52] = {
-		0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000,
-		0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000,
-		0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000,
-		0x0, 0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000,
-		0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000,
-		0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000,
-		0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000,
-		0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000,
-		0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000,
-		0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000, 0x7E7E7E7E7E7E0000,
-		0x7E7E7E7E7E7E0000, 0x0, 0x808080800080000,
-		0x2828000000000000, 0x287C287C280000, 0x81E281C0A3C0800,
-		0x6094681629060000, 0x1C20201926190000, 0x808000000000000,
-		0x810202010080000, 0x1008040408100000, 0x2A1C3E1C2A000000,
-		0x8083E08080000, 0x81000, 0x3C00000000,
-		0x80000, 0x204081020400000, 0x1824424224180000,
-		0x8180808081C0000, 0x3C420418207E0000, 0x3C420418423C0000};
+	char		*line;
+	int			fd;
 
+	fd = open("./fonts/font.csv", O_RDONLY);
+	if (fd < 0)
+	{
+		write(2, "Font not found\n", 16);
+		return ;
+	}
 	i = -1;
-	while (++i < 52)
-		vars->font[i] = font[i];
-	affect_ascii_2(vars);
-	affect_ascii_3(vars);
+	while (++i < 128)
+	{
+		line = get_next_line(fd);
+		if (!line || ft_strlen(line) < 3)
+		{
+			write(2, "Error while parsing fonts\n", 16);
+			return ;
+		}	
+		vars->font[i] = ft_atoi_base_u_64(line + 2, "0123456789ABCDEF");
+		printf("%llu\n", vars->font[i]);
+	}
 }
