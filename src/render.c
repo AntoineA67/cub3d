@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/10 19:01:39 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/10 20:08:58 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -667,7 +667,8 @@ void	render(t_vars *vars)
 	draw_square_center(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, 4, gen_color(255, 255, 255, 0)));
 	draw_square_center(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, 2, gen_color(0, 0, 0, 0)));
 	// img_text(vars, "OUI5456465", gen_coord(500, 500, 5, gen_color(100, 255, 255, 0)));
-	img_text(vars, "OUI5456465", gen_coord(500, 500, 4, gen_color(100, 255, 255, 0)));
+	img_text(vars, "OUI5456465", gen_coord(500, 500, 8, gen_color(100, 255, 255, 0)));
+	img_text(vars, "OUI5456465", gen_coord(500, 600, 2, gen_color(100, 255, 255, 0)));
 	// img_text(vars, "efefefs", gen_coord(100, 100, 1, gen_color(255, 255, 100, 0)));
 	// img_text(vars, "mefkjejfs;fs65+6", gen_coord(500, 1075, 5, gen_color(255, 255, 255, 0)));
 	// img_text(vars, "mefkjejfs;fs65+6", gen_coord(1900, 1000, 1, gen_color(100, 255, 255, 0)));

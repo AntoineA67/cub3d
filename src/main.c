@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/10 15:56:01 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/10 20:12:00 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -389,6 +389,7 @@ int	frame(void *data)
 		temp = gettime(vars->n1);
 		itoa = ft_itoa(1000 / (temp - vars->n2));
 		fps = ft_strjoin("FPS: ", itoa);
+		img_text(vars, fps, gen_coord(10, 150, 3, gen_color(255, 255, 255, 0)));
 		mlx_string_put(vars->mlx, vars->win, 100, 100, 0xff00ff, fps);
 		free(itoa);
 		free(fps);

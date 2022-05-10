@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:07:51 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/10 19:01:27 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/10 20:08:39 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	img_text(t_vars *vars, char *str, t_coord p)
 {
 	int	i;
 	int	j;
+	int	k;
 	int	scale;
 
 	scale = p.z;
@@ -26,15 +27,15 @@ void	img_text(t_vars *vars, char *str, t_coord p)
 	while (str[++i])
 	{
 		j = -1;
-		while (++j < 64 * scale * scale)// && is_in_window(vars, p.x + j % 8 + i * 8, p.y + j / 8))
+		while (++j < 8 * scale)
 		{
-			// printf("%d %d\t", p.x + j % (8 * scale) + i * (8 * scale), p.y + j / (8 * scale));
-			if ((vars->font[(int)str[i]]>>(64 - ((j / scale) - (((j / (8 * scale)) % scale) * 8) - (8 * ((j / (8 * scale)) / scale))))) & 1)
-				pixel_put(vars->img, p.x + j % (8 * scale) + i * (8 * scale), p.y + j / (8 * scale), to_rgb(p.c, 0));
-			// printf("%d ", (j / scale) - ((j / (8 * scale)) / scale));
-			printf("%d ", ((j / scale) - (((j / (8 * scale)) % scale) * 8) - (8 * ((j / (8 * scale)) / scale))));	
+			k = -1;
+			while (++k < 8 * scale)
+			{
+				if ((vars->font[(int)str[i]]>>(64 - (j / scale * 8) - (k / scale))) & 1)
+					pixel_put(vars->img, p.x + k + i * (8 * scale), p.y + j, to_rgb(p.c, 0));
+			}	
 		}
-		printf("\n%d %d\n\n", j, j / scale);
 	}
 }
 
