@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/07 18:41:38 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/10 16:57:36 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 
 # define MAX_CLIENT 10
 # define PORT 6300
-# define SERVER_IP "10.1.4.5"
+# define SERVER_IP "127.0.0.1"
 
 enum	e_mlx_events {
 	ON_KEYDOWN = 2,
@@ -88,8 +88,10 @@ typedef struct s_player {
 
 typedef struct s_settings
 {
-	int				fps_cap;
+	double			fps_cap;
 	int				map_type;
+	double			y_ratio_mouse_speed;
+	double			x_ratio_mouse_speed;
 	t_data			*bttext;
 }	t_settings;
 
@@ -108,11 +110,12 @@ typedef	struct s_textures
 }	t_textures;
 
 typedef struct s_vars {
+	double			jump_height;
+	time_t			jump;
 	int				ao;
 	double			ao_scale;
-	double			y_ratio_mouse_speed;
 	struct sockaddr_in	serv_addr;
-	char			keyboard[200];
+	char			keyboard[300];
 	int				mult_fd;
 	int				mult_id;
 	int				mult_n_players;
@@ -139,6 +142,8 @@ typedef struct s_vars {
 	int				start_rot;
 	int				ui;
 	int				clicked;
+	int				clicking;
+	int				slider;
 	t_coord			clicked_co;
 	t_settings		settings;
 	double			min_map_mult;
@@ -178,9 +183,38 @@ typedef struct s_line {
 	float	dist;
 }		t_line;
 
+typedef struct s_slider {
+	double min;
+	double max;
+	void *setting;
+}	t_slider;
+
+//************************* Texture manage fonctions *************************//
+
+void		load_texture(t_vars	*vars, char *name, int nb, char *path);
+void		load_animtexture(t_vars	*vars, char *name, int nb, char *path);
+void		free_textures(t_vars *vars);
+t_data		*get_texture(t_vars	*vars, char	*name, int nb);
+int			get_animsize(t_vars	*vars, char *name);
+t_data		*get_animtexture(t_vars	*vars, char	*name, double speed);
+
+//***************************** Button fonctions *****************************//
+
+void		change_ui(void		*v, void	*data);
+void		change_setting(void		*v, void	*dat);
+t_coords	screen_pc(double off, double wh, t_rgb colore, t_vars *vars);
+void		button(t_vars *vars, t_coords p, char *txt,void (*f)(void*, void*));
+
+//***************************** Slider fonctions *****************************//
+
+t_slider	slider_param(double	max, double min, void *setting);
+void		slider(t_vars *vars, t_coords p, t_slider slider, double pas);
+
+//****************************************************************************//
+
+
+int	mouse_hook_up(int keycode, int x, int y, t_vars *vars);
 long	gettime(long initime);
-t_data	*get_animtexture(t_vars	*vars, char	*name, double speed);
-t_data	*get_texture(t_vars	*vars, char	*name, int nb);
 void	vert_line(t_vars *vars, int x, int size, int color);
 void	rotate_player_x(t_vars *vars, int dir);
 unsigned int	add_shade(t_vars *vars, unsigned int c, unsigned int dist_int, double ao);
@@ -215,7 +249,7 @@ t_rgb	gen_color(int r, int g, int b, int v);
 t_coord	coord(t_coord *p, int x, int y, int z);
 void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit_dist, double ao);
 
-void	pixel_put(t_data *data, int x, int y, int color);
+void	pixel_put(t_data *data, int x, int y, unsigned int color);
 // float	deg_to_rad(int d);
 // t_rgb	cycle_color(t_rgb color);
 char	*parse(int fd, t_vars *vars);
