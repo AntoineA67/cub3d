@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/10 20:12:59 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/10 20:25:51 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ static void	fill_vars(t_vars *vars, int fd)
 	vars->ao = 1.0;
 	vars->ao_scale = .22;
 	vars->settings.y_ratio_mouse_speed = 1.2;
+	vars->settings.x_ratio_mouse_speed = 1.2;
 	vars->mult_fd = 0;
 	affect_ascii(vars);
 	ft_bzero(vars->keyboard, sizeof(vars->keyboard));
@@ -160,7 +161,6 @@ int	frame(void *data)
 		temp = gettime(vars->n1);
 		itoa = ft_itoa(1000 / (temp - vars->n2));
 		fps = ft_strjoin("FPS: ", itoa);
-		img_text(vars, fps, gen_coord(10, 150, 3, gen_color(255, 255, 255, 0)));
 		mlx_string_put(vars->mlx, vars->win, 100, 100, 0xff00ff, fps);
 		free(itoa);
 		free(fps);
