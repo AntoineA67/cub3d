@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 19:13:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/04 20:42:29 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/11 18:16:54 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,8 +152,7 @@ int main(int argc, char *argv[])
 					packet.n_players--;
                     getpeername(sd , (struct sockaddr*)&serv_addr,
 						(socklen_t*)&addrlen);
-                    printf("Host disconnected , id %d , fd %d\n",
-                          id , sd);
+                    printf("Player with id %d disconnected\n", id);
                     close(sd);
                     client_socket[id] = 0;
                 }

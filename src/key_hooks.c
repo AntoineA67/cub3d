@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/11 11:48:26 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/11 17:17:31 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ void	rotate_player_x(t_vars *vars, int dir)
 
 int	key_hook_down(int keycode, t_vars *vars)
 {
-	printf("%d\n", keycode);
+	// printf("%d\n", keycode);
 	if (keycode < 300)
 		vars->keyboard[keycode] = 1;
 	return (0);

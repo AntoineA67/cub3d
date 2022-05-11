@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/11 11:47:59 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/11 19:28:36 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # include "../mlx_opengl/mlx.h"
 
 # define MAX_CLIENT 10
-# define PORT 6300
+# define PORT 5000
 # define SERVER_IP "127.0.0.1"
 
 enum	e_mlx_events {
@@ -98,6 +98,7 @@ typedef struct s_settings
 
 typedef struct s_packet
 {
+	double			bullets[MAX_CLIENT];
 	int				n_players;
 	t_vector2		players_pos[MAX_CLIENT];
 	double			players_rot[MAX_CLIENT];
@@ -110,7 +111,18 @@ typedef	struct s_textures
 	struct s_textures 	*next;
 }	t_textures;
 
+typedef struct s_enemy {
+	t_vector2	pos;
+	int			lives;
+}		t_enemy;
+
 typedef struct s_vars {
+	double			bullets;
+	int				n_enemies;
+	double			start;
+	double			end;
+	int				usable_cells;
+	t_enemy			*enemies;
 	char			*parse_seen;
 	uint64_t		font[128];
 	double			jump_height;
@@ -141,7 +153,7 @@ typedef struct s_vars {
 	void			*mlx;
 	void			*win;
 	char			*map;
-	double 			rays;
+	double 			*rays;
 	int				start_rot;
 	int				ui;
 	int				clicked;
