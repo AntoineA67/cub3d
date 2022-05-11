@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:07:51 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/10 20:08:39 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/11 11:09:11 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,5 @@ void	affect_ascii(t_vars *vars)
 			return ;
 		}	
 		vars->font[i] = ft_atoi_base_u_64(line + 2, "0123456789ABCDEF");
-		printf("%llu\n", vars->font[i]);
 	}
 }

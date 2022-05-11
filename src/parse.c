@@ -3,14 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/09 14:11:53 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/11 11:38:10 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
+
+int	check_map(t_vars *vars, int x, int y)
+{
+	if (x < 0 || y < 0 || x >= vars->size.x || y >= vars->size.y || vars->map[x + vars->size.x * y] == ' ')
+		return (1);
+	else if (vars->parse_seen[x + vars->size.x * y])
+		return (0);
+	printf("%d %d\t", x, y);
+	vars->parse_seen[x + vars->size.x * y] = 1;
+	if (vars->map[x + vars->size.x * y] == '0' || vars->map[x + vars->size.x * y] == 'C')
+		return (check_map(vars, x + 1, y) || check_map(vars, x - 1, y)
+			|| check_map(vars, x, y + 1) || check_map(vars, x, y - 1));
+	return (0);
+}
 
 void	exit_lst(t_list **lst)
 {

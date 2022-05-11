@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/10 20:14:33 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/11 11:47:59 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_vector2 {
 }			t_vector2;
 
 typedef struct s_player {
+	int			run;
 	t_vector2	pos;
 	t_vector2	delta;
 	t_vector2	rot;
@@ -110,6 +111,7 @@ typedef	struct s_textures
 }	t_textures;
 
 typedef struct s_vars {
+	char			*parse_seen;
 	uint64_t		font[128];
 	double			jump_height;
 	time_t			jump;
@@ -214,6 +216,7 @@ void		slider(t_vars *vars, t_coords p, t_slider slider, double pas);
 //****************************************************************************//
 
 
+int	check_map(t_vars *vars, int x, int y);
 int	mouse_hook_up(int keycode, int x, int y, t_vars *vars);
 long	gettime(long initime);
 void	img_text(t_vars *vars, char *str, t_coord p);

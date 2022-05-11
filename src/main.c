@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/10 20:25:51 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/11 11:50:04 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	init_imgs(t_vars *vars)
 
 static void	fill_vars(t_vars *vars, int fd)
 {
+	vars->player.run = 0;
 	vars->jump_height = 0.0;
 	vars->jump = -2000;
 	vars->ao = 1.0;
@@ -77,6 +78,15 @@ static void	fill_vars(t_vars *vars, int fd)
 	vars->map = parse(fd, vars);
 	if (init_player(vars))
 		return ; //NO PLAYER IN MAP
+	vars->parse_seen = ft_calloc(vars->size.x * vars->size.y, 1);
+	if (!vars->parse_seen)
+		return ;
+	if (check_map(vars, (int)vars->player.pos.x, (int)vars->player.pos.y))
+	{
+		write(2, "Error while parsing map\n", 25);
+		exit(EXIT_FAILURE);
+	}
+	free(vars->parse_seen);
 	init_imgs(vars);
 	vars->img->img = mlx_new_image(vars->mlx, vars->win_size.x, vars->win_size.y);
 	vars->img->addr = mlx_get_data_addr(vars->img->img, &vars->img->bits_per_pixel,
