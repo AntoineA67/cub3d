@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/10 16:57:36 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/11 11:47:59 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_vector2 {
 }			t_vector2;
 
 typedef struct s_player {
+	int			run;
 	t_vector2	pos;
 	t_vector2	delta;
 	t_vector2	rot;
@@ -110,6 +111,8 @@ typedef	struct s_textures
 }	t_textures;
 
 typedef struct s_vars {
+	char			*parse_seen;
+	uint64_t		font[128];
 	double			jump_height;
 	time_t			jump;
 	int				ao;
@@ -213,8 +216,11 @@ void		slider(t_vars *vars, t_coords p, t_slider slider, double pas);
 //****************************************************************************//
 
 
+int	check_map(t_vars *vars, int x, int y);
 int	mouse_hook_up(int keycode, int x, int y, t_vars *vars);
 long	gettime(long initime);
+void	img_text(t_vars *vars, char *str, t_coord p);
+void	affect_ascii(t_vars *vars);
 void	vert_line(t_vars *vars, int x, int size, int color);
 void	rotate_player_x(t_vars *vars, int dir);
 unsigned int	add_shade(t_vars *vars, unsigned int c, unsigned int dist_int, double ao);

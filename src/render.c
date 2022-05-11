@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/10 13:37:21 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/10 20:26:09 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ double	dist(double ax, double ay, double bx, double by, double angle)
 	
 // }
 
-void	draw_square_texture_center(t_vars *vars, t_coord p, t_data *img)
+void	draw_square_texture_center(t_vars *vars, t_coord p, t_data *img, double dist_b_players)
 {
 	int		dy;
 	int		dx;
@@ -188,6 +188,7 @@ void	draw_square_texture_center(t_vars *vars, t_coord p, t_data *img)
 		return ;
 	square_size = p.z;
 	img_y = 0;
+	(void)dist_b_players;
 	ratio_x = (img->size.x + .0) / (square_size + .0);
 	ratio_y = (img->size.y + .0) / (square_size + .0);
 	dy = p.y - p.z / 2;
@@ -197,12 +198,12 @@ void	draw_square_texture_center(t_vars *vars, t_coord p, t_data *img)
 	{
 		dx = p.x - p.z / 2;
 		img_x = 0;
-		while (++dx < p.x + p.z / 2 && img_x < img->size.x && img_y >= 0 && img_x >= 0 && img_y < img->size.y && is_in_window(vars, dx, dy - vars->player.rot.y))
+		while (++dx < p.x + p.z / 2 && img_x < img->size.x && img_y >= 0 && img_x >= 0 && img_y < img->size.y && is_in_window(vars, dx, dy - vars->player.rot.y - vars->jump_height / dist_b_players))
 		{
 			//printf("img_x: %f	img_y: %f\n", img_x, img_y);
 			//printf("%d\n", img->line_length);
 			// if ((*(unsigned int *)(img->addr + ((int)((int)img_x * (img->bits_per_pixel / 8)) + (int)((int)img_y * img->line_length)))>>24) != 255)
-				pixel_put(vars->img, dx, dy - vars->player.rot.y,
+				pixel_put(vars->img, dx, dy - vars->player.rot.y - vars->jump_height / dist_b_players,
 					*(unsigned int *)(img->addr + ((int)((int)img_x * (img->bits_per_pixel / 8)) + (int)((int)img_y * img->line_length))));
 			// else
 				// printf("aaa\n");
@@ -430,6 +431,7 @@ void	project_rays(t_vars *vars, double render_ratio)
 		}
 	}
 	i = -1;
+	double	dist_players;
 	while (++i < vars->mult_n_players && i < MAX_CLIENT)
 	{
 		if (vars->mult_id != i)
@@ -442,16 +444,18 @@ void	project_rays(t_vars *vars, double render_ratio)
 				angle =  angle + M_PI;
 				angle = fmod(angle, M_PI * 2);
 				// printf("player%d:%f|%f|%f\\%f\n",i,start,angle,end, angle + (M_PI * 2.0));
+				dist_players = dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle);
 				if (angle > start && angle < end )
 				{
 					double dangle = end - angle;
-					draw_square_texture_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) * 200, gen_color(100,100,100,0)), get_texture(vars, "player", 0));
+					draw_square_texture_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist_players) * (vars->win_size.y / 2), gen_color(100,100,100,0)), get_texture(vars, "oui", 0), dist_players);
+					// draw_square_texture_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) * 200, gen_color(100,100,100,0)), get_animtexture(vars, "player", 0.2));
 					// draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));
 				}
 				else if (( angle + (M_PI * 2.0)) > start && (angle + (M_PI * 2.0)) < end)
 				{
 					double dangle = end - ( angle + (M_PI * 2.0));
-					draw_square_texture_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) * 200, gen_color(100,100,100,0)), get_texture(vars, "player", 0));	
+					draw_square_texture_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist_players) * (vars->win_size.y / 2), gen_color(100,100,100,0)), get_texture(vars, "oui", 0), dist_players);	
 					// draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));	
 				}
 			}
@@ -645,7 +649,10 @@ void	render(t_vars *vars)
 	// 	vars->player.rot.y -= vars->win_size.y / 80;
 	// }
 	if (jump_time < 1000)
+	{
 		vars->jump_height = -(((-1.0 / 1000.0) * ((int)jump_time * (int)jump_time) + .0) + (int)jump_time) * 1.5;
+		printf("%.2f\n", vars->jump_height);
+	}
 	else
 		vars->jump_height = 0.0;
 	if (vars->mult_fd)
@@ -659,6 +666,7 @@ void	render(t_vars *vars)
 		draw_multi(vars, vars->min_map_mult);
 	draw_square_center(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, 4, gen_color(255, 255, 255, 0)));
 	draw_square_center(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, 2, gen_color(0, 0, 0, 0)));
+	img_text(vars, "OUI5456465", gen_coord(500, 500, 5, gen_color(100, 255, 255, 0)));
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	// vars->img = img;
 }

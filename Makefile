@@ -4,7 +4,7 @@ OBJDIR		= obj/
 INCDIR		= inc/
 VPATH		= src/
 INC			= $(addprefix ${INCDIR}, cub3D.h)
-SRC			= main.c utils.c parse.c button.c slider.c l_pts.c key_hooks.c texture_manage.c mouse_hooks.c plot.c render.c color_utils.c client.c
+SRC			= main.c utils.c parse.c button.c slider.c l_pts.c key_hooks.c texture_manage.c mouse_hooks.c plot.c render.c color_utils.c client.c font.c
 SERVER		= server
 OBJ			= $(addprefix ${OBJDIR}, $(SRC:.c=.o))
 LIBRARY		= -L libft -lft -L mlx_opengl -lmlx -lm
@@ -14,7 +14,7 @@ CC			= gcc
 FLAGS		= -Wall -Wextra -Werror
 FLAGS		+= -O2
 # FLAGS		+= -fsanitize=address -g
-#FLAGS		+= -Ofast
+# FLAGS		+= -Ofast
 
 #	RULES
 all: ${OBJDIR} ${NAME}
@@ -23,7 +23,6 @@ ${OBJDIR}:
 	@mkdir -p ${OBJDIR}
 
 ${NAME}: ${OBJ} ${LIB_FILE}
-#	${CC} ${FLAGS} ${LIBRARY} $^ -Lmlx_linux -lmlx -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -o ${NAME}
 	${CC} ${FLAGS} ${LIBRARY} $^ -framework OpenGL -framework AppKit -o ${NAME}
 
 ${OBJDIR}%.o: %.c ${INC} Makefile

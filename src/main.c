@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/10 17:30:25 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/11 11:53:17 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,15 @@ void	init_imgs(t_vars *vars)
 
 static void	fill_vars(t_vars *vars, int fd)
 {
+	vars->player.run = 0;
 	vars->jump_height = 0.0;
 	vars->jump = -2000;
 	vars->ao = 1.0;
 	vars->ao_scale = .22;
 	vars->settings.y_ratio_mouse_speed = 1.2;
+	vars->settings.x_ratio_mouse_speed = 1.2;
 	vars->mult_fd = 0;
+	affect_ascii(vars);
 	ft_bzero(vars->keyboard, sizeof(vars->keyboard));
 	vars->mult_n_players = 0;
 	vars->mlx = mlx_init();
@@ -75,6 +78,15 @@ static void	fill_vars(t_vars *vars, int fd)
 	vars->map = parse(fd, vars);
 	if (init_player(vars))
 		return ; //NO PLAYER IN MAP
+	vars->parse_seen = ft_calloc(vars->size.x * vars->size.y, 1);
+	if (!vars->parse_seen)
+		return ;
+	if (check_map(vars, (int)vars->player.pos.x, (int)vars->player.pos.y))
+	{
+		write(2, "Error while parsing map\n", 25);
+		exit(EXIT_FAILURE);
+	}
+	free(vars->parse_seen);
 	init_imgs(vars);
 	vars->img->img = mlx_new_image(vars->mlx, vars->win_size.x, vars->win_size.y);
 	vars->img->addr = mlx_get_data_addr(vars->img->img, &vars->img->bits_per_pixel,

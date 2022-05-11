@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_hooks.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/10 17:23:29 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/11 11:48:26 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,14 +83,14 @@ int	change_case(t_vars	*vars, double newposX, double newposY)
 		vars->map[pos - vars->size.x] = 'O';
 	else if (vars->map[pos] != 'O')
 	{
-	if (vars->map[posplayer - 1] == 'O')
-		vars->map[posplayer - 1] = 'C';
-	else if (vars->map[posplayer + 1] == 'O')
-		vars->map[posplayer + 1] = 'C';
-	else if (vars->map[posplayer + vars->size.x] == 'O')
-		vars->map[posplayer + vars->size.x] = 'C';
-	else if (vars->map[posplayer - vars->size.x] == 'O')
-		vars->map[posplayer - vars->size.x] = 'C';
+		if (vars->map[posplayer - 1] == 'O')
+			vars->map[posplayer - 1] = 'C';
+		else if (vars->map[posplayer + 1] == 'O')
+			vars->map[posplayer + 1] = 'C';
+		else if (vars->map[posplayer + vars->size.x] == 'O')
+			vars->map[posplayer + vars->size.x] = 'C';
+		else if (vars->map[posplayer - vars->size.x] == 'O')
+			vars->map[posplayer - vars->size.x] = 'C';
 	}
 	return (0);
 }
@@ -104,13 +104,13 @@ static void	move_player(t_vars *vars, int dir_x, int dir_y)
 	size = vars->min_map_mult;
 	if (dir_x)
 	{
-		newposX = vars->player.pos.x + dir_x * cos(vars->player.rot.x) * 0.1;
-		newposY = vars->player.pos.y + dir_x * sin(vars->player.rot.x) * 0.1;
+		newposX = vars->player.pos.x + dir_x * cos(vars->player.rot.x) * (.1 + .1 * vars->player.run);
+		newposY = vars->player.pos.y + dir_x * sin(vars->player.rot.x) * (.1 + .1 * vars->player.run);
 	}
 	else
 	{
-		newposX = vars->player.pos.x + dir_y * cos(vars->player.rot.x - M_PI_2) * 0.05;
-		newposY = vars->player.pos.y + dir_y * sin(vars->player.rot.x - M_PI_2) * 0.05;	
+		newposX = vars->player.pos.x + dir_y * cos(vars->player.rot.x - M_PI_2) * (.05 + .05 * vars->player.run);
+		newposY = vars->player.pos.y + dir_y * sin(vars->player.rot.x - M_PI_2) * (.05 + .05 * vars->player.run);	
 	}
 	// printf("%.2f	%.2f\n", newposX, newposY);
 	if (vars->map[(int)newposX + (int)newposY * vars->size.x] != '1')
@@ -174,7 +174,7 @@ void	rotate_player_x(t_vars *vars, int dir)
 
 int	key_hook_down(int keycode, t_vars *vars)
 {
-	// printf("%d\n", keycode);
+	printf("%d\n", keycode);
 	if (keycode < 300)
 		vars->keyboard[keycode] = 1;
 	return (0);
@@ -210,6 +210,11 @@ int	check_inputs(t_vars *vars)
 	}
 	if (vars->ui)
 		return (0);
+	if (vars->keyboard[257])
+	{
+		vars->keyboard[257] = 0;
+		vars->player.run = !vars->player.run;
+	}
 	if (vars->keyboard[49])
 		jump(vars);
 	if (vars->keyboard[45])
