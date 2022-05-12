@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 15:00:14 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 17:00:11 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 17:07:24 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,8 +158,6 @@ void	project_rays(t_vars *vars)
 			// vars->rays[i] = dist(vars->player.pos.x, vars->player.pos.y, disV.x, disV.y, ra2);
 			if (vars->rays[i].ra2 > M_PI)
 			{
-				// if (i == vars->win_size.x / 2)
-				// 	printf("hit %d %d %.2f %.2f %c\n", (int)rx, (int)ry, rx - (int)rx, ry - (int)ry, 'N');
 				if (vars->rays[i].rx - (int)vars->rays[i].rx < .5 && ((int)vars->rays[i].rx - 1) >= 0 && ((int)vars->rays[i].rx - 1) < vars->size.x
 					&& ((int)vars->rays[i].ry + 1) >= 0 && ((int)vars->rays[i].ry + 1) < vars->size.y
 					&& (vars->map[(int)vars->rays[i].rx - 1 + ((int)vars->rays[i].ry + 1) * vars->size.x] == '1'
@@ -170,14 +168,11 @@ void	project_rays(t_vars *vars)
 					&& (vars->map[(int)vars->rays[i].rx + 1 + ((int)vars->rays[i].ry + 1) * vars->size.x] == '1'
 					|| vars->map[(int)vars->rays[i].rx + 1 + ((int)vars->rays[i].ry + 1) * vars->size.x] == 'C'))
 					ao = (vars->rays[i].rx - (int)vars->rays[i].rx) * 2.0 - 1.0;
-				// line_texture(vars, i, (vars->rays[i].rx - (int)vars->rays[i].rx) * (get_texture(vars, "no", 0)->size.x + .0), get_texture(vars, "no", 0), min_dist, ao);
 				line_texture(vars, i, (vars->rays[i].rx - (int)vars->rays[i].rx) * (get_animtexture(vars, "no", 0.2)->size.x + .0), get_animtexture(vars, "no", 0.2), vars->rays[i].dist, ao);
 				//nord
 			}
 			else
 			{
-				// if (i == vars->win_size.x / 2)
-				// 	printf("hit %d %d %.2f %.2f %c\n", (int)vars->rays[i].rx, (int)vars->rays[i].ry, vars->rays[i].rx - (int)vars->rays[i].rx, vars->rays[i].ry - (int)vars->rays[i].ry, 'S');
 				if (vars->rays[i].rx - (int)vars->rays[i].rx < .5 && ((int)vars->rays[i].rx - 1) >= 0 && ((int)vars->rays[i].rx - 1) < vars->size.x
 					&& ((int)vars->rays[i].ry - 1) >= 0 && ((int)vars->rays[i].ry - 1) < vars->size.y
 					&& (vars->map[(int)vars->rays[i].rx - 1 + ((int)vars->rays[i].ry - 1) * vars->size.x] == '1'
@@ -198,8 +193,6 @@ void	project_rays(t_vars *vars)
 			//HIT HORIZONTAL
 			if (vars->rays[i].ra2 > M_PI_2 && vars->rays[i].ra2 < M_PI_2 + M_PI)
 			{
-				// if (i == vars->win_size.x / 2)
-				// 	printf("hit %d %d %.2f %.2f %c\n", (int)vars->rays[i].rx, (int)vars->rays[i].ry, vars->rays[i].rx - (int)vars->rays[i].rx, vars->rays[i].ry - (int)vars->rays[i].ry, 'W');
 				if (vars->rays[i].ry - (int)vars->rays[i].ry < .5 && ((int)vars->rays[i].rx + 1) >= 0 && ((int)vars->rays[i].rx + 1) < vars->size.x
 					&& ((int)vars->rays[i].ry - 1) >= 0 && ((int)vars->rays[i].ry - 1) < vars->size.y
 					&& (vars->map[(int)vars->rays[i].rx + 1 + ((int)vars->rays[i].ry - 1) * vars->size.x] == '1'
@@ -215,8 +208,6 @@ void	project_rays(t_vars *vars)
 			}
 			else
 			{
-				// if (i == vars->win_size.x / 2)
-				// 	printf("hit %d %d %.2f %.2f %c\n", (int)vars->rays[i].rx, (int)vars->rays[i].ry, vars->rays[i].rx - (int)vars->rays[i].rx, vars->rays[i].ry - (int)vars->rays[i].ry, 'E');
 				if (vars->rays[i].ry - (int)vars->rays[i].ry < .5 && ((int)vars->rays[i].rx - 1) >= 0 && ((int)vars->rays[i].rx - 1) < vars->size.x
 					&& ((int)vars->rays[i].ry - 1) >= 0 && ((int)vars->rays[i].ry - 1) < vars->size.y
 					&& (vars->map[(int)vars->rays[i].rx - 1 + ((int)vars->rays[i].ry - 1) * vars->size.x] == '1'

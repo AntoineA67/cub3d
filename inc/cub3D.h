@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 16:58:41 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 17:51:41 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,6 +207,8 @@ typedef struct s_slider {
 	double max;
 	void *setting;
 }	t_slider;
+
+void	pixel_put_add(t_data *data, int *x, int *y, unsigned int *color);
 
 //************************* Texture manage fonctions *************************//
 

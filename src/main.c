@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 16:57:54 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 17:22:38 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,7 @@ int	main(int argc, char **argv)
 	fill_vars(&vars, fd);
 	(void)extract_name;
 	vars.rays_number = 0;
-	vars.settings.fps_cap = 60;
+	vars.settings.fps_cap = 0;
 	vars.settings.map_type = 1;
 	vars.win = mlx_new_window(vars.mlx, vars.win_size.x,
 			vars.win_size.y, extract_name(argv[1]));

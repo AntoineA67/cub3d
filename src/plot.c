@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   plot.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:03:35 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/09 13:02:56 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 18:01:13 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ void	vert_line(t_vars *vars, int x, int size, int color)
 
 void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit_dist, double ao)
 {
+	long t;
 	int				i;
 	double			y;
 	double			step;
@@ -137,7 +138,7 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit
 	// 	printf("%.2f\n", ao);
 	// 	printf("%.2f %.2f\n", wall_height, hit_dist);
 	y = 0.0;
-	step = (img->size.y * 1.0) / ((vars->win_size.y / 2 + wall_height)
+	step = (img->size.y + .0) / ((vars->win_size.y / 2 + wall_height)
 			- (vars->win_size.y / 2 - wall_height));
 	i = vars->win_size.y / 2 - wall_height - vars->player.rot.y - (vars->jump_height / hit_dist);
 	if (i < 0)
@@ -152,14 +153,20 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit
 		img_x = 0;
 	if (y < 0.0)
 		y = 0.0;
-	while (++i < draw_end && (int)y < img->size.y && img_x < img->size.x)
+	if (img_x > img->size.x)
+		return ;
+	(void)screen_x;
+	t = img_x * 4;
+	ao = ao * vars->ao_scale;
+	int hit = (int)(hit_dist * 10.0);
+	double isize = 1.0 / (img->size.y + 1.0);
+	while (++i < draw_end)// && (int)y < img->size.y)
 	{
 		// if (y < 0.1)
 		// 	printf("%.2f %.2f	%.2f\n", y / img->size.y, sin((y / img->size.y) * M_PI), ((fabs(1.0 - ao) > .1) * (1.0 - ao) - 1.0));
-		pixel_put(vars->img, screen_x, i,
-			add_shade(vars, *(unsigned int *)(img->addr + (img_x
-			* (img->bits_per_pixel / 8) + (int)y * img->line_length)), (int)(hit_dist * 10.0),
-			vars->ao * (ao * vars->ao_scale + (1 - sin((((y + 1) / (img->size.y + 1))) * M_PI)) * vars->ao_scale)));
+		//pixel_put_add(vars->img, &screen_x, &i, (unsigned int *)(img->addr + t + (int)y * img->line_length));
+		*(unsigned int *)(vars->img->addr + (i * vars->img->line_length + screen_x * vars->img->bits_per_pixel)) = add_shade(vars, *(unsigned int *)(img->addr + (t + (int)y * img->line_length)), hit,
+			vars->ao * (ao + (1 - sin((((y + 1) * isize)) * M_PI)) * vars->ao_scale));
 		y += step;
 	}
 }
