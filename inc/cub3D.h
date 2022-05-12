@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 16:56:47 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 16:58:41 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # include "../mlx_opengl/mlx.h"
 
 # define MAX_CLIENT 10
-# define M_2PI 6.283185307179586;
+# define M_2PI 6.283185307179586
 # define PORT 5000
 # define SERVER_IP "127.0.0.1"
 
