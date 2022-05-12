@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 14:46:43 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 16:40:05 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,20 @@ typedef struct s_bullets {
 	t_vector2	delta;
 }		t_bullets;
 
+typedef struct s_ray {
+	double	dist;
+	double	rx;
+	double	ry;
+	double	ra2;
+	int		side;
+}		t_ray;
+
+// size.z => size.x * size.y
 typedef struct s_vars {
+	t_ray			*rays;
+	int				max_size;
+	double			tx;
+	double			rotmpi;
 	double			delta_time;
 	double			delta_time_render;
 	t_bullets		bullets[MAX_CLIENT];
@@ -160,7 +173,6 @@ typedef struct s_vars {
 	void			*mlx;
 	void			*win;
 	char			*map;
-	double 			*rays;
 	int				start_rot;
 	int				ui;
 	int				clicked;
@@ -175,26 +187,6 @@ typedef struct s_vars {
 	t_vector2		camera;
 }			t_vars;
 
-typedef struct s_ray {
-	double			camera_x;
-	t_vector2			ray_dir;
-	t_coord			map_pos;
-	t_vector2			side_dist;
-	t_vector2			delta_dist;
-	double			perp_wall_dist;
-	t_coord			step;
-	double			tex_pos;
-	int				hit;
-	int				side;
-	int				line_height;
-	int				draw_start;
-	int				draw_end;
-	double			h;
-	int				pitch;
-	t_vector2			wall;
-	t_coord			tex;
-	unsigned int	color;
-}		t_ray;
 
 typedef struct s_line {
 	int		dx;
@@ -235,6 +227,8 @@ void		slider(t_vars *vars, t_coords p, t_slider slider, double pas);
 
 //****************************************************************************//
 
+double	dist(double ax, double ay, double bx, double by, double angle);
+void	project_rays(t_vars *vars);
 void	process_bullets(t_vars *vars);
 void	gen_bullet(t_vars *vars);
 int	check_map(t_vars *vars, int x, int y);

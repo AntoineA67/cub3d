@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 14:47:38 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 16:34:03 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	init_enemies(t_vars *vars)
 
 	i = -1;
 	n = -1;
-	while (++i < vars->size.x * vars->size.y && vars->n_enemies < vars->usable_cells / 20 + 1)
+	while (++i < vars->size.z && vars->n_enemies < vars->usable_cells / 20 + 1)
 	{
 		if (vars->parse_seen[i] == 1 && ++n % (int)(vars->usable_cells / 10) == 0)
 		{
@@ -109,11 +109,15 @@ static void	fill_vars(t_vars *vars, int fd)
 	vars->mlx = mlx_init();
 	vars->win_size.x = 1920;// * 0.75;
 	vars->win_size.y = 1080;// * 0.75;
+	vars->rays = ft_calloc(vars->win_size.x + 1, sizeof(t_ray));
 	vars->map = parse(fd, vars);
+	vars->tx = (2.0 / vars->win_size.x);
+	vars->size.z = vars->size.x * vars->size.y;
+	vars->max_size = ft_max(vars->size.x, vars->size.y);
 	vars->rays = ft_calloc(vars->win_size.x + 1, sizeof(double));
 	if (init_player(vars))
 		return ; //NO PLAYER IN MAP
-	vars->parse_seen = ft_calloc(vars->size.x * vars->size.y, 1);
+	vars->parse_seen = ft_calloc(vars->size.z, 1);
 	if (!vars->parse_seen)
 		return ;
 	if (check_map(vars, (int)vars->player.pos.x, (int)vars->player.pos.y))

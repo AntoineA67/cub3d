@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 14:59:34 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 16:33:39 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,229 +213,12 @@ void	draw_square_texture_center(t_vars *vars, t_coord p, t_data *img, double dis
 	}
 }
 
-void	project_rays(t_vars *vars, double render_ratio)
-{
-	int			i;
-	int			dof;
-	int			mx;
-	int			my;
-	int			mp;
-	int			size;
-	double		ra2;
-	double		ca; 
-	double		aTan;
-	double		nTan;
-	double		ry;
-	double		rx;
-	double		yo;
-	double		xo;
-	double		min_dist;
-	double		tx;
-	double		rotmpi;
-	int			mapsizei;
-	t_vector2	disV;
-	t_vector2	disH;
 
-	(void)render_ratio;
-	size = ft_max(vars->size.x, vars->size.y);
-	i = -1;
-	vars->start = fmod(vars->player.rot.x - M_PI_4 + (M_PI * 2) , M_PI * 2);
-	vars->end = fmod(vars->player.rot.x + M_PI_4 + (M_PI * 2) , M_PI * 2);
-	if (vars->start > vars->end)
-		vars->end += (M_PI * 2);
-	tx = (2.0 / vars->win_size.x);
-	rotmpi = vars->player.rot.x + (M_PI * 2.0);
-	mapsizei = vars->size.x * vars->size.y;
-	while (++i < vars->win_size.x)
-	{
-		dof = 0;
-		if (i == vars->win_size.x / 2)
-			ra2 = vars->player.rot.x;
-		else
-			ra2 = fmod(rotmpi - atan(1.0 - (tx * i)), M_PI * 2.0);
-		aTan = -1.0/tan(ra2);
-		if (ra2 > M_PI) //looking down
-		{
-			ry = (int)vars->player.pos.y - .00001;
-			rx = (vars->player.pos.y - ry) * aTan + vars->player.pos.x;
-			yo = -1.0;
-			xo = 1.0 * aTan;
-		}
-		if (ra2 < M_PI && ra2 != 0) //looking up
-		{
-			ry = (int)vars->player.pos.y + 1.0;
-			rx = (vars->player.pos.y - ry) * aTan + vars->player.pos.x;
-			yo = 1.0;
-			xo = -1.0 * aTan;
-		}
-		if (ra2 == 0.0 || ra2 == M_PI)//looking straight left or right
-		{
-			rx = vars->player.pos.x;
-			ry = vars->player.pos.y;
-			dof = size;
-		}
-		while (dof < size)
-		{
-			mx = (int)rx;
-			my = (int)ry;
-			mp = my * vars->size.x + mx;
-			if (mp < mapsizei && mp >= 0 && (vars->map[mp] == '1' || vars->map[mp] == 'C'))
-				dof = size;
-			else
-			{
-				rx += xo;
-				ry += yo;
-				dof += 1;
-			}
-		}
-		disV.x = rx;
-		disV.y = ry;
-		//Horizontal rays
-		dof = 0;
-		nTan = -tan(ra2);
-		if (ra2 > M_PI_2 && ra2 < M_PI_2 * 3.0) //looking left
-		{
-			rx = (int)vars->player.pos.x - .00001;
-			ry = (vars->player.pos.x - rx) * nTan + vars->player.pos.y;
-			xo = -1.0;
-			yo = 1.0 * nTan;
-		}
-		if (ra2 > M_PI_2 * 3.0 || ra2 < M_PI_2) //looking right
-		{
-			rx = (int)vars->player.pos.x + 1.0;
-			ry = (vars->player.pos.x - rx) * nTan + vars->player.pos.y;
-			xo = 1.0;
-			yo = -1.0 * nTan;
-		}
-		if (ra2 == M_PI_2 || ra2 == M_PI_2 * 3.0)//looking stra2ight left or right
-		{
-			rx = vars->player.pos.x;
-			ry = vars->player.pos.y;
-			dof = size;
-		}
-		while (dof < size)
-		{
-			mx = (int)rx;
-			my = (int)ry;
-			mp = my * vars->size.x + mx;
-			if (mp < mapsizei && mp >= 0 && (vars->map[mp] == '1' || vars->map[mp] == 'C'))
-				dof = size;
-			else
-			{
-				rx += xo;
-				ry += yo;
-				dof += 1;
-			}
-		}
-		disH.x = rx;
-		disH.y = ry;
-		t_rgb	color;
-		if (dist(vars->player.pos.x, vars->player.pos.y, disV.x, disV.y, ra2) <
-			dist(vars->player.pos.x, vars->player.pos.y, disH.x, disH.y, ra2))
-		{
-			//HIT VERTICAL
-			rx = disV.x;
-			ry = disV.y;
-		}
-		min_dist = dist(vars->player.pos.x, vars->player.pos.y, rx, ry, ra2);
-		ca = vars->player.rot.x - ra2;
-		if (ca < 0)
-			ca += M_PI * 2;
-		if (ca > M_PI * 2)
-			ca -= M_PI * 2;
-		min_dist *= cos(ca);
-		//int	wall_height = 1000 / min_dist;
-		// printf("MIN DIST %.2f %.2f\n", min_dist, min_dist * cos(ca));
-		// printf("OUI %d	%.3f	%d\n", vars->textures.img_no.size.x, (rx - (int)rx), vars->textures.img_no.size.x);
-		(void)color;
-		double	ao;
-		ao = 0.0;
-		if (dist(vars->player.pos.x, vars->player.pos.y, disV.x, disV.y, ra2) <
-			dist(vars->player.pos.x, vars->player.pos.y, disH.x, disH.y, ra2))
-		{
-			vars->rays[i] = dist(vars->player.pos.x, vars->player.pos.y, disV.x, disV.y, ra2);
-			if (ra2 > M_PI)
-			{
-				// if (i == vars->win_size.x / 2)
-				// 	printf("hit %d %d %.2f %.2f %c\n", (int)rx, (int)ry, rx - (int)rx, ry - (int)ry, 'N');
-				if (rx - (int)rx < .5 && ((int)rx - 1) >= 0 && ((int)rx - 1) < vars->size.x
-					&& ((int)ry + 1) >= 0 && ((int)ry + 1) < vars->size.y
-					&& (vars->map[(int)rx - 1 + ((int)ry + 1) * vars->size.x] == '1'
-					|| vars->map[(int)rx - 1 + ((int)ry + 1) * vars->size.x] == 'C'))
-					ao = 1.0 - (rx - (int)rx) * 2.0;
-				else if (rx - (int)rx > .5 && ((int)rx + 1) >= 0 && ((int)rx + 1) < vars->size.x
-					&& ((int)ry + 1) >= 0 && ((int)ry + 1) < vars->size.y
-					&& (vars->map[(int)rx + 1 + ((int)ry + 1) * vars->size.x] == '1'
-					|| vars->map[(int)rx + 1 + ((int)ry + 1) * vars->size.x] == 'C'))
-					ao = (rx - (int)rx) * 2.0 - 1.0;
-				// line_texture(vars, i, (rx - (int)rx) * (get_texture(vars, "no", 0)->size.x + .0), get_texture(vars, "no", 0), min_dist, ao);
-				line_texture(vars, i, (rx - (int)rx) * (get_animtexture(vars, "player", 0.2)->size.x + .0), get_animtexture(vars, "player", 0.2), min_dist, ao);
-				//nord
-			}
-			else
-			{
-				// if (i == vars->win_size.x / 2)
-				// 	printf("hit %d %d %.2f %.2f %c\n", (int)rx, (int)ry, rx - (int)rx, ry - (int)ry, 'S');
-				if (rx - (int)rx < .5 && ((int)rx - 1) >= 0 && ((int)rx - 1) < vars->size.x
-					&& ((int)ry - 1) >= 0 && ((int)ry - 1) < vars->size.y
-					&& (vars->map[(int)rx - 1 + ((int)ry - 1) * vars->size.x] == '1'
-					|| vars->map[(int)rx - 1 + ((int)ry - 1) * vars->size.x] == 'C'))
-					ao = 1.0 - (rx - (int)rx) * 2.0;
-				else if (rx - (int)rx > .5 && ((int)rx + 1) >= 0 && ((int)rx + 1) < vars->size.x
-					&& ((int)ry - 1) >= 0 && ((int)ry - 1) < vars->size.y
-					&& (vars->map[(int)rx + 1 + ((int)ry - 1) * vars->size.x] == '1'
-					|| vars->map[(int)rx + 1 + ((int)ry - 1) * vars->size.x] == 'C'))
-					ao = (rx - (int)rx) * 2.0 - 1.0;
-				line_texture(vars, i, (1.0 - (rx - (int)rx)) * (get_texture(vars, "so", 0)->size.x + .0), get_texture(vars, "so", 0), min_dist, ao);
-				//sud
-			}
-		}
-		else
-		{
-			vars->rays[i] = dist(vars->player.pos.x, vars->player.pos.y, disH.x, disH.y, ra2);
-			//HIT HORIZONTAL
-			if (ra2 > M_PI_2 && ra2 < M_PI_2 + M_PI)
-			{
-				// if (i == vars->win_size.x / 2)
-				// 	printf("hit %d %d %.2f %.2f %c\n", (int)rx, (int)ry, rx - (int)rx, ry - (int)ry, 'W');
-				if (ry - (int)ry < .5 && ((int)rx + 1) >= 0 && ((int)rx + 1) < vars->size.x
-					&& ((int)ry - 1) >= 0 && ((int)ry - 1) < vars->size.y
-					&& (vars->map[(int)rx + 1 + ((int)ry - 1) * vars->size.x] == '1'
-					|| vars->map[(int)rx + 1 + ((int)ry - 1) * vars->size.x] == 'C'))
-					ao = 1.0 - (ry - (int)ry) * 2.0;
-				else if (ry - (int)ry > .5 && ((int)rx + 1) >= 0 && ((int)rx + 1) < vars->size.x
-					&& ((int)ry + 1) >= 0 && ((int)ry + 1) < vars->size.y
-					&& (vars->map[(int)rx + 1 + ((int)ry + 1) * vars->size.x] == '1'
-					|| vars->map[(int)rx + 1 + ((int)ry + 1) * vars->size.x] == 'C'))
-					ao = (ry - (int)ry) * 2.0 - 1.0;
-				line_texture(vars, i, (1.0 - (ry - (int)ry)) * (get_texture(vars, "we", 0)->size.x + .0), get_texture(vars, "we", 0), min_dist, ao);
-				//ouest
-			}
-			else
-			{
-				// if (i == vars->win_size.x / 2)
-				// 	printf("hit %d %d %.2f %.2f %c\n", (int)rx, (int)ry, rx - (int)rx, ry - (int)ry, 'E');
-				if (ry - (int)ry < .5 && ((int)rx - 1) >= 0 && ((int)rx - 1) < vars->size.x
-					&& ((int)ry - 1) >= 0 && ((int)ry - 1) < vars->size.y
-					&& (vars->map[(int)rx - 1 + ((int)ry - 1) * vars->size.x] == '1'
-					|| vars->map[(int)rx - 1 + ((int)ry - 1) * vars->size.x] == 'C'))
-					ao = 1.0 - (ry - (int)ry) * 2.0;
-				else if (ry - (int)ry > .5 && ((int)rx - 1) >= 0 && ((int)rx - 1) < vars->size.x
-					&& ((int)ry + 1) >= 0 && ((int)ry + 1) < vars->size.y
-					&& (vars->map[(int)rx - 1 + ((int)ry + 1) * vars->size.x] == '1'
-					|| vars->map[(int)rx - 1 + ((int)ry + 1) * vars->size.x] == 'C'))
-					ao = (ry - (int)ry) * 2.0 - 1.0;
-				line_texture(vars, i, (ry - (int)ry) * (get_texture(vars, "ea", 0)->size.x + .0), get_texture(vars, "ea", 0), min_dist, ao);
-				//est
-			}
-		}
-	}
-}
 
-void	process_enemies(t_vars *vars)
-{
+// void	process_enemies(t_vars *vars)
+// {
 	
-}
+// }
 
 void	draw_enemies(t_vars *vars)
 {
@@ -461,7 +244,7 @@ void	draw_enemies(t_vars *vars)
 			{
 				dangle = vars->end - angle;
 				screen_x = vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2);
-				if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x] > dist_enemy)
+				if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x].dist > dist_enemy)
 				{
 					vars->enemies[i].pos.x += .08 - .16 * (vars->player.pos.x < vars->enemies[i].pos.x);
 					vars->enemies[i].pos.y += .08 - .16 * (vars->player.pos.y < vars->enemies[i].pos.y);
@@ -474,7 +257,7 @@ void	draw_enemies(t_vars *vars)
 			{
 				dangle = vars->end - (angle + (M_PI * 2.0));
 				screen_x = vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2);
-				if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x] > dist_enemy)
+				if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x].dist > dist_enemy)
 				{
 					vars->enemies[i].pos.x += .08 - .16 * (vars->player.pos.x < vars->enemies[i].pos.x);
 					vars->enemies[i].pos.y += .08 - .16 * (vars->player.pos.y < vars->enemies[i].pos.y);
@@ -512,7 +295,7 @@ void	draw_other_players(t_vars *vars)
 				{
 					dangle = vars->end - angle;
 					screen_x = vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2);
-					if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x] > dist_players)
+					if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x].dist > dist_players)
 						draw_square_texture_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_players) * (vars->win_size.y / 2), gen_color(100,100,100,0)), get_texture(vars, "oui", 0), dist_players);
 					// draw_square_texture_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) * 200, gen_color(100,100,100,0)), get_animtexture(vars, "player", 0.2));
 					// draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));
@@ -521,7 +304,7 @@ void	draw_other_players(t_vars *vars)
 				{
 					dangle = vars->end - (angle + (M_PI * 2.0));
 					screen_x = vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2);
-					if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x] > dist_players)
+					if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x].dist > dist_players)
 						draw_square_texture_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_players) * (vars->win_size.y / 2), gen_color(100,100,100,0)), get_texture(vars, "oui", 0), dist_players);	
 					// draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));	
 				}
@@ -625,7 +408,7 @@ void	draw_bullets(t_vars *vars, int size)
 			{
 				dangle = vars->end - angle;
 				screen_x = vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2);
-				if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x] > dist_bullet)
+				if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x].dist > dist_bullet)
 					// draw_square_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_bullet) * (vars->win_size.y / 2) * .2, gen_color(100,100,100,0)));
 					draw_square_texture_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_bullet) * (vars->win_size.y / 2) * .2, gen_color(100,100,100,0)), get_texture(vars, "bullet", 0), dist_bullet);
 			}
@@ -633,7 +416,7 @@ void	draw_bullets(t_vars *vars, int size)
 			{
 				dangle = vars->end - (angle + (M_PI * 2.0));
 				screen_x = vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2);
-				if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x] > dist_bullet)
+				if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x].dist > dist_bullet)
 					// draw_square_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_bullet) * (vars->win_size.y / 2) * .2, gen_color(100,100,100,0)));	
 					draw_square_texture_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_bullet) * (vars->win_size.y / 2) * .2, gen_color(100,100,100,0)), get_texture(vars, "bullet", 0), dist_bullet);
 			}
@@ -857,7 +640,7 @@ void	render(t_vars *vars)
 	else
 		vars->jump_height = 0.0;
 	shade_floor_ceil(vars);
-	project_rays(vars, 64.0);
+	project_rays(vars);
 	draw_other_players(vars);
 	draw_enemies(vars);
 	//test_rays(vars);
