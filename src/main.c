@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 13:52:37 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 14:20:25 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,13 +206,15 @@ int	frame(void *data)
 		serv_process(vars);
 	if (!vars->ui)
 	{
-		
+		temp = gettime(vars->n1);
+		vars->delta_time = (temp - vars->n3) / 100.0;
+		check_inputs(vars);
+		vars->n3 = temp;
 		if (!vars->settings.fps_cap || !fmod(gettime(vars->n1), (1000 / (int)vars->settings.fps_cap)))
 		{
-			temp = gettime(vars->n1);
 			itoa = ft_itoa(1000 / (temp - vars->n2));
 			fps = ft_strjoin("FPS: ", itoa);
-			vars->delta_time = temp - vars->n2;
+			printf("%.10f|%s\n", vars->delta_time, itoa);
 			render(vars);
 			mlx_string_put(vars->mlx, vars->win, 100, 100, 0xff00ff, fps);
 			free(itoa);

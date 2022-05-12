@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 13:52:39 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 13:55:24 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -747,7 +747,7 @@ int	check_enemy_nearby(t_vars *vars, t_vector2 *bullet_pos)
 	{
 		if (vars->enemies[i].lives > 0)
 		{
-			printf("%.2f %.2f	%.2f %.2f\n", bullet_pos->x, bullet_pos->y, vars->enemies[i].pos.x, vars->enemies[i].pos.y);
+			// printf("%.2f %.2f	%.2f %.2f\n", bullet_pos->x, bullet_pos->y, vars->enemies[i].pos.x, vars->enemies[i].pos.y);
 			if (bullet_pos->x > vars->enemies[i].pos.x - hitbox
 				&& bullet_pos->x < vars->enemies[i].pos.x + hitbox
 				&& bullet_pos->y > vars->enemies[i].pos.y - hitbox
@@ -846,7 +846,6 @@ void	render(t_vars *vars)
 		// if (vars->player.rot.y + jump_height < vars->win_size.y && vars->player.rot.y + jump_height > 0)
 		// 	vars->player.rot.y += 
 	}
-	check_inputs(vars);
 	jump_time = gettime(vars->n1) - vars->jump;
 	if (jump_time < 1000)
 		vars->jump_height = -(((-1.0 / 1000.0) * ((int)jump_time * (int)jump_time) + .0) + (int)jump_time) * 1.5;

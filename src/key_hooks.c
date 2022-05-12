@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/11 17:17:31 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 14:13:53 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,13 @@ static void	move_player(t_vars *vars, int dir_x, int dir_y)
 	size = vars->min_map_mult;
 	if (dir_x)
 	{
-		newposX = vars->player.pos.x + dir_x * cos(vars->player.rot.x) * (.1 + .1 * vars->player.run);
-		newposY = vars->player.pos.y + dir_x * sin(vars->player.rot.x) * (.1 + .1 * vars->player.run);
+		newposX = vars->player.pos.x + dir_x * cos(vars->player.rot.x) * (.1 + .1 * vars->player.run) * vars->delta_time;
+		newposY = vars->player.pos.y + dir_x * sin(vars->player.rot.x) * (.1 + .1 * vars->player.run) * vars->delta_time;
 	}
 	else
 	{
-		newposX = vars->player.pos.x + dir_y * cos(vars->player.rot.x - M_PI_2) * (.05 + .05 * vars->player.run);
-		newposY = vars->player.pos.y + dir_y * sin(vars->player.rot.x - M_PI_2) * (.05 + .05 * vars->player.run);	
+		newposX = vars->player.pos.x + dir_y * cos(vars->player.rot.x - M_PI_2) * (.05 + .05 * vars->player.run) * vars->delta_time;
+		newposY = vars->player.pos.y + dir_y * sin(vars->player.rot.x - M_PI_2) * (.05 + .05 * vars->player.run) * vars->delta_time;	
 	}
 	// printf("%.2f	%.2f\n", newposX, newposY);
 	if (vars->map[(int)newposX + (int)newposY * vars->size.x] != '1')
