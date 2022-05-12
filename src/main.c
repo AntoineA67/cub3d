@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 16:34:03 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 16:45:11 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ int	init_player(t_vars *vars)
 	vars->player.delta.x = 0;
 	vars->player.delta.y = 0;
 	player_in_map = ft_strchr(vars->map, 'P');
+	printf("test%p|%p\n", vars->map, player_in_map);
 	vars->map[player_in_map - vars->map] = '0';
+	printf("test\n");
 	vars->player.pos.x = (player_in_map - vars->map) % vars->size.x + .5;
 	vars->player.pos.y = (player_in_map - vars->map) / vars->size.x + .5;
 	return (0);
@@ -160,41 +162,6 @@ static int	test_hook(t_vars *vars)
 	(void)vars;
 	exit(EXIT_SUCCESS);
 	// esc(vars, 0);
-	return (0);
-}
-
-int	ui_frame1(t_vars	*vars)
-{ 
-	button(vars, screen_pc(25.15,50.05, gen_color(255,0,100, 100), vars), "0start", &change_ui);
-	button(vars, screen_pc(25.30,25.025, gen_color(255,255,100, 0), vars), "2maps", &change_ui);
-	button(vars, screen_pc(25.40,25.025, gen_color(25,60,100, 0), vars), "3textures", &change_ui);
-	button(vars, screen_pc(25.50,25.025, gen_color(56,69,10, 0), vars), "4settings", &change_ui);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
-	return (0);
-}
-
-int	ui_frame2(t_vars	*vars)
-{ 
-	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "1start", &change_ui);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
-	return (0);
-}
-int	ui_frame3(t_vars	*vars)
-{ 
-	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "1start", &change_ui);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
-	return (0);
-}
-
-int	ui_setting(t_vars	*vars)
-{
-	button(vars, screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "1start", &change_ui);
-	button(vars, screen_pc(25.30,25.025, gen_color(255,0,100, 0), vars), "1start", &change_setting);
-	slider(vars, screen_pc(25.40,25.025, gen_color(255,0,100, 0), vars), slider_param(120.0, 1.0, &vars->settings.fps_cap), 1.0);
-	slider(vars, screen_pc(25.50,25.025, gen_color(255,0,100, 0), vars), slider_param(1.6, 0.2, &vars->settings.y_ratio_mouse_speed), 0.1);
-	slider(vars, screen_pc(25.60,25.025, gen_color(255,0,100, 0), vars), slider_param(2.0, 0.1, &vars->settings.x_ratio_mouse_speed), 0.1);
-	//slider(vars, screen_pc(25.50,25.025, gen_color(255,0,100, 0), vars), slider_param(0.2, 1.6, &vars->settings.y_ratio_mouse_speed), 0.1);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	return (0);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mouse_hooks.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 19:50:25 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 12:52:06 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 14:22:32 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ int	mouse_hook_up(int keycode, int x, int y, t_vars *vars)
 	}
 	 (void)x;
 	 (void)y;
-	// if (keycode < 300)
-	// 	vars->keyboard[keycode] = 0;
 	return (0);
 }
 

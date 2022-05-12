@@ -1,11 +1,49 @@
 #include "../inc/cub3D.h"
 
-void	change_ui(void		*v, void	*data)
+void	change_map(void		*v, int data)
 {
 	t_vars	*vars;
 
 	vars = (t_vars *)v;
-	vars->ui = *((int*)data);
+	int fd;
+	char	*str;
+	int i;
+
+	fd = open("maps.txt", O_RDONLY);
+	str = get_next_line(fd);
+	i = 0;
+	while (str)
+	{
+		if (i == data)
+		{
+			str = ft_strjoin("maps/", str);
+			printf("{%s}\n", vars->map);
+			free(vars->map);
+			vars->map = NULL;
+			if (str[ft_strlen(str) - 1] == '\n')
+				str[ft_strlen(str) - 1] = 0;
+			i = open(str, O_RDONLY);
+			printf("MAP:%d|%s|\n", i, str);
+			vars->map = parse(i, vars);
+			printf("{%s}\n", vars->map);
+			if (init_player(vars))
+				return ; //NO PLAYER IN MAP
+			//free(str);
+		}
+		i++;
+		free(str);
+		str = get_next_line(fd);
+	}
+	close(fd);
+	change_ui(vars, 1);
+}
+
+void	change_ui(void		*v, int data)
+{
+	t_vars	*vars;
+
+	vars = (t_vars *)v;
+	vars->ui = data;
 	if (vars->ui)
 		mlx_mouse_show();
 	else
@@ -15,12 +53,10 @@ void	change_ui(void		*v, void	*data)
 	}
 }
 
-void	change_setting(void		*v, void	*dat)
+void	change_setting(void		*v, int	data)
 {
 	t_vars	*vars;
-	int	data;
 
-	data = *((int*)dat);
 	vars = (t_vars *)v;
 	if (data == 1)
 	{
@@ -47,41 +83,42 @@ t_coords screen_pc(double off, double wh, t_rgb colore, t_vars *vars)
 	res.b.x = res.a.x + (vars->win_size.x * width / 100);
 	res.b.y = res.a.y + (vars->win_size.x * height / 100);
 	res.a.c = colore;
+	res.vars = vars;
 	//printf("%d|%d|%d\n", res.x, res.y, res.z);
 	return (res);
 }
 
-void	button(t_vars *vars, t_coords p, char *txt,void (*f)(void*, void*))
+void	button(t_coords p, char *txt,void (*f)(void*, int), int data)
 {
 	int	dy;
 	int	dx;
-	int	data;
 	unsigned int	add;
 	t_data	*text;
 
-	text = get_texture(vars, txt + 1, 0);
+	if (txt)
+		text = get_texture(p.vars, txt, 0);
 	dy = p.a.y;
-	data = (int)(*txt - '0');
 	while (++dy < p.b.y)
 	{
 		dx = p.a.x;
 		while (++dx < p.b.x && dy - p.a.y < 95)
 		{
-			add =  *(unsigned int *)(text->addr + ((int)(((dx - p.a.x) * text->size.x) / (p.b.x - p.a.x))
-						* (text->bits_per_pixel / 8) + ((int)(((dy - p.a.y) * text->size.y) / (p.b.y - p.a.y)) * text->line_length)));
-			//printf("%d\\%d|%d\\%d\n", (((dx - p.a.x) * text->size.x) / (p.b.x - p.a.x)), text->size.x, dy - p.a.y, vars->settings.bttext[(int)txt[1]].size.y);
-			if (vars->clicked && vars->clicked_co.x >= p.a.x && vars->clicked_co.x <= p.b.x && vars->clicked_co.y >= p.a.y && vars->clicked_co.y <= p.b.y)
-				pixel_put(vars->img, dx, dy, add + (10<<8) + (10<<4) + 10);
+			if (txt)
+				add =  *(unsigned int *)(text->addr + ((int)(((dx - p.a.x) * text->size.x) / (p.b.x - p.a.x))
+							* (text->bits_per_pixel / 8) + ((int)(((dy - p.a.y) * text->size.y) / (p.b.y - p.a.y)) * text->line_length)));
 			else
-				pixel_put(vars->img, dx, dy, add);
+				add = to_rgb(p.a.c, 0);
+			if (p.vars->clicked && p.vars->clicked_co.x >= p.a.x && p.vars->clicked_co.x <= p.b.x && p.vars->clicked_co.y >= p.a.y && p.vars->clicked_co.y <= p.b.y)
+				pixel_put(p.vars->img, dx, dy, add + (10<<8) + (10<<4) + 10);
+			else
+				pixel_put(p.vars->img, dx, dy, add);
 		}
 	}
-	(void)txt;
-	//printf("%d\n", mlx_string_put(vars->mlx, vars->win,100,100,0xff00ff, "PLAY"));
-	if (vars->clicked)
+	//printf("%d\n", mlx_string_put(p.vars->mlx, p.vars->win,100,100,0xff00ff, "PLAY"));
+	if (p.vars->clicked)
 	{
-		if (vars->clicked_co.x >= p.a.x && vars->clicked_co.x <= p.b.x)
-			if (vars->clicked_co.y >= p.a.y && vars->clicked_co.y <= p.b.y)
-				f(vars, &data);
+		if (p.vars->clicked_co.x >= p.a.x && p.vars->clicked_co.x <= p.b.x)
+			if (p.vars->clicked_co.y >= p.a.y && p.vars->clicked_co.y <= p.b.y)
+				f(p.vars, data);
 	}
 }

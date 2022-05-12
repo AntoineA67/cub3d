@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 12:05:23 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/10 16:21:48 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/11 12:26:51 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int			ft_atoi_base(char *str, char *base);
 int			ft_memcmp(const void *s1, const void *s2, size_t n);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 float		ft_deg_to_rad(int d);
+char		*ft_dtoa(double n);
 char		*ft_itoa(int n);
 char		*ft_strdup(const char *src);
 char		*get_next_line(int fd);
