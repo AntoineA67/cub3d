@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 14:22:14 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 14:23:37 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -554,8 +554,6 @@ void	draw_multi(t_vars *vars, int size)
 	}
 }
 
-<<<<<<< HEAD
-=======
 void	draw_bullets(t_vars *vars, int size)
 {
 	int		i;
@@ -677,7 +675,6 @@ void	draw_2d_map(t_vars *vars, int size)
 		//printf("\n");
 }
 
->>>>>>> cda0845c86fb6bf2945e8765218433a73634363b
 void	shade_floor_ceil(t_vars *vars)
 {
 	// int	i;
