@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/11 11:47:59 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 13:51:07 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,6 @@ typedef struct s_coord
 	int		z;
 	t_rgb	c;
 }		t_coord;
-
-typedef struct s_coords
-{
-	t_coord	a;
-	t_coord	b;
-}		t_coords;
 
 typedef struct s_data {
 	void	*img;
@@ -155,6 +149,13 @@ typedef struct s_vars {
 	t_vector2		camera;
 }			t_vars;
 
+typedef struct s_coords
+{
+	t_vars	*vars;
+	t_coord	a;
+	t_coord	b;
+}		t_coords;
+
 typedef struct s_ray {
 	double			camera_x;
 	t_vector2			ray_dir;
@@ -203,23 +204,37 @@ t_data		*get_animtexture(t_vars	*vars, char	*name, double speed);
 
 //***************************** Button fonctions *****************************//
 
-void		change_ui(void		*v, void	*data);
-void		change_setting(void		*v, void	*dat);
+void		change_ui(void		*v, int data);
+void		change_map(void		*v, int data);
+void		change_setting(void		*v,  int data);
 t_coords	screen_pc(double off, double wh, t_rgb colore, t_vars *vars);
-void		button(t_vars *vars, t_coords p, char *txt,void (*f)(void*, void*));
+void		button(t_coords p, char *txt,void (*f)(void*, int), int data);
 
 //***************************** Slider fonctions *****************************//
 
 t_slider	slider_param(double	max, double min, void *setting);
 void		slider(t_vars *vars, t_coords p, t_slider slider, double pas);
 
+//******************************* UI fonctions *******************************//
+
+int			ui_frame1(t_vars	*vars);
+int			ui_frame2(t_vars	*vars);
+int			ui_frame3(t_vars	*vars);
+int			ui_setting(t_vars	*vars);
+
+//**************************** Minimap fonctions *****************************//
+
+void	show_player(t_vars *vars, double size);
+void	draw_2d_map(t_vars *vars, int size);
+
 //****************************************************************************//
 
-
+int		init_player(t_vars *vars);
+double	dist(double ax, double ay, double bx, double by, double angle);
 int	check_map(t_vars *vars, int x, int y);
 int	mouse_hook_up(int keycode, int x, int y, t_vars *vars);
 long	gettime(long initime);
-void	img_text(t_vars *vars, char *str, t_coord p);
+void	img_text(t_vars *vars, char *str, t_coords p);
 void	affect_ascii(t_vars *vars);
 void	vert_line(t_vars *vars, int x, int size, int color);
 void	rotate_player_x(t_vars *vars, int dir);

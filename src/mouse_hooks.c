@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 19:50:25 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/10 15:29:57 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 12:32:41 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ int	mouse_hook_up(int keycode, int x, int y, t_vars *vars)
 	 vars->slider = 0;
 	 (void)x;
 	 (void)y;
-	if (keycode < 300)
-		vars->keyboard[keycode] = 0;
 	return (0);
 }
 

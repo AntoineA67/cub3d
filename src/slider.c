@@ -40,6 +40,7 @@ void	slider(t_vars *vars, t_coords p, t_slider slider, double pas)
 	//printf("%d\n", mlx_string_put(vars->mlx, vars->win,100,100,0xff00ff, "PLAY"));
 	if (vars->slider == (int)slider.setting)
 	{
+		p.a.x += (diffx / 10.0) / 2.0;
 		mlx_mouse_get_pos(vars->win, &vars->clicked_co.x, &vars->clicked_co.y);
 		new = ((((vars->clicked_co.x) - p.a.x) * slider.max) / diffx) - remainder(((((vars->clicked_co.x) - p.a.x) * slider.max) / diffx), pas);
 		if ((vars->clicked_co.x > p.a.x + 5 || vars->clicked_co.x < p.a.x - 5 ))

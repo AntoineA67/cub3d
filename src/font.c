@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   font.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:07:51 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/11 11:09:11 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/11 12:10:38 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
 
-void	img_text(t_vars *vars, char *str, t_coord p)
+void	img_text(t_vars *vars, char *str, t_coords p)
 {
 	int	i;
 	int	j;
 	int	k;
 	int	scale;
 
-	scale = p.z;
+	scale = ((p.b.x - p.a.x) * 23) / vars->win_size.x;
 	if (!scale)
 		return ;
 	i = -1;
@@ -33,7 +33,7 @@ void	img_text(t_vars *vars, char *str, t_coord p)
 			while (++k < 8 * scale)
 			{
 				if ((vars->font[(int)str[i]]>>(64 - (j / scale * 8) - (k / scale))) & 1)
-					pixel_put(vars->img, p.x + k + i * (8 * scale), p.y + j, to_rgb(p.c, 0));
+					pixel_put(vars->img, p.a.x + k + i * (8 * scale), p.a.y + j, to_rgb(p.a.c, 0));
 			}	
 		}
 	}
