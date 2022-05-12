@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 16:45:11 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 16:55:32 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ static void	fill_vars(t_vars *vars, int fd)
 	vars->tx = (2.0 / vars->win_size.x);
 	vars->size.z = vars->size.x * vars->size.y;
 	vars->max_size = ft_max(vars->size.x, vars->size.y);
-	vars->rays = ft_calloc(vars->win_size.x + 1, sizeof(double));
 	if (init_player(vars))
 		return ; //NO PLAYER IN MAP
 	vars->parse_seen = ft_calloc(vars->size.z, 1);
