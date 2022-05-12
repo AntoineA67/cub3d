@@ -37,25 +37,31 @@ void	draw_mini_circle(t_vars *vars)
 {
 	int	x;
 	int y;
-	int pos;
+	double pos;
 
 	(void)vars;
 	y = -1;
-	printf("%d,%d\n", vars->size.x, vars->size.y);
-	printf("%f,%f\n", vars->player.pos.y, vars->player.pos.x);
-	printf("%f,%f\n", vars->player.pos.y / 200, vars->player.pos.x + vars->size.y);
 	while (++y < 200)
 	{
 		x = -1;
 		while (++x < 200)
 		{
+				if (x == 0 && y == 0)
+					printf("min%f|%f\n", vars->player.pos.y + (y * 0.02) - 2.0, (vars->player.pos.x + (x * 0.02) - 2.0));
+				if (y == 199 && x == 199)
+					printf("max%f|%f\n", vars->player.pos.y + (y * 0.02) - 2.0, (vars->player.pos.x + (x * 0.02) - 2.0));
 			if (sqrt(pow(x - 100, 2) + pow(y - 100, 2)) < 100)
 			{
-				pos = ((((y * vars->size.y)/ 200)) * vars->size.x) + ((x * vars->size.x) / 200) + vars->player.pos.x + vars->player.pos.y * vars->size.x;
-				if (vars->map[pos] == '1')
-					pixel_put(vars->img, x, y, to_rgb(gen_color(100,100,100,0), 100));
-				else if (vars->map[pos] == '0')
-					pixel_put(vars->img, x, y, to_rgb(gen_color(100,100,100,0), 10));
+				pos = (int)(vars->player.pos.y + ((y * 8.0) / 200.0) - 4.0) * vars->size.x;
+				pos += (vars->player.pos.x + ((x * 8.0) / 200.0) - 4.0);
+				if (vars->map[(int)floor(pos)] == '1')
+					pixel_put(vars->img, x, y, to_rgb(gen_color(255,255,255,0), 100));
+				else if (vars->map[(int)floor(pos)] == 'C')
+					pixel_put(vars->img, x, y, to_rgb(gen_color(0,255,0,0), 0));
+				else if (vars->map[(int)floor(pos)] == '0')
+					pixel_put(vars->img, x, y, to_rgb(gen_color(0,0,0,0), 0));
+				else if (vars->map[(int)floor(pos)] == 'O')
+					pixel_put(vars->img, x, y, to_rgb(gen_color(255,255,255,0), 0));
 				else
 					pixel_put(vars->img, x, y, to_rgb(gen_color(100,100,100,0), 0));
 			}

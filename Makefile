@@ -19,6 +19,7 @@ FLAGS		+= -fsanitize=address -g
 #	RULES
 all: ${OBJDIR} ${NAME}
 	ls maps > maps.txt
+	find -f textures | grep "\.xpm" > textures.txt
 
 ${OBJDIR}:
 	@mkdir -p ${OBJDIR}

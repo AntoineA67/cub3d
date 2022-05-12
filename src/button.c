@@ -23,7 +23,6 @@ void	change_map(void		*v, int data)
 			if (str[ft_strlen(str) - 1] == '\n')
 				str[ft_strlen(str) - 1] = 0;
 			i = open(str, O_RDONLY);
-			printf("MAP:%d|%s|\n", i, str);
 			vars->map = parse(i, vars);
 			printf("{%s}\n", vars->map);
 			if (init_player(vars))
@@ -38,12 +37,43 @@ void	change_map(void		*v, int data)
 	change_ui(vars, 1);
 }
 
+void	change_texture(void		*v, int data)
+{
+	t_vars	*vars;
+
+	vars = (t_vars *)v;
+	int fd;
+	char	*str;
+	int i;
+
+	fd = open("textures.txt", O_RDONLY);
+	str = get_next_line(fd);
+	i = 0;
+	while (str)
+	{
+		if (i == data)
+		{
+			if (str[ft_strlen(str) - 1] == '\n')
+				str[ft_strlen(str) - 1] = 0;
+			printf("Load:%s| to |%s|\n", str, vars->changetexture);
+			load_texture(vars, vars->changetexture, 0, str);
+		}
+		i++;
+		free(str);
+		str = get_next_line(fd);
+	}
+	close(fd);
+	change_ui(vars, 1);
+}
+
+
 void	change_ui(void		*v, int data)
 {
 	t_vars	*vars;
 
 	vars = (t_vars *)v;
 	vars->ui = data;
+	vars->scroll = 0;
 	if (vars->ui)
 		mlx_mouse_show();
 	else

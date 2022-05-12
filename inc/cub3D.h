@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 16:49:38 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 16:56:47 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # include "../mlx_opengl/mlx.h"
 
 # define MAX_CLIENT 10
+# define M_2PI 6.283185307179586;
 # define PORT 5000
 # define SERVER_IP "127.0.0.1"
 
@@ -167,11 +168,13 @@ typedef struct s_vars {
 	void			*mlx;
 	void			*win;
 	char			*map;
+	char			*changetexture;
 	int				start_rot;
 	int				ui;
 	int				clicked;
 	int				clicking;
 	int				slider;
+	int				scroll;
 	t_coord			clicked_co;
 	t_settings		settings;
 	double			min_map_mult;
@@ -216,6 +219,7 @@ t_data		*get_animtexture(t_vars	*vars, char	*name, double speed);
 
 //***************************** Button fonctions *****************************//
 
+void		change_texture(void		*v, int data);
 void		change_ui(void		*v, int data);
 void		change_map(void		*v, int data);
 void		change_setting(void		*v,  int data);
@@ -233,6 +237,7 @@ int			ui_frame1(t_vars	*vars);
 int			ui_frame2(t_vars	*vars);
 int			ui_frame3(t_vars	*vars);
 int			ui_setting(t_vars	*vars);
+int			ui_texture(t_vars	*vars);
 
 void	draw_2d_map(t_vars *vars, int size);
 int	init_player(t_vars *vars);

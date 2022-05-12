@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rays.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 15:00:14 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 16:34:05 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 16:57:26 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,9 +118,9 @@ void	calc_ray(t_vars *vars, t_ray *r)
 	min_dist = dist(vars->player.pos.x, vars->player.pos.y, rx, ry, r->ra2);
 	ca = vars->player.rot.x - r->ra2;
 	if (ca < 0)
-		ca += M_PI * 2;
-	if (ca > M_PI * 2)
-		ca -= M_PI * 2;
+		ca += M_2PI;
+	if (ca > M_2PI)
+		ca -= M_2PI;
 	min_dist *= cos(ca);
 	r->dist = min_dist;
 	r->ry = ry;
@@ -136,17 +136,17 @@ void	project_rays(t_vars *vars)
 	// double		tx;
 
 	i = -1;
-	vars->start = fmod(vars->player.rot.x - M_PI_4 + (M_PI * 2) , M_PI * 2);
-	vars->end = fmod(vars->player.rot.x + M_PI_4 + (M_PI * 2) , M_PI * 2);
+	vars->start = fmod(vars->player.rot.x - M_PI_4 + (M_2PI) , M_2PI);
+	vars->end = fmod(vars->player.rot.x + M_PI_4 + (M_2PI) , M_2PI);
 	if (vars->start > vars->end)
-		vars->end += (M_PI * 2);
-	vars->rotmpi = vars->player.rot.x + (M_PI * 2.0);
+		vars->end += (M_2PI);
+	vars->rotmpi = vars->player.rot.x + (M_2PI);
 	while (++i < vars->win_size.x)
 	{
 		if (i == vars->win_size.x / 2.0)
 			vars->rays[i].ra2 = vars->player.rot.x;
 		else
-			vars->rays[i].ra2 = fmod(vars->rotmpi - atan(1.0 - (vars->tx * i)), M_PI * 2.0);
+			vars->rays[i].ra2 = fmod(vars->rotmpi - atan(1.0 - (vars->tx * i)), M_2PI);
 		calc_ray(vars, &vars->rays[i]);
 	}
 	i = -1;
