@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 13:51:07 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 14:22:58 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # include "../mlx_opengl/mlx.h"
 
 # define MAX_CLIENT 10
-# define PORT 6300
+# define PORT 5000
 # define SERVER_IP "127.0.0.1"
 
 enum	e_mlx_events {
@@ -92,6 +92,7 @@ typedef struct s_settings
 
 typedef struct s_packet
 {
+	double			bullets[MAX_CLIENT];
 	int				n_players;
 	t_vector2		players_pos[MAX_CLIENT];
 	double			players_rot[MAX_CLIENT];
@@ -104,7 +105,24 @@ typedef	struct s_textures
 	struct s_textures 	*next;
 }	t_textures;
 
+typedef struct s_enemy {
+	t_vector2	pos;
+	int			lives;
+}		t_enemy;
+
+typedef struct s_bullets {
+	t_vector2	pos;
+	t_vector2	delta;
+}		t_bullets;
+
 typedef struct s_vars {
+	double			delta_time;
+	t_bullets		bullets[MAX_CLIENT];
+	int				n_enemies;
+	double			start;
+	double			end;
+	int				usable_cells;
+	t_enemy			*enemies;
 	char			*parse_seen;
 	uint64_t		font[128];
 	double			jump_height;
@@ -135,7 +153,7 @@ typedef struct s_vars {
 	void			*mlx;
 	void			*win;
 	char			*map;
-	double 			rays;
+	double 			*rays;
 	int				start_rot;
 	int				ui;
 	int				clicked;
@@ -146,6 +164,7 @@ typedef struct s_vars {
 	double			min_map_mult;
 	long			n1;
 	long			n2;
+	long			n3;
 	t_vector2		camera;
 }			t_vars;
 
@@ -231,6 +250,7 @@ void	draw_2d_map(t_vars *vars, int size);
 
 int		init_player(t_vars *vars);
 double	dist(double ax, double ay, double bx, double by, double angle);
+void	gen_bullet(t_vars *vars);
 int	check_map(t_vars *vars, int x, int y);
 int	mouse_hook_up(int keycode, int x, int y, t_vars *vars);
 long	gettime(long initime);

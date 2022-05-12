@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 13:41:14 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 14:22:21 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@ int	check_map(t_vars *vars, int x, int y)
 		return (1);
 	else if (vars->parse_seen[x + vars->size.x * y])
 		return (0);
-	printf("%d %d\t", x, y);
-	vars->parse_seen[x + vars->size.x * y] = 1;
 	if (vars->map[x + vars->size.x * y] == '0' || vars->map[x + vars->size.x * y] == 'C')
+	{
+		vars->parse_seen[x + vars->size.x * y] = 1;
+		vars->usable_cells++;
 		return (check_map(vars, x + 1, y) || check_map(vars, x - 1, y)
 			|| check_map(vars, x, y + 1) || check_map(vars, x, y - 1));
+	}
 	return (0);
 }
 

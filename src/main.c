@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 13:58:43 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 14:22:43 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,50 @@ void	init_imgs(t_vars *vars)
 	load_texture(vars, "textures", 0, "./textures/pack_blue_pink/textures.xpm");
 	load_animtexture(vars, "player", 4, "./textures/nice/photo.xpm");
 	load_texture(vars, "no", 0, vars->no);
-	//load_texture(vars, "oui", 0, "./textures/nice/non.xpm");
+	load_texture(vars, "oui", 0, "./textures/nice/non.xpm");
+	load_texture(vars, "bullet", 0, "./textures/bullets/bullet.xpm");
 	load_texture(vars, "so", 0, vars->so);
 	load_texture(vars, "maps", 0, "./textures/pack_blue_pink/maps.xpm");
-	load_texture(vars, "ea", 0, "./textures/xpm/photo.xpm");
+	load_texture(vars, "ea", 0, "./textures/xpm/banane.xpm");
 	load_texture(vars, "we", 0, vars->we);
+}
+
+void	init_bullets(t_vars *vars)
+{
+	int	i;
+	
+	i = -1;
+	while (++i < MAX_CLIENT)
+	{
+		vars->bullets[i].pos.x = -1;
+	}
+}
+
+void	init_enemies(t_vars *vars)
+{
+	int	i;
+	int	n;
+
+	i = -1;
+	n = -1;
+	while (++i < vars->size.x * vars->size.y && vars->n_enemies < vars->usable_cells / 20 + 1)
+	{
+		if (vars->parse_seen[i] == 1 && ++n % (int)(vars->usable_cells / 10) == 0)
+		{
+			vars->enemies[++vars->n_enemies - 1].lives = 3;
+			vars->enemies[vars->n_enemies - 1].pos.x = i % vars->size.x + .5;
+			vars->enemies[vars->n_enemies - 1].pos.y = i / vars->size.x + .5;
+			printf("Enemy: %.2f %.2f\n", vars->enemies[vars->n_enemies - 1].pos.x,
+			vars->enemies[vars->n_enemies - 1].pos.y);
+		}
+	}
 }
 
 static void	fill_vars(t_vars *vars, int fd)
 {
+	vars->n_enemies = 0;
+	vars->mult_n_players = 0;
+	vars->usable_cells = 0;
 	vars->player.run = 0;
 	vars->jump_height = 0.0;
 	vars->jump = -2000;
@@ -73,11 +108,11 @@ static void	fill_vars(t_vars *vars, int fd)
 	vars->mult_fd = 0;
 	affect_ascii(vars);
 	ft_bzero(vars->keyboard, sizeof(vars->keyboard));
-	vars->mult_n_players = 0;
 	vars->mlx = mlx_init();
 	vars->win_size.x = 1920;// * 0.75;
 	vars->win_size.y = 1080;// * 0.75;
 	vars->map = parse(fd, vars);
+	vars->rays = ft_calloc(vars->win_size.x + 1, sizeof(double));
 	if (init_player(vars))
 		return ; //NO PLAYER IN MAP
 	vars->parse_seen = ft_calloc(vars->size.x * vars->size.y, 1);
@@ -88,7 +123,11 @@ static void	fill_vars(t_vars *vars, int fd)
 		write(2, "Error while parsing map\n", 25);
 		exit(EXIT_FAILURE);
 	}
+	vars->enemies = ft_calloc(vars->usable_cells / 20 + 2, sizeof(t_enemy));
+	printf("USABLE CELLS %d ENEMIES %d\n", vars->usable_cells, vars->usable_cells / 20 + 2);
+	init_enemies(vars);
 	free(vars->parse_seen);
+	init_bullets(vars);
 	init_imgs(vars);
 	vars->img->img = mlx_new_image(vars->mlx, vars->win_size.x, vars->win_size.y);
 	vars->img->addr = mlx_get_data_addr(vars->img->img, &vars->img->bits_per_pixel,
@@ -130,21 +169,25 @@ int	frame(void *data)
 	char	*itoa;
 
 	vars = (t_vars *)data;
+	if (vars->mult_fd)
+		serv_process(vars);
 	if (!vars->ui)
 	{
-	if (!vars->settings.fps_cap || !fmod(gettime(vars->n1), (1000 / (int)vars->settings.fps_cap)))
-	{
 		temp = gettime(vars->n1);
-		itoa = ft_itoa(1000 / (temp - vars->n2));
-		fps = ft_strjoin("FPS: ", itoa);
-		render(vars);
-		img_text(vars, fps, screen_pc(60.60,20.025, gen_color(255,0,100, 0), vars));
-		mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
-		mlx_string_put(vars->mlx, vars->win, 100, 100, 0xff00ff, fps);
-		free(itoa);
-		free(fps);
-		vars->n2 = temp;
-	}
+		vars->delta_time = (temp - vars->n3) / 100.0;
+		check_inputs(vars);
+		vars->n3 = temp;
+		if (!vars->settings.fps_cap || !fmod(gettime(vars->n1), (1000 / (int)vars->settings.fps_cap)))
+		{
+			itoa = ft_itoa(1000 / (temp - vars->n2));
+			fps = ft_strjoin("FPS: ", itoa);
+			printf("%.10f|%s\n", vars->delta_time, itoa);
+			render(vars);
+			mlx_string_put(vars->mlx, vars->win, 100, 100, 0xff00ff, fps);
+			free(itoa);
+			free(fps);
+			vars->n2 = temp;
+		}
 	}
 	else
 	{

@@ -9,12 +9,12 @@ SERVER		= server
 OBJ			= $(addprefix ${OBJDIR}, $(SRC:.c=.o))
 LIBRARY		= -L libft -lft -L mlx_opengl -lmlx -lm
 LIB_FILE	= libft/libft.a mlx_opengl/libmlx.a
-CC			= gcc
+CC			= cc
 # FLAGS		= -I/usr/include
 FLAGS		= -Wall -Wextra -Werror
-FLAGS		+= -O2
+# FLAGS		+= -O2
 # FLAGS		+= -fsanitize=address -g
-# FLAGS		+= -Ofast
+FLAGS		+= -Ofast
 
 #	RULES
 all: ${OBJDIR} ${NAME}
@@ -27,7 +27,7 @@ ${NAME}: ${OBJ} ${LIB_FILE}
 	${CC} ${FLAGS} ${LIBRARY} $^ -framework OpenGL -framework AppKit -o ${NAME}
 
 ${OBJDIR}%.o: %.c ${INC} Makefile
-	${CC} ${FLAGS} -I/usr/include -Imlx_linux -c $< -o $@
+	${CC} ${FLAGS} -c $< -o $@
 
 libft/libft.a:
 	make -C libft
