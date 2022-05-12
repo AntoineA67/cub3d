@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 11:22:36 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 13:47:52 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ typedef struct s_bullets {
 }		t_bullets;
 
 typedef struct s_vars {
+	time_t			delta_time;
 	t_bullets		bullets[MAX_CLIENT];
 	int				n_enemies;
 	double			start;

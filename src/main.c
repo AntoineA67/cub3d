@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 12:15:30 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 13:52:37 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	init_imgs(t_vars *vars)
 	load_animtexture(vars, "player", 4, "./textures/nice/photo.xpm");
 	load_texture(vars, "no", 0, vars->no);
 	load_texture(vars, "oui", 0, "./textures/nice/non.xpm");
+	load_texture(vars, "bullet", 0, "./textures/bullets/bullet.xpm");
 	load_texture(vars, "so", 0, vars->so);
 	load_texture(vars, "maps", 0, "./textures/pack_blue_pink/maps.xpm");
 	load_texture(vars, "ea", 0, "./textures/xpm/banane.xpm");
@@ -205,13 +206,14 @@ int	frame(void *data)
 		serv_process(vars);
 	if (!vars->ui)
 	{
+		
 		if (!vars->settings.fps_cap || !fmod(gettime(vars->n1), (1000 / (int)vars->settings.fps_cap)))
 		{
-			
-			render(vars);
 			temp = gettime(vars->n1);
 			itoa = ft_itoa(1000 / (temp - vars->n2));
 			fps = ft_strjoin("FPS: ", itoa);
+			vars->delta_time = temp - vars->n2;
+			render(vars);
 			mlx_string_put(vars->mlx, vars->win, 100, 100, 0xff00ff, fps);
 			free(itoa);
 			free(fps);

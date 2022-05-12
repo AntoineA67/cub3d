@@ -9,7 +9,10 @@ void	change_ui(void		*v, void	*data)
 	if (vars->ui)
 		mlx_mouse_show();
 	else
+	{
 		mlx_mouse_hide();
+		mlx_mouse_move(vars->win, vars->win_size.x / 2, vars->win_size.y / 2);
+	}
 }
 
 void	change_setting(void		*v, void	*dat)

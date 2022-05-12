@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 12:14:33 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 13:52:39 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -621,17 +621,16 @@ void	draw_bullets(t_vars *vars, int size)
 				dangle = vars->end - angle;
 				screen_x = vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2);
 				if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x] > dist_bullet)
-					draw_square_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_bullet) * (vars->win_size.y / 2) * .2, gen_color(100,100,100,0)));
-				// draw_square_texture_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) * 200, gen_color(100,100,100,0)), get_animtexture(vars, "player", 0.2));
-				// draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));
+					// draw_square_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_bullet) * (vars->win_size.y / 2) * .2, gen_color(100,100,100,0)));
+					draw_square_texture_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_bullet) * (vars->win_size.y / 2) * .2, gen_color(100,100,100,0)), get_texture(vars, "bullet", 0), dist_bullet);
 			}
 			else if (( angle + (M_PI * 2.0)) > vars->start && (angle + (M_PI * 2.0)) < vars->end)
 			{
 				dangle = vars->end - (angle + (M_PI * 2.0));
 				screen_x = vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2);
 				if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x] > dist_bullet)
-					draw_square_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_bullet) * (vars->win_size.y / 2) * .2, gen_color(100,100,100,0)));	
-				// draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));	
+					// draw_square_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_bullet) * (vars->win_size.y / 2) * .2, gen_color(100,100,100,0)));	
+					draw_square_texture_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_bullet) * (vars->win_size.y / 2) * .2, gen_color(100,100,100,0)), get_texture(vars, "bullet", 0), dist_bullet);
 			}
 		}
 	}
@@ -743,7 +742,7 @@ int	check_enemy_nearby(t_vars *vars, t_vector2 *bullet_pos)
 	double	hitbox;
 
 	i = -1;
-	hitbox = 1.0;
+	hitbox = .3;
 	while (++i < vars->n_enemies)
 	{
 		if (vars->enemies[i].lives > 0)
@@ -824,6 +823,7 @@ void	render(t_vars *vars)
 	int		x;
 	int		y;
 	time_t	jump_time;
+
 	//void *tmp;
 
 //	tmp = vars->img;
