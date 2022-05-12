@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 16:55:32 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 16:56:42 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	init_imgs(t_vars *vars)
 	load_texture(vars, "textures", 0, "./textures/pack_blue_pink/textures.xpm");
 	load_animtexture(vars, "player", 4, "./textures/nice/photo.xpm");
 	load_texture(vars, "no", 0, vars->no);
-	load_texture(vars, "oui", 0, "./textures/nice/non.xpm");
+	load_texture(vars, "aaa", 0, "./textures/nice/aaa.xpm");
 	load_texture(vars, "bullet", 0, "./textures/bullets/bullet.xpm");
 	load_texture(vars, "so", 0, vars->so);
 	load_texture(vars, "maps", 0, "./textures/pack_blue_pink/maps.xpm");

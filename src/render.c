@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 16:49:19 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 16:56:32 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,7 @@ void	draw_enemies(t_vars *vars)
 				{
 					vars->enemies[i].pos.x += .08 - .16 * (vars->player.pos.x < vars->enemies[i].pos.x);
 					vars->enemies[i].pos.y += .08 - .16 * (vars->player.pos.y < vars->enemies[i].pos.y);
-					draw_square_texture_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_enemy) * (vars->win_size.y / 2), gen_color(100,100,100,0)), get_texture(vars, "oui", 0), dist_enemy);
+					draw_square_texture_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_enemy) * (vars->win_size.y / 2), gen_color(100,100,100,0)), get_texture(vars, "aaa", 0), dist_enemy);
 				}
 				// draw_square_texture_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) * 200, gen_color(100,100,100,0)), get_animtexture(vars, "player", 0.2));
 				// draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));
@@ -228,7 +228,7 @@ void	draw_enemies(t_vars *vars)
 				{
 					vars->enemies[i].pos.x += .08 - .16 * (vars->player.pos.x < vars->enemies[i].pos.x);
 					vars->enemies[i].pos.y += .08 - .16 * (vars->player.pos.y < vars->enemies[i].pos.y);
-					draw_square_texture_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_enemy) * (vars->win_size.y / 2), gen_color(100,100,100,0)), get_texture(vars, "oui", 0), dist_enemy);	
+					draw_square_texture_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_enemy) * (vars->win_size.y / 2), gen_color(100,100,100,0)), get_texture(vars, "aaa", 0), dist_enemy);	
 				}
 				// draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));	
 			}
