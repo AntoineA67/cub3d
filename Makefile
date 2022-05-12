@@ -4,7 +4,7 @@ OBJDIR		= obj/
 INCDIR		= inc/
 VPATH		= src/
 INC			= $(addprefix ${INCDIR}, cub3D.h)
-SRC			= main.c utils.c parse.c button.c slider.c ui.c l_pts.c key_hooks.c texture_manage.c mouse_hooks.c plot.c render.c color_utils.c client.c minimap.c font.c
+SRC			= main.c utils.c parse.c button.c slider.c ui.c l_pts.c key_hooks.c texture_manage.c mouse_hooks.c plot.c render.c color_utils.c client.c minimap.c font.c rays.c
 SERVER		= server
 OBJ			= $(addprefix ${OBJDIR}, $(SRC:.c=.o))
 LIBRARY		= -L libft -lft -L mlx_opengl -lmlx -lm
@@ -14,7 +14,7 @@ CC			= cc
 FLAGS		= -Wall -Wextra -Werror
 # FLAGS		+= -O2
 # FLAGS		+= -fsanitize=address -g
-FLAGS		+= -Ofast
+# FLAGS		+= -Ofast
 
 #	RULES
 all: ${OBJDIR} ${NAME}

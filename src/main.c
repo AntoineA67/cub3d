@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 16:45:45 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 16:52:53 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	init_enemies(t_vars *vars)
 
 	i = -1;
 	n = -1;
-	while (++i < vars->size.x * vars->size.y && vars->n_enemies < vars->usable_cells / 20 + 1)
+	while (++i < vars->size.z && vars->n_enemies < vars->usable_cells / 20 + 1)
 	{
 		if (vars->parse_seen[i] == 1 && ++n % (int)(vars->usable_cells / 10) == 0)
 		{
@@ -112,11 +112,15 @@ static void	fill_vars(t_vars *vars, int fd)
 	vars->mlx = mlx_init();
 	vars->win_size.x = 1920;// * 0.75;
 	vars->win_size.y = 1080;// * 0.75;
+	vars->rays = ft_calloc(vars->win_size.x + 1, sizeof(t_ray));
 	vars->map = parse(fd, vars);
+	vars->tx = (2.0 / vars->win_size.x);
+	vars->size.z = vars->size.x * vars->size.y;
+	vars->max_size = ft_max(vars->size.x, vars->size.y);
 	vars->rays = ft_calloc(vars->win_size.x + 1, sizeof(double));
 	if (init_player(vars))
 		return ; //NO PLAYER IN MAP
-	vars->parse_seen = ft_calloc(vars->size.x * vars->size.y, 1);
+	vars->parse_seen = ft_calloc(vars->size.z, 1);
 	if (!vars->parse_seen)
 		return ;
 	if (check_map(vars, (int)vars->player.pos.x, (int)vars->player.pos.y))
@@ -175,14 +179,15 @@ int	frame(void *data)
 	if (!vars->ui)
 	{
 		temp = gettime(vars->n1);
-		vars->delta_time = (temp - vars->n3) / 100.0;
+		vars->delta_time = (temp + .0 - (vars->n3 + .0)) / 1000.0;
 		check_inputs(vars);
 		vars->n3 = temp;
 		if (!vars->settings.fps_cap || !fmod(gettime(vars->n1), (1000 / (int)vars->settings.fps_cap)))
 		{
+			vars->delta_time_render = (temp + .0 - (vars->n2 + .0)) / 1000.0;
 			itoa = ft_itoa(1000 / (temp - vars->n2));
 			fps = ft_strjoin("FPS: ", itoa);
-			printf("%.10f|%s\n", vars->delta_time, itoa);
+			// printf("%.10f|%s\n", vars->delta_time, itoa);
 			render(vars);
 			mlx_string_put(vars->mlx, vars->win, 100, 100, 0xff00ff, fps);
 			free(itoa);
