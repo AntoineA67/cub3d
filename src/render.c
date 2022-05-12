@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 14:23:37 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 16:44:31 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -336,7 +336,7 @@ void	project_rays(t_vars *vars, double render_ratio)
 					|| vars->map[(int)rx + 1 + ((int)ry + 1) * vars->size.x] == 'C'))
 					ao = (rx - (int)rx) * 2.0 - 1.0;
 				// line_texture(vars, i, (rx - (int)rx) * (get_texture(vars, "no", 0)->size.x + .0), get_texture(vars, "no", 0), min_dist, ao);
-				line_texture(vars, i, (rx - (int)rx) * (get_animtexture(vars, "player", 0.2)->size.x + .0), get_animtexture(vars, "player", 0.2), min_dist, ao);
+				line_texture(vars, i, (rx - (int)rx) * (get_animtexture(vars, "no", 0.2)->size.x + .0), get_animtexture(vars, "no", 0.2), min_dist, ao);
 				//nord
 			}
 			else
@@ -601,78 +601,6 @@ void	draw_bullets(t_vars *vars, int size)
 			}
 		}
 	}
-}
-
-void	draw_2d_map(t_vars *vars, int size)
-{
-	int	x;
-	int	y;
-	int	pos;
-	int x1;
-	int y1;
-	int k;
-
-	y = -1;
-	pos = -1;
-	x1 = 0;
-	y1 = 0;
-	k = 0;
-	size = 16;
-	while (++y < vars->size.y)
-	{
-		x = -1;
-		while (++x < vars->size.x && ++pos >= 0)
-		{
-			//printf("%c", vars->map[x + y * vars->size.x]);
-		if (vars->settings.map_type == 1)
-		{
-			if (vars->map[pos] == '0')
-				draw_square(vars, gen_coord(x * size + size, y * size + size, size, gen_color(100, 100, 100, 0)));
-			else if (vars->map[pos] == '1')
-				draw_square(vars, gen_coord(x * size + size, y * size + size, size, gen_color(200, 200, 200, 0)));
-			else if (vars->map[pos] == 'O' || vars->map[pos] == 'C')
-				draw_square(vars, gen_coord(x * size + size, y * size + size, size,
-					gen_color(150, 20, 150, 0)));
-			
-		}
-		else if (vars->settings.map_type == 2)
-		{
-			size = 64;
-			if (vars->map[pos] == '0')
-				draw_square(vars, gen_coord(x * size + size, y * size + size, size, gen_color(100, 100, 100, 0)));
-			else if (vars->map[pos] == '1')
-				draw_square(vars, gen_coord(x * size + size, y * size + size, size, gen_color(200, 200, 200, 0)));
-			else if (vars->map[pos] == 'O' || vars->map[pos] == 'C')
-				draw_square(vars, gen_coord(x * size + size, y * size + size, size,
-					gen_color(150, 20, 150, 0)));
-		}
-		else if (y >= ((int)vars->player.pos.y - 2) && y <= ((int)vars->player.pos.y + 2)&&
-			x >= ((int)vars->player.pos.x - 2) && x <= ((int)vars->player.pos.x + 2))
-		{
-			//k++;
-			//if (k != 1)
-			//{
-			if (vars->map[pos] == '0')
-				draw_square(vars, gen_coord((x1++ * size) + size, y1 * size + size, size, gen_color(100, 100, 100, 0)));
-			else if (vars->map[pos] == '1')
-				draw_square(vars, gen_coord((x1++ * size) + size, y1 * size + size, size, gen_color(200, 200, 200, 0)));
-			else if (vars->map[pos] == 'O' || vars->map[pos] == 'C')
-				draw_square(vars, gen_coord((x1++ * size) + size, y1 * size + size, size,
-					gen_color(150, 20, 150, 0)));
-			//}
-			//else
-			//	x++;
-			if (x1 == 5)
-			{
-				x1 = 0;
-				y1++;
-			}
-		}
-	//	else
-		//	draw_square(vars, gen_coord(x1 * size + size, y1 * size + size, size, vars->textures.c));
-		}
-	}
-		//printf("\n");
 }
 
 void	shade_floor_ceil(t_vars *vars)

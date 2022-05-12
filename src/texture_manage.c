@@ -10,7 +10,7 @@ void	load_texture(t_vars	*vars , char *name, int nb, char *path)
 	printf("LOADING:%s\t...\n", path);
 	if (access(path, F_OK) == -1)
 	{
-		perror("Cube");
+		perror(path);
 		free_textures(vars);
 		exit(0);
 	}
@@ -43,13 +43,18 @@ void	load_texture(t_vars	*vars , char *name, int nb, char *path)
 		i = 0;
 		while ((*act)->imgtab[i])
 			i++;
-		// if (!(&((*act)->texture[i])))
-		// {
-		//printf("load%d|%d\n", i, nb);
-		t_data **tmp = ft_calloc(sizeof(t_data *), i + 2);
-		ft_memcpy(tmp, (*act)->imgtab, i * sizeof(t_data *));
-		free((*act)->imgtab);
-		(*act)->imgtab = tmp;
+		if ((*act)->imgtab[nb])
+		{
+			free((*act)->imgtab[nb]);
+			i = nb;
+		}
+		else
+		{
+			t_data **tmp = ft_calloc(sizeof(t_data *), i + 2);
+			ft_memcpy(tmp, (*act)->imgtab, i * sizeof(t_data *));
+			free((*act)->imgtab);
+			(*act)->imgtab = tmp;
+		}
 		// }
 		// else
 		// 	ft_bzero((*act)->imgtab + (i * sizeof(t_data)), sizeof(t_data));

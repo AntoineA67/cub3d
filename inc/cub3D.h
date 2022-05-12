@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 14:22:58 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 15:57:31 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,12 +153,14 @@ typedef struct s_vars {
 	void			*mlx;
 	void			*win;
 	char			*map;
+	char			*changetexture;
 	double 			*rays;
 	int				start_rot;
 	int				ui;
 	int				clicked;
 	int				clicking;
 	int				slider;
+	int				scroll;
 	t_coord			clicked_co;
 	t_settings		settings;
 	double			min_map_mult;
@@ -223,6 +225,7 @@ t_data		*get_animtexture(t_vars	*vars, char	*name, double speed);
 
 //***************************** Button fonctions *****************************//
 
+void		change_texture(void		*v, int data);
 void		change_ui(void		*v, int data);
 void		change_map(void		*v, int data);
 void		change_setting(void		*v,  int data);
@@ -240,6 +243,7 @@ int			ui_frame1(t_vars	*vars);
 int			ui_frame2(t_vars	*vars);
 int			ui_frame3(t_vars	*vars);
 int			ui_setting(t_vars	*vars);
+int			ui_texture(t_vars	*vars);
 
 //**************************** Minimap fonctions *****************************//
 

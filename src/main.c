@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 14:22:43 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 16:45:45 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ void	init_imgs(t_vars *vars)
 	load_texture(vars, "settings", 0, "./textures/pack_blue_pink/settings.xpm");
 	load_texture(vars, "maps", 0, "./textures/pack_blue_pink/maps.xpm");
 	load_texture(vars, "textures", 0, "./textures/pack_blue_pink/textures.xpm");
-	load_animtexture(vars, "player", 4, "./textures/nice/photo.xpm");
 	load_texture(vars, "no", 0, vars->no);
-	load_texture(vars, "oui", 0, "./textures/nice/non.xpm");
+	//load_animtexture(vars, "no", 4, "./textures/nice/photo.xpm");
+	load_texture(vars, "oui", 0, "./textures/nice/arbre.xpm");
 	load_texture(vars, "bullet", 0, "./textures/bullets/bullet.xpm");
 	load_texture(vars, "so", 0, vars->so);
 	load_texture(vars, "maps", 0, "./textures/pack_blue_pink/maps.xpm");
@@ -106,6 +106,7 @@ static void	fill_vars(t_vars *vars, int fd)
 	vars->settings.y_ratio_mouse_speed = 1.2;
 	vars->settings.x_ratio_mouse_speed = 1.2;
 	vars->mult_fd = 0;
+	vars->scroll = 0;
 	affect_ascii(vars);
 	ft_bzero(vars->keyboard, sizeof(vars->keyboard));
 	vars->mlx = mlx_init();
@@ -191,7 +192,7 @@ int	frame(void *data)
 	}
 	else
 	{
-			ft_int_memset(vars->img->addr, 0x000000,
+		ft_int_memset(vars->img->addr, 0x000000,
 		vars->img->line_length * vars->win_size.y / 4);
 	if (vars->ui == 1)
 	{
@@ -211,6 +212,11 @@ int	frame(void *data)
 	else if (vars->ui == 4)
 	{
 		ui_setting(vars);
+		vars->clicked = 0;
+	}
+	else if (vars->ui == 5)
+	{
+		ui_texture(vars);
 		vars->clicked = 0;
 	}
 	}
