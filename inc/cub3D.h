@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 14:19:53 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 14:46:43 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ typedef struct s_bullets {
 
 typedef struct s_vars {
 	double			delta_time;
+	double			delta_time_render;
 	t_bullets		bullets[MAX_CLIENT];
 	int				n_enemies;
 	double			start;
@@ -234,7 +235,7 @@ void		slider(t_vars *vars, t_coords p, t_slider slider, double pas);
 
 //****************************************************************************//
 
-
+void	process_bullets(t_vars *vars);
 void	gen_bullet(t_vars *vars);
 int	check_map(t_vars *vars, int x, int y);
 int	mouse_hook_up(int keycode, int x, int y, t_vars *vars);

@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 13:55:24 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 14:59:34 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -432,6 +432,11 @@ void	project_rays(t_vars *vars, double render_ratio)
 	}
 }
 
+void	process_enemies(t_vars *vars)
+{
+	
+}
+
 void	draw_enemies(t_vars *vars)
 {
 	int		i;
@@ -764,8 +769,8 @@ int	check_enemy_nearby(t_vars *vars, t_vector2 *bullet_pos)
 void	process_bullets(t_vars *vars)
 {
 	int			i;
-	t_vector2	new_pos;
 	int			hit;
+	t_vector2	new_pos;
 
 	i = -1;
 	while (++i < MAX_CLIENT)
@@ -773,8 +778,8 @@ void	process_bullets(t_vars *vars)
 		if (vars->bullets[i].pos.x > 0)
 		{
 			hit = 0;
-			new_pos.x = vars->bullets[i].pos.x + vars->bullets[i].delta.x * .5;
-			new_pos.y = vars->bullets[i].pos.y + vars->bullets[i].delta.y * .5;
+			new_pos.x = vars->bullets[i].pos.x + vars->bullets[i].delta.x * .5 * vars->delta_time_render * 25.0;
+			new_pos.y = vars->bullets[i].pos.y + vars->bullets[i].delta.y * .5 * vars->delta_time_render * 25.0;
 			if (vars->map[(int)new_pos.x + (int)vars->bullets[i].pos.y * vars->size.x] != 'C'
 				&& vars->map[(int)new_pos.x + (int)vars->bullets[i].pos.y * vars->size.x] != '1')
 				vars->bullets[i].pos.x = new_pos.x;
@@ -816,19 +821,19 @@ void	draw_hud(t_vars *vars)
 
 void	render(t_vars *vars)
 {
-	// t_data	*img;
+	t_data	*img;
 
-	// img = vars->img;
-	// vars->img = vars->img2;
+	img = vars->img;
+	vars->img = vars->img2;
 	int		x;
 	int		y;
 	time_t	jump_time;
 
-	//void *tmp;
+	void *tmp;
 
-//	tmp = vars->img;
-//	vars->img = vars->img2;
-	//vars->img2 = tmp;
+	tmp = vars->img;
+	vars->img = vars->img2;
+	vars->img2 = tmp;
 	mlx_mouse_get_pos(vars->win, &x, &y);
 	// printf("%.2f\n", vars->player.rot.y);
 	if (!vars->ui)
