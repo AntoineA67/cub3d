@@ -3,6 +3,7 @@ textures/dir/east.xpm
 textures/dir/north.xpm
 textures/dir/south.xpm
 textures/dir/west.xpm
+textures/nice/aaa.xpm
 textures/nice/arbre.xpm
 textures/nice/photo0.xpm
 textures/nice/photo1.xpm

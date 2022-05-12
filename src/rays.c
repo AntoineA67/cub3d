@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 15:00:14 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 16:57:26 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 17:00:11 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ void	project_rays(t_vars *vars)
 	vars->rotmpi = vars->player.rot.x + (M_2PI);
 	while (++i < vars->win_size.x)
 	{
-		if (i == vars->win_size.x / 2.0)
+		if (i == vars->win_size.x * 0.5)
 			vars->rays[i].ra2 = vars->player.rot.x;
 		else
 			vars->rays[i].ra2 = fmod(vars->rotmpi - atan(1.0 - (vars->tx * i)), M_2PI);
@@ -171,7 +171,7 @@ void	project_rays(t_vars *vars)
 					|| vars->map[(int)vars->rays[i].rx + 1 + ((int)vars->rays[i].ry + 1) * vars->size.x] == 'C'))
 					ao = (vars->rays[i].rx - (int)vars->rays[i].rx) * 2.0 - 1.0;
 				// line_texture(vars, i, (vars->rays[i].rx - (int)vars->rays[i].rx) * (get_texture(vars, "no", 0)->size.x + .0), get_texture(vars, "no", 0), min_dist, ao);
-				line_texture(vars, i, (vars->rays[i].rx - (int)vars->rays[i].rx) * (get_animtexture(vars, "player", 0.2)->size.x + .0), get_animtexture(vars, "player", 0.2), vars->rays[i].dist, ao);
+				line_texture(vars, i, (vars->rays[i].rx - (int)vars->rays[i].rx) * (get_animtexture(vars, "no", 0.2)->size.x + .0), get_animtexture(vars, "no", 0.2), vars->rays[i].dist, ao);
 				//nord
 			}
 			else
