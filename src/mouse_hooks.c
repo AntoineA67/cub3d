@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mouse_hooks.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 19:50:25 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/10 15:29:57 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 12:10:21 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	mouse_hook_up(int keycode, int x, int y, t_vars *vars)
 {
-	 printf("%d|%d|%d\n", keycode,x,y);
-	 printf("%f|%f\n", vars->settings.y_ratio_mouse_speed, vars->settings.fps_cap);
+	//  printf("%d|%d|%d\n", keycode,x,y);
+	//  printf("%f|%f\n", vars->settings.y_ratio_mouse_speed, vars->settings.fps_cap);
 	 vars->clicking = 0;
 	 vars->slider = 0;
 	 (void)x;
@@ -36,6 +36,11 @@ int	mouse_hook(int keycode, int x, int y, t_vars *vars)
 		vars->clicking = 1;
 		vars->clicked_co.x = x;
 		vars->clicked_co.y = y;
+		if (!vars->mult_fd && vars->bullets[0].pos.x < 0)
+		{
+			printf("Gen bullet");
+			gen_bullet(vars);
+		}
 	}
 	return (0);
 }

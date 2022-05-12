@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/11 19:28:36 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 11:22:36 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,13 @@ typedef struct s_enemy {
 	int			lives;
 }		t_enemy;
 
+typedef struct s_bullets {
+	t_vector2	pos;
+	t_vector2	delta;
+}		t_bullets;
+
 typedef struct s_vars {
-	double			bullets;
+	t_bullets		bullets[MAX_CLIENT];
 	int				n_enemies;
 	double			start;
 	double			end;
@@ -228,6 +233,7 @@ void		slider(t_vars *vars, t_coords p, t_slider slider, double pas);
 //****************************************************************************//
 
 
+void	gen_bullet(t_vars *vars);
 int	check_map(t_vars *vars, int x, int y);
 int	mouse_hook_up(int keycode, int x, int y, t_vars *vars);
 long	gettime(long initime);

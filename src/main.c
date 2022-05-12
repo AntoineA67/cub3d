@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/11 19:42:04 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 12:15:30 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,17 @@ void	init_imgs(t_vars *vars)
 	load_texture(vars, "maps", 0, "./textures/pack_blue_pink/maps.xpm");
 	load_texture(vars, "ea", 0, "./textures/xpm/banane.xpm");
 	load_texture(vars, "we", 0, vars->we);
+}
+
+void	init_bullets(t_vars *vars)
+{
+	int	i;
+	
+	i = -1;
+	while (++i < MAX_CLIENT)
+	{
+		vars->bullets[i].pos.x = -1;
+	}
 }
 
 void	init_enemies(t_vars *vars)
@@ -113,6 +124,7 @@ static void	fill_vars(t_vars *vars, int fd)
 	printf("USABLE CELLS %d ENEMIES %d\n", vars->usable_cells, vars->usable_cells / 20 + 2);
 	init_enemies(vars);
 	free(vars->parse_seen);
+	init_bullets(vars);
 	init_imgs(vars);
 	vars->img->img = mlx_new_image(vars->mlx, vars->win_size.x, vars->win_size.y);
 	vars->img->addr = mlx_get_data_addr(vars->img->img, &vars->img->bits_per_pixel,
