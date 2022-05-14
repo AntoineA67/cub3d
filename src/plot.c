@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:03:35 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 18:01:13 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/13 12:27:46 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit
 		// 	printf("%.2f %.2f	%.2f\n", y / img->size.y, sin((y / img->size.y) * M_PI), ((fabs(1.0 - ao) > .1) * (1.0 - ao) - 1.0));
 		//pixel_put_add(vars->img, &screen_x, &i, (unsigned int *)(img->addr + t + (int)y * img->line_length));
 		*(unsigned int *)(vars->img->addr + (i * vars->img->line_length + screen_x * vars->img->bits_per_pixel)) = add_shade(vars, *(unsigned int *)(img->addr + (t + (int)y * img->line_length)), hit,
-			vars->ao * (ao + (1 - sin((((y + 1) * isize)) * M_PI)) * vars->ao_scale));
+			 vars->ao * (ao + (1 - sin((((y + 1) * isize)) * M_PI)) * vars->ao_scale));
 		y += step;
 	}
 }

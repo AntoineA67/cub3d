@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:24:04 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 17:54:13 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/13 12:28:43 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,11 @@ void	pixel_put(t_data *data, int x, int y, unsigned int color)
 
 	// if (x >= 0 && x < 1920 && y >= 0 && y < 1080)
 	// {
-	// if (x >= 0 && x < 1920 && y >= 0 && y < 1080 && color>>24 != 255)
-	// {
+	if (x >= 0 && x < 1920 && y >= 0 && y < 1080 && color>>24 != 255)
+	{
 		dst = data->addr + (y * data->line_length + x * data->bits_per_pixel);
 		*(unsigned int *)dst = color;
-	// }
+	}
 	// else
 		// printf("aa\n");
 	// }
