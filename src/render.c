@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 17:00:50 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/16 15:22:01 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,42 @@ double	dist(double ax, double ay, double bx, double by, double angle)
 {
 	(void)angle;
 	return (sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
+}
+
+void	draw_easy_texture(t_vars *vars, t_coord p, t_data *img)
+{
+	int		dy;
+	int		dx;
+	int		square_size;
+	double	ratio_x;
+	double	ratio_y;
+	double	img_x;
+	double	img_y;
+
+	if (!p.z)
+		return ;
+	square_size = p.z;
+	img_y = 0;
+	ratio_x = (img->size.x + .0) / (square_size + .0);
+	ratio_y = (img->size.y + .0) / (square_size + .0);
+	dy = p.y - p.z / 2;
+	while (++dy < p.y + p.z / 2)
+	{
+		dx = p.x - p.z / 2;
+		img_x = 0;
+		while (++dx < p.x + p.z / 2 && img_x < img->size.x && img_y >= 0 && img_x >= 0 && img_y < img->size.y && is_in_window(vars, dx, dy))
+		{
+			//printf("img_x: %f	img_y: %f\n", img_x, img_y);
+			//printf("%d\n", img->line_length);
+			// if ((*(unsigned int *)(img->addr + ((int)((int)img_x * (img->bits_per_pixel / 8)) + (int)((int)img_y * img->line_length)))>>24) != 255)
+			pixel_put(vars->img, dx, dy,
+				*(unsigned int *)(img->addr + ((int)((int)img_x * (img->bits_per_pixel / 8)) + (int)((int)img_y * img->line_length))));
+			// else
+				// printf("aaa\n");
+			img_x += ratio_x;
+		}
+		img_y += ratio_y;
+	}
 }
 
 void	draw_square_texture_center(t_vars *vars, t_coord p, t_data *img, double dist_b_players)
@@ -83,8 +119,6 @@ void	draw_enemies(t_vars *vars)
 				screen_x = vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2);
 				if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x].dist > dist_enemy)
 				{
-					vars->enemies[i].pos.x += .08 - .16 * (vars->player.pos.x < vars->enemies[i].pos.x);
-					vars->enemies[i].pos.y += .08 - .16 * (vars->player.pos.y < vars->enemies[i].pos.y);
 					draw_square_texture_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_enemy) * (vars->win_size.y / 2), gen_color(100,100,100,0)), get_texture(vars, "aaa", 0), dist_enemy);
 				}
 				// draw_square_texture_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) * 200, gen_color(100,100,100,0)), get_animtexture(vars, "player", 0.2));
@@ -96,8 +130,6 @@ void	draw_enemies(t_vars *vars)
 				screen_x = vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2);
 				if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x].dist > dist_enemy)
 				{
-					vars->enemies[i].pos.x += .08 - .16 * (vars->player.pos.x < vars->enemies[i].pos.x);
-					vars->enemies[i].pos.y += .08 - .16 * (vars->player.pos.y < vars->enemies[i].pos.y);
 					draw_square_texture_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_enemy) * (vars->win_size.y / 2), gen_color(100,100,100,0)), get_texture(vars, "aaa", 0), dist_enemy);	
 				}
 				// draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));	
@@ -321,19 +353,20 @@ void	process_bullets(t_vars *vars)
 	t_vector2	new_pos;
 
 	i = -1;
-	while (++i < MAX_CLIENT)
+	while (++i < MAX_BULLETS)
 	{
 		if (vars->bullets[i].pos.x > 0)
 		{
 			hit = 0;
 			new_pos.x = vars->bullets[i].pos.x + vars->bullets[i].delta.x * .5 * vars->delta_time_render * 25.0;
 			new_pos.y = vars->bullets[i].pos.y + vars->bullets[i].delta.y * .5 * vars->delta_time_render * 25.0;
-			if (vars->map[(int)new_pos.x + (int)vars->bullets[i].pos.y * vars->size.x] != 'C'
+			if (((int)new_pos.x >= 0 && (int)new_pos.y >= 0 && (int)new_pos.x < vars->size.x && (int)new_pos.y < vars->size.y) && vars->map[(int)new_pos.x + (int)vars->bullets[i].pos.y * vars->size.x] != 'C'
 				&& vars->map[(int)new_pos.x + (int)vars->bullets[i].pos.y * vars->size.x] != '1')
 				vars->bullets[i].pos.x = new_pos.x;
 			else
 				hit = 1;
-			if (vars->map[(int)vars->bullets[i].pos.x + (int)new_pos.y * vars->size.x] != 'C'
+			// printf("%d\n", (int)vars->bullets[i].pos.x);
+			if (!hit && vars->map[(int)vars->bullets[i].pos.x + (int)new_pos.y * vars->size.x] != 'C'
 				&& vars->map[(int)vars->bullets[i].pos.x + (int)new_pos.y * vars->size.x] != '1')
 				vars->bullets[i].pos.y = new_pos.y;
 			else
@@ -350,13 +383,86 @@ void	process_bullets(t_vars *vars)
 	}
 }
 
+void	end_game(t_vars *vars)
+{
+	vars->ui = 10;
+	draw_easy_texture(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, vars->win_size.y / 2, gen_color(0, 0, 0, 0)), get_texture(vars, "end", 0));
+}
+
+int	try_attack(t_vars *vars, t_enemy *enemy)
+{
+	time_t	attack_ts;
+
+	attack_ts = gettime(vars->n1);
+	if (attack_ts - enemy->last_attack < 1000)
+		return (0);
+	vars->player.lives--;
+	if (vars->player.lives <= 0)
+		end_game(vars);
+	return (1);
+}
+
+void	process_enemies(t_vars *vars)
+{
+	int		i;
+	double	angle;
+	double	dist_enemy;
+	// double	dangle;
+	// int		screen_x;
+	t_vector2	new_pos;
+	t_ray	ray;
+
+	i = -1;
+	while (++i < vars->n_enemies)
+	{
+		if (vars->enemies[i].lives > 0)
+		{
+			angle = atan2((vars->enemies[i].pos.y - vars->player.pos.y), (vars->enemies[i].pos.x - vars->player.pos.x));
+			if (angle < 0)
+				angle = M_PI * 2 + angle;
+			angle =  angle + M_PI;
+			angle = fmod(angle, M_PI * 2);
+			printf("player%d:%f|%f|%f\\%f\n",i,vars->start,angle,vars->end, angle + (M_PI * 2.0));
+			dist_enemy = dist(vars->enemies[i].pos.x, vars->enemies[i].pos.y, vars->player.pos.x, vars->player.pos.y, angle);
+			// if (dist_enemy < .8 && try_attack(vars, &vars->enemies[i]))
+			// 	return ;
+			ray.ra2 = angle;
+			ray.start_pos.x = vars->enemies[i].pos.x;
+			ray.start_pos.y = vars->enemies[i].pos.y;
+			calc_ray(vars, &ray);
+			if (dist_enemy < ray.dist)
+			{
+				new_pos.x = vars->enemies[i].pos.x + (.08 - .16 * (vars->player.pos.x < vars->enemies[i].pos.x))* vars->delta_time * 20.0;
+				new_pos.y = vars->enemies[i].pos.y + (.08 - .16 * (vars->player.pos.y < vars->enemies[i].pos.y)) * vars->delta_time * 20.0;
+				change_case(vars, new_pos.x, new_pos.y, &vars->enemies[i].pos);
+				vars->enemies[i].pos.x = new_pos.x;
+				vars->enemies[i].pos.y = new_pos.y;
+			}
+		}
+	}
+}
+
 void	gen_bullet(t_vars *vars)
 {
-	vars->bullets[0].pos.x = vars->player.pos.x;
-	vars->bullets[0].pos.y = vars->player.pos.y;
-	vars->bullets[0].delta.x = cos(vars->player.rot.x);
-	vars->bullets[0].delta.y = sin(vars->player.rot.x);
-	printf("%.2f %.2f\n", vars->player.delta.x, vars->player.delta.y);
+	int		i;
+	time_t	cooldown;
+
+	cooldown = gettime(vars->n1);
+	if (cooldown - vars->bullet_cooldown < 400
+		|| vars->mult_fd || !vars->clicking)
+		return ;
+	vars->bullet_cooldown = cooldown;
+	i = -1;
+	while (++i < MAX_BULLETS)
+		if (vars->bullets[i].pos.x < 0)
+			break;
+	if (i == MAX_BULLETS)
+		return ;
+	vars->bullets[i].pos.x = vars->player.pos.x;
+	vars->bullets[i].pos.y = vars->player.pos.y;
+	vars->bullets[i].delta.x = cos(vars->player.rot.x);
+	vars->bullets[i].delta.y = sin(vars->player.rot.x);
+	// printf("%.2f %.2f\n", vars->player.delta.x, vars->player.delta.y);
 }
 
 void	draw_hud(t_vars *vars)
@@ -364,7 +470,7 @@ void	draw_hud(t_vars *vars)
 	// Cursor
 	draw_square_center(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, 4, gen_color(255, 255, 255, 0)));
 	draw_square_center(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, 2, gen_color(0, 0, 0, 0)));
-
+	draw_easy_texture(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, vars->win_size.y, gen_color(0, 0, 0, 0)), get_texture(vars, "hud", 0));
 }
 
 void	render(t_vars *vars)
@@ -399,6 +505,7 @@ void	render(t_vars *vars)
 		// if (vars->player.rot.y + jump_height < vars->win_size.y && vars->player.rot.y + jump_height > 0)
 		// 	vars->player.rot.y += 
 	}
+	gen_bullet(vars);
 	jump_time = gettime(vars->n1) - vars->jump;
 	if (jump_time < 1000)
 		vars->jump_height = -(((-1.0 / 1000.0) * ((int)jump_time * (int)jump_time) + .0) + (int)jump_time) * 1.5;
@@ -407,6 +514,7 @@ void	render(t_vars *vars)
 	shade_floor_ceil(vars);
 	project_rays(vars);
 	draw_other_players(vars);
+	process_enemies(vars);
 	draw_enemies(vars);
 	//test_rays(vars);
 	draw_2d_map(vars, vars->min_map_mult);

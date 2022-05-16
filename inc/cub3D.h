@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 16:58:41 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/16 15:19:07 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # include "../mlx_opengl/mlx.h"
 
 # define MAX_CLIENT 10
+# define MAX_BULLETS 2000
 # define M_2PI 6.283185307179586
 # define PORT 5000
 # define SERVER_IP "127.0.0.1"
@@ -76,10 +77,11 @@ typedef struct s_vector2 {
 }			t_vector2;
 
 typedef struct s_player {
-	int			run;
-	t_vector2	pos;
-	t_vector2	delta;
-	t_vector2	rot;
+	int				run;
+	t_vector2		pos;
+	t_vector2		delta;
+	t_vector2		rot;
+	int				lives;
 }		t_player;
 
 typedef struct s_settings
@@ -109,6 +111,7 @@ typedef	struct s_textures
 typedef struct s_enemy {
 	t_vector2	pos;
 	int			lives;
+	time_t		last_attack;
 }		t_enemy;
 
 typedef struct s_bullets {
@@ -117,22 +120,24 @@ typedef struct s_bullets {
 }		t_bullets;
 
 typedef struct s_ray {
-	double	dist;
-	double	rx;
-	double	ry;
-	double	ra2;
-	int		side;
+	t_vector2	start_pos;
+	double		dist;
+	double		rx;
+	double		ry;
+	double		ra2;
+	int			side;
 }		t_ray;
 
 // size.z => size.x * size.y
 typedef struct s_vars {
+	time_t			bullet_cooldown;
 	t_ray			*rays;
 	int				max_size;
 	double			tx;
 	double			rotmpi;
 	double			delta_time;
 	double			delta_time_render;
-	t_bullets		bullets[MAX_CLIENT];
+	t_bullets		bullets[MAX_BULLETS];
 	int				n_enemies;
 	double			start;
 	double			end;
@@ -208,6 +213,8 @@ typedef struct s_slider {
 	void *setting;
 }	t_slider;
 
+void	pixel_put_add(t_data *data, int *x, int *y, unsigned int *color);
+
 //************************* Texture manage fonctions *************************//
 
 void		load_texture(t_vars	*vars, char *name, int nb, char *path);
@@ -239,6 +246,8 @@ int			ui_frame3(t_vars	*vars);
 int			ui_setting(t_vars	*vars);
 int			ui_texture(t_vars	*vars);
 
+int	change_case(t_vars	*vars, double newposX, double newposY, t_vector2 *start);
+void	calc_ray(t_vars *vars, t_ray *r);
 void	draw_2d_map(t_vars *vars, int size);
 int	init_player(t_vars *vars);
 double	dist(double ax, double ay, double bx, double by, double angle);

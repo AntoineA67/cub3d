@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:24:04 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/11 18:31:05 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/12 18:32:18 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,26 @@ void	pixel_put(t_data *data, int x, int y, unsigned int color)
 
 	// if (x >= 0 && x < 1920 && y >= 0 && y < 1080)
 	// {
-	if (color>>24 != 255)
+	if (x >= 0 && x < 1920 && y >= 0 && y < 1080 && color>>24 != 255)
 	{
 		dst = data->addr + (y * data->line_length + x * data->bits_per_pixel);
 		*(unsigned int *)dst = color;
 	}
+	// else
+		// printf("aa\n");
+	// }
+}
+void	pixel_put_add(t_data *data, int *x, int *y, unsigned int *color)
+{
+	char	*dst;
+
+	// if (x >= 0 && x < 1920 && y >= 0 && y < 1080)
+	// {
+	//if (x >= 0 && x < 1920 && y >= 0 && y < 1080 && color>>24 != 255)
+	// {
+		dst = data->addr + (*y * data->line_length + *x * data->bits_per_pixel);
+		*(unsigned int *)dst = *color;
+	// }
 	// else
 		// printf("aa\n");
 	// }

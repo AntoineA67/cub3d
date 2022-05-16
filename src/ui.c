@@ -116,7 +116,7 @@ int	ui_setting(t_vars	*vars)
 	button(screen_pc(80.80,05.05, gen_color(255,0,100, 0), vars), "start", &change_ui, 1);
 	button(screen_pc(25.30,25.025, gen_color(255,0,100, 0), vars), "start", &change_setting, 1);
 	img_text(vars, ft_strjoin("Minimaps_type: ", ft_itoa(vars->settings.map_type)), screen_pc(60.30,20.025, gen_color(255,0,100, 0), vars));
-	slider(vars, screen_pc(25.40,25.025, gen_color(255,0,100, 0), vars), slider_param(120.0, 1.0, &vars->settings.fps_cap), 1.0);
+	slider(vars, screen_pc(25.40,25.025, gen_color(255,0,100, 0), vars), slider_param(120.0, 0, &vars->settings.fps_cap), 1.0);
 	img_text(vars, ft_strjoin("FPS_CAPS: ", ft_itoa(vars->settings.fps_cap)), screen_pc(60.40,20.025, gen_color(255,0,100, 0), vars));
 	slider(vars, screen_pc(25.50,25.025, gen_color(255,0,100, 0), vars), slider_param(1.6, 0.2, &vars->settings.y_ratio_mouse_speed), 0.1);
 	img_text(vars, ft_strjoin("Sensibilite Y: ", ft_dtoa(vars->settings.y_ratio_mouse_speed)), screen_pc(60.50,20.025, gen_color(255,0,100, 0), vars));

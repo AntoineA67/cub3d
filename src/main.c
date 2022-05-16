@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 17:01:02 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/16 15:20:42 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	init_player(t_vars *vars)
 {
 	char	*player_in_map;
 
+	vars->player.lives = 3;
 	vars->player.rot.x = vars->start_rot;
 	vars->player.rot.y = 0;
 	vars->player.delta.x = 0;
@@ -54,6 +55,8 @@ void	init_imgs(t_vars *vars)
 	load_texture(vars, "textures", 0, "./textures/pack_blue_pink/textures.xpm");
 	load_texture(vars, "no", 0, vars->no);
 	load_texture(vars, "aaa", 0, "./textures/nice/aaa.xpm");
+	load_texture(vars, "end", 0, "./textures/nice/aaa.xpm");
+	load_texture(vars, "hud", 0, "./textures/hud.xpm");
 	load_texture(vars, "bullet", 0, "./textures/bullets/bullet.xpm");
 	load_texture(vars, "so", 0, vars->so);
 	load_texture(vars, "maps", 0, "./textures/pack_blue_pink/maps.xpm");
@@ -64,9 +67,10 @@ void	init_imgs(t_vars *vars)
 void	init_bullets(t_vars *vars)
 {
 	int	i;
-	
+
+	vars->bullet_cooldown = -1;
 	i = -1;
-	while (++i < MAX_CLIENT)
+	while (++i < MAX_BULLETS)
 	{
 		vars->bullets[i].pos.x = -1;
 	}
@@ -84,10 +88,11 @@ void	init_enemies(t_vars *vars)
 		if (vars->parse_seen[i] == 1 && ++n % (int)(vars->usable_cells / 10) == 0)
 		{
 			vars->enemies[++vars->n_enemies - 1].lives = 3;
+			vars->enemies[++vars->n_enemies - 1].last_attack = -1000;
 			vars->enemies[vars->n_enemies - 1].pos.x = i % vars->size.x + .5;
 			vars->enemies[vars->n_enemies - 1].pos.y = i / vars->size.x + .5;
 			printf("Enemy: %.2f %.2f\n", vars->enemies[vars->n_enemies - 1].pos.x,
-			vars->enemies[vars->n_enemies - 1].pos.y);
+				vars->enemies[vars->n_enemies - 1].pos.y);
 		}
 	}
 }
@@ -247,7 +252,7 @@ int	main(int argc, char **argv)
 	fill_vars(&vars, fd);
 	(void)extract_name;
 	vars.rays_number = 0;
-	vars.settings.fps_cap = 60;
+	vars.settings.fps_cap = 0;
 	vars.settings.map_type = 1;
 	vars.win = mlx_new_window(vars.mlx, vars.win_size.x,
 			vars.win_size.y, extract_name(argv[1]));

@@ -9,11 +9,11 @@ SERVER		= server
 OBJ			= $(addprefix ${OBJDIR}, $(SRC:.c=.o))
 LIBRARY		= -L libft -lft -L mlx_opengl -lmlx -lm
 LIB_FILE	= libft/libft.a mlx_opengl/libmlx.a
-CC			= cc
+CC			= gcc
 # FLAGS		= -I/usr/include
 FLAGS		= -Wall -Wextra -Werror
-# FLAGS		+= -O2
-FLAGS		+= -fsanitize=address -g
+FLAGS		+= -O3
+# FLAGS		+= -fsanitize=address -g
 # FLAGS		+= -Ofast
 
 #	RULES

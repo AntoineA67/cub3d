@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mouse_hooks.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 19:50:25 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 15:26:51 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/14 16:14:00 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ int	mouse_hook(int keycode, int x, int y, t_vars *vars)
 		vars->clicking = 1;
 		vars->clicked_co.x = x;
 		vars->clicked_co.y = y;
-		if (!vars->mult_fd && vars->bullets[0].pos.x < 0 && !vars->ui)
-			gen_bullet(vars);
+		// if (!vars->mult_fd && !vars->ui)
+		// 	gen_bullet(vars);
 	}
 	else if (keycode == 4)
 		vars->scroll++;
