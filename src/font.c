@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   font.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:07:51 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/11 12:10:38 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/05/16 16:02:22 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,33 @@ void	img_text(t_vars *vars, char *str, t_coords p)
 			{
 				if ((vars->font[(int)str[i]]>>(64 - (j / scale * 8) - (k / scale))) & 1)
 					pixel_put(vars->img, p.a.x + k + i * (8 * scale), p.a.y + j, to_rgb(p.a.c, 0));
+			}	
+		}
+	}
+}
+
+void	img_text_simple(t_vars *vars, char *str, t_coord p)
+{
+	int	i;
+	int	j;
+	int	k;
+	int	scale;
+
+	scale = p.z;
+	if (!scale)
+		return ;
+	i = -1;
+	j = 0;
+	while (str[++i])
+	{
+		j = -1;
+		while (++j < 8 * scale)
+		{
+			k = -1;
+			while (++k < 8 * scale)
+			{
+				if ((vars->font[(int)str[i]]>>(64 - (j / scale * 8) - (k / scale))) & 1)
+					pixel_put(vars->img, p.x + k + i * (8 * scale), p.y + j, to_rgb(p.c, 0));
 			}	
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/16 15:22:01 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/17 14:44:25 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,51 +93,6 @@ void	draw_square_texture_center(t_vars *vars, t_coord p, t_data *img, double dis
 	}
 }
 
-void	draw_enemies(t_vars *vars)
-{
-	int		i;
-	double	angle;
-	double	dist_enemy;
-	double	dangle;
-	int		screen_x;
-
-	i = -1;
-	while (++i < vars->n_enemies)
-	{
-		if (vars->enemies[i].lives > 0)
-		{
-			angle = atan2((vars->player.pos.y - vars->enemies[i].pos.y), (vars->player.pos.x - vars->enemies[i].pos.x));
-			if (angle < 0)
-				angle = M_PI * 2 + angle;
-			angle =  angle + M_PI;
-			angle = fmod(angle, M_PI * 2);
-			// printf("player%d:%f|%f|%f\\%f\n",i,vars->start,angle,vars->end, angle + (M_PI * 2.0));
-			dist_enemy = dist(vars->player.pos.x, vars->player.pos.y, vars->enemies[i].pos.x, vars->enemies[i].pos.y, angle);
-			if (angle > vars->start && angle < vars->end)
-			{
-				dangle = vars->end - angle;
-				screen_x = vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2);
-				if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x].dist > dist_enemy)
-				{
-					draw_square_texture_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_enemy) * (vars->win_size.y / 2), gen_color(100,100,100,0)), get_texture(vars, "aaa", 0), dist_enemy);
-				}
-				// draw_square_texture_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) * 200, gen_color(100,100,100,0)), get_animtexture(vars, "player", 0.2));
-				// draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));
-			}
-			else if (( angle + (M_PI * 2.0)) > vars->start && (angle + (M_PI * 2.0)) < vars->end)
-			{
-				dangle = vars->end - (angle + (M_PI * 2.0));
-				screen_x = vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2);
-				if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x].dist > dist_enemy)
-				{
-					draw_square_texture_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_enemy) * (vars->win_size.y / 2), gen_color(100,100,100,0)), get_texture(vars, "aaa", 0), dist_enemy);	
-				}
-				// draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));	
-			}
-		}
-	}
-}
-
 void	draw_other_players(t_vars *vars)
 {
 	int		i;
@@ -219,7 +174,7 @@ void	draw_2d_enemies(t_vars *vars, int size)
 	int	i;
 
 	i = -1;
-	while (++i < vars->n_enemies)
+	while (++i < vars->max_n_enemies)
 	{
 		if (vars->enemies[i].lives > 0)
 		{
@@ -328,7 +283,7 @@ int	check_enemy_nearby(t_vars *vars, t_vector2 *bullet_pos)
 
 	i = -1;
 	hitbox = .3;
-	while (++i < vars->n_enemies)
+	while (++i < vars->max_n_enemies)
 	{
 		if (vars->enemies[i].lives > 0)
 		{
@@ -383,63 +338,46 @@ void	process_bullets(t_vars *vars)
 	}
 }
 
-void	end_game(t_vars *vars)
+void	end_game_lose(t_vars *vars)
 {
 	vars->ui = 10;
-	draw_easy_texture(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, vars->win_size.y / 2, gen_color(0, 0, 0, 0)), get_texture(vars, "end", 0));
+	ft_int_memset(vars->img->addr, 0x000000,
+				vars->img->line_length * vars->win_size.y / 4);
+	// draw_easy_texture(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, vars->win_size.y / 2, gen_color(0, 0, 0, 0)), get_texture(vars, "end", 0));
+	img_text_simple(vars, "GAME OVER", gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, 8, gen_color(0, 0, 0, 0)));
+	printf("Game over\n");
+}
+void	end_game_win(t_vars *vars)
+{
+	vars->ui = 10;
+	ft_int_memset(vars->img->addr, 0x000000,
+				vars->img->line_length * vars->win_size.y / 4);
+	// draw_easy_texture(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, vars->win_size.y / 2, gen_color(0, 0, 0, 0)), get_texture(vars, "end", 0));
+	img_text_simple(vars, "Fini", gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, 10, gen_color(0, 0, 0, 0)));
+	printf("You win\n");
+	exit(EXIT_SUCCESS);
 }
 
-int	try_attack(t_vars *vars, t_enemy *enemy)
+int	check_end_game(t_vars *vars)
 {
-	time_t	attack_ts;
-
-	attack_ts = gettime(vars->n1);
-	if (attack_ts - enemy->last_attack < 1000)
-		return (0);
-	vars->player.lives--;
-	if (vars->player.lives <= 0)
-		end_game(vars);
-	return (1);
-}
-
-void	process_enemies(t_vars *vars)
-{
-	int		i;
-	double	angle;
-	double	dist_enemy;
-	// double	dangle;
-	// int		screen_x;
-	t_vector2	new_pos;
-	t_ray	ray;
+	int	i;
 
 	i = -1;
-	while (++i < vars->n_enemies)
+	if (vars->player.lives <= 0)
 	{
-		if (vars->enemies[i].lives > 0)
-		{
-			angle = atan2((vars->enemies[i].pos.y - vars->player.pos.y), (vars->enemies[i].pos.x - vars->player.pos.x));
-			if (angle < 0)
-				angle = M_PI * 2 + angle;
-			angle =  angle + M_PI;
-			angle = fmod(angle, M_PI * 2);
-			printf("player%d:%f|%f|%f\\%f\n",i,vars->start,angle,vars->end, angle + (M_PI * 2.0));
-			dist_enemy = dist(vars->enemies[i].pos.x, vars->enemies[i].pos.y, vars->player.pos.x, vars->player.pos.y, angle);
-			// if (dist_enemy < .8 && try_attack(vars, &vars->enemies[i]))
-			// 	return ;
-			ray.ra2 = angle;
-			ray.start_pos.x = vars->enemies[i].pos.x;
-			ray.start_pos.y = vars->enemies[i].pos.y;
-			calc_ray(vars, &ray);
-			if (dist_enemy < ray.dist)
-			{
-				new_pos.x = vars->enemies[i].pos.x + (.08 - .16 * (vars->player.pos.x < vars->enemies[i].pos.x))* vars->delta_time * 20.0;
-				new_pos.y = vars->enemies[i].pos.y + (.08 - .16 * (vars->player.pos.y < vars->enemies[i].pos.y)) * vars->delta_time * 20.0;
-				change_case(vars, new_pos.x, new_pos.y, &vars->enemies[i].pos);
-				vars->enemies[i].pos.x = new_pos.x;
-				vars->enemies[i].pos.y = new_pos.y;
-			}
-		}
+		end_game_lose(vars);
+		return (1);
 	}
+	while (++i < vars->max_n_enemies)
+	{
+		// printf("%")
+		if (vars->enemies[i].lives > 0)
+			return (0);
+		// if (vars->enemies[i].pos.x > 0)
+		// 	return (0);
+	}
+	end_game_win(vars);
+	return (1);
 }
 
 void	gen_bullet(t_vars *vars)
@@ -467,10 +405,14 @@ void	gen_bullet(t_vars *vars)
 
 void	draw_hud(t_vars *vars)
 {
+	int	i;
 	// Cursor
 	draw_square_center(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, 4, gen_color(255, 255, 255, 0)));
 	draw_square_center(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, 2, gen_color(0, 0, 0, 0)));
 	draw_easy_texture(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, vars->win_size.y, gen_color(0, 0, 0, 0)), get_texture(vars, "hud", 0));
+	i = -1;
+	while (++i < vars->player.lives)
+		draw_easy_texture(vars, gen_coord(60 + i * 40, vars->win_size.y - 50, 32, gen_color(0, 0, 0, 0)), get_texture(vars, "hp", 0));
 }
 
 void	render(t_vars *vars)
@@ -505,6 +447,8 @@ void	render(t_vars *vars)
 		// if (vars->player.rot.y + jump_height < vars->win_size.y && vars->player.rot.y + jump_height > 0)
 		// 	vars->player.rot.y += 
 	}
+	if (check_end_game(vars))
+		return ;
 	gen_bullet(vars);
 	jump_time = gettime(vars->n1) - vars->jump;
 	if (jump_time < 1000)

@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/16 15:19:07 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/17 14:46:43 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ typedef struct s_enemy {
 	t_vector2	pos;
 	int			lives;
 	time_t		last_attack;
+	t_vector2	last_player_pos;
 }		t_enemy;
 
 typedef struct s_bullets {
@@ -138,6 +139,7 @@ typedef struct s_vars {
 	double			delta_time;
 	double			delta_time_render;
 	t_bullets		bullets[MAX_BULLETS];
+	int				max_n_enemies;
 	int				n_enemies;
 	double			start;
 	double			end;
@@ -246,6 +248,10 @@ int			ui_frame3(t_vars	*vars);
 int			ui_setting(t_vars	*vars);
 int			ui_texture(t_vars	*vars);
 
+void	draw_enemies(t_vars *vars);
+void	process_enemies(t_vars *vars);
+void	draw_square_texture_center(t_vars *vars, t_coord p, t_data *img, double dist_b_players);
+void	img_text_simple(t_vars *vars, char *str, t_coord p);
 int	change_case(t_vars	*vars, double newposX, double newposY, t_vector2 *start);
 void	calc_ray(t_vars *vars, t_ray *r);
 void	draw_2d_map(t_vars *vars, int size);

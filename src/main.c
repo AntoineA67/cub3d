@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/16 15:20:42 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/05/17 17:42:24 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ long	gettime(long initime)
 
 void	init_imgs(t_vars *vars)
 {
-	// t_textures	*imgs;
-
 	vars->img = ft_calloc(1, sizeof(t_data));
 	vars->img2 = ft_calloc(1, sizeof(t_data));
 	vars->settings.bttext = ft_calloc(10, sizeof(t_data));
@@ -55,7 +53,8 @@ void	init_imgs(t_vars *vars)
 	load_texture(vars, "textures", 0, "./textures/pack_blue_pink/textures.xpm");
 	load_texture(vars, "no", 0, vars->no);
 	load_texture(vars, "aaa", 0, "./textures/nice/aaa.xpm");
-	load_texture(vars, "end", 0, "./textures/nice/aaa.xpm");
+	load_texture(vars, "hp", 0, "./textures/hp.xpm");
+	load_texture(vars, "end", 0, "./textures/xpm/dirt.xpm");
 	load_texture(vars, "hud", 0, "./textures/hud.xpm");
 	load_texture(vars, "bullet", 0, "./textures/bullets/bullet.xpm");
 	load_texture(vars, "so", 0, vars->so);
@@ -78,28 +77,52 @@ void	init_bullets(t_vars *vars)
 
 void	init_enemies(t_vars *vars)
 {
-	int	i;
-	int	n;
+	int		i;
+	int		n;
+	double	prob;
 
-	i = -1;
+	i = 0;
+	// i = -1;
 	n = -1;
-	while (++i < vars->size.z && vars->n_enemies < vars->usable_cells / 20 + 1)
+	prob = .0001;
+	while (vars->max_n_enemies < vars->usable_cells / 20 + 1)
 	{
-		if (vars->parse_seen[i] == 1 && ++n % (int)(vars->usable_cells / 10) == 0)
+		printf("GEN ENEMY: %d	%d %.2f\n", vars->max_n_enemies, (int)(gettime(vars->n1) % 100), prob * 100);
+		if (vars->parse_seen[i] == 1 && (int)(gettime(vars->n1) % 100) < (int)(prob * 100))
 		{
-			vars->enemies[++vars->n_enemies - 1].lives = 3;
-			vars->enemies[++vars->n_enemies - 1].last_attack = -1000;
-			vars->enemies[vars->n_enemies - 1].pos.x = i % vars->size.x + .5;
-			vars->enemies[vars->n_enemies - 1].pos.y = i / vars->size.x + .5;
-			printf("Enemy: %.2f %.2f\n", vars->enemies[vars->n_enemies - 1].pos.x,
-				vars->enemies[vars->n_enemies - 1].pos.y);
+			vars->enemies[++vars->max_n_enemies - 1].lives = 3;
+			vars->enemies[vars->max_n_enemies - 1].last_attack = -1000;
+			vars->enemies[vars->max_n_enemies - 1].pos.x = i % vars->size.x + .5;
+			vars->enemies[vars->max_n_enemies - 1].pos.y = i / vars->size.x + .5;
+			ft_memcpy(&vars->enemies[vars->max_n_enemies - 1].last_player_pos,
+				&vars->enemies[vars->max_n_enemies - 1].pos, sizeof(t_vector2));
+			printf("Enemy: %.2f %.2f\n", vars->enemies[vars->max_n_enemies - 1].pos.x,
+				vars->enemies[vars->max_n_enemies - 1].pos.y);
 		}
+		prob += 1.0 / vars->usable_cells;
+		i = (i + 1) % vars->size.z;
 	}
+
+	// while (++i < vars->size.z && vars->max_n_enemies < vars->usable_cells / 20 + 1)
+	// {
+	// 	if (vars->parse_seen[i] == 1 && ++n % (int)(vars->usable_cells / 10) == 0)
+	// 	{
+	// 		vars->enemies[++vars->max_n_enemies - 1].lives = 3;
+	// 		vars->enemies[vars->max_n_enemies - 1].last_attack = -1000;
+	// 		vars->enemies[vars->max_n_enemies - 1].pos.x = i % vars->size.x + .5;
+	// 		vars->enemies[vars->max_n_enemies - 1].pos.y = i / vars->size.x + .5;
+	// 		ft_memcpy(&vars->enemies[vars->max_n_enemies - 1].last_player_pos,
+	// 			&vars->enemies[vars->max_n_enemies - 1].pos, sizeof(t_vector2));
+	// 		printf("Enemy: %.2f %.2f\n", vars->enemies[vars->max_n_enemies - 1].pos.x,
+	// 			vars->enemies[vars->max_n_enemies - 1].pos.y);
+	// 	} 
+	// }
+	vars->n_enemies = vars->max_n_enemies;
 }
 
 static void	fill_vars(t_vars *vars, int fd)
 {
-	vars->n_enemies = 0;
+	vars->max_n_enemies = 0;
 	vars->mult_n_players = 0;
 	vars->usable_cells = 0;
 	vars->player.run = 0;
@@ -249,6 +272,7 @@ int	main(int argc, char **argv)
 	}
 	vars.min_map_mult = 16.0;
 	vars.ui = 1;
+	vars.n1 = gettime(0);
 	fill_vars(&vars, fd);
 	(void)extract_name;
 	vars.rays_number = 0;
@@ -270,7 +294,6 @@ int	main(int argc, char **argv)
 	mlx_loop_hook(vars.mlx, frame, &vars);
 	mlx_mouse_hook(vars.win, mouse_hook, &vars);
 	// mlx_loop_hook(vars.mlx, raycasting, &vars);
-	vars.n1 = gettime(0);
 	mlx_loop(vars.mlx);
 	free_textures(&vars);
 }
