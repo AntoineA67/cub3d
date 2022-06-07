@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 17:51:41 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/02 16:11:10 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@
 # include <sys/time.h>
 # include "../libft/libft.h"
 # include "../mlx_opengl/mlx.h"
+# include "profiling.h"
 
 # define MAX_CLIENT 10
+# define MAX_BULLETS 2000
 # define M_2PI 6.283185307179586
 # define PORT 5000
 # define SERVER_IP "127.0.0.1"
@@ -76,10 +78,11 @@ typedef struct s_vector2 {
 }			t_vector2;
 
 typedef struct s_player {
-	int			run;
-	t_vector2	pos;
-	t_vector2	delta;
-	t_vector2	rot;
+	int				run;
+	t_vector2		pos;
+	t_vector2		delta;
+	t_vector2		rot;
+	int				lives;
 }		t_player;
 
 typedef struct s_settings
@@ -109,6 +112,8 @@ typedef	struct s_textures
 typedef struct s_enemy {
 	t_vector2	pos;
 	int			lives;
+	time_t		last_attack;
+	t_vector2	last_player_pos;
 }		t_enemy;
 
 typedef struct s_bullets {
@@ -117,22 +122,25 @@ typedef struct s_bullets {
 }		t_bullets;
 
 typedef struct s_ray {
-	double	dist;
-	double	rx;
-	double	ry;
-	double	ra2;
-	int		side;
+	t_vector2	start_pos;
+	double		dist;
+	double		rx;
+	double		ry;
+	double		ra2;
+	int			side;
 }		t_ray;
 
 // size.z => size.x * size.y
 typedef struct s_vars {
+	time_t			bullet_cooldown;
 	t_ray			*rays;
 	int				max_size;
 	double			tx;
 	double			rotmpi;
 	double			delta_time;
 	double			delta_time_render;
-	t_bullets		bullets[MAX_CLIENT];
+	t_bullets		bullets[MAX_BULLETS];
+	int				max_n_enemies;
 	int				n_enemies;
 	double			start;
 	double			end;
@@ -208,88 +216,98 @@ typedef struct s_slider {
 	void *setting;
 }	t_slider;
 
-void	pixel_put_add(t_data *data, int *x, int *y, unsigned int *color);
+void	pixel_put_add(t_data *data, int *x, int *y, unsigned int *color) NOPROF;
 
 //************************* Texture manage fonctions *************************//
 
-void		load_texture(t_vars	*vars, char *name, int nb, char *path);
-void		load_animtexture(t_vars	*vars, char *name, int nb, char *path);
-void		free_textures(t_vars *vars);
-t_data		*get_texture(t_vars	*vars, char	*name, int nb);
-int			get_animsize(t_vars	*vars, char *name);
-t_data		*get_animtexture(t_vars	*vars, char	*name, double speed);
+void		load_texture(t_vars	*vars, char *name, int nb, char *path) NOPROF;
+void		load_animtexture(t_vars	*vars, char *name, int nb, char *path) NOPROF;
+void		free_textures(t_vars *vars) NOPROF;
+t_data		*get_texture(t_vars	*vars, char	*name, int nb) NOPROF;
+int			get_animsize(t_vars	*vars, char *name) NOPROF;
+t_data		*get_animtexture(t_vars	*vars, char	*name, double speed) NOPROF;
 
 //***************************** Button fonctions *****************************//
 
-void		change_texture(void		*v, int data);
-void		change_ui(void		*v, int data);
-void		change_map(void		*v, int data);
-void		change_setting(void		*v,  int data);
-t_coords	screen_pc(double off, double wh, t_rgb colore, t_vars *vars);
-void		button(t_coords p, char *txt,void (*f)(void*, int), int data);
+void		change_texture(void		*v, int data) NOPROF;
+void		change_ui(void		*v, int data) NOPROF;
+void		change_map(void		*v, int data) NOPROF;
+void		change_setting(void		*v,  int data) NOPROF;
+t_coords	screen_pc(double off, double wh, t_rgb colore, t_vars *vars) NOPROF;
+void		button(t_coords p, char *txt,void (*f)(void*, int), int data) NOPROF;
 
 //***************************** Slider fonctions *****************************//
 
-t_slider	slider_param(double	max, double min, void *setting);
-void		slider(t_vars *vars, t_coords p, t_slider slider, double pas);
+t_slider	slider_param(double	max, double min, void *setting) NOPROF;
+void		slider(t_vars *vars, t_coords p, t_slider slider, double pas) NOPROF;
 
 //******************************* UI fonctions *******************************//
 
-int			ui_frame1(t_vars	*vars);
-int			ui_frame2(t_vars	*vars);
-int			ui_frame3(t_vars	*vars);
-int			ui_setting(t_vars	*vars);
-int			ui_texture(t_vars	*vars);
+int			ui_frame1(t_vars	*vars) NOPROF;
+int			ui_frame2(t_vars	*vars) NOPROF;
+int			ui_frame3(t_vars	*vars) NOPROF;
+int			ui_setting(t_vars	*vars) NOPROF;
+int			ui_texture(t_vars	*vars) NOPROF;
 
-void	draw_2d_map(t_vars *vars, int size);
-int	init_player(t_vars *vars);
-double	dist(double ax, double ay, double bx, double by, double angle);
+//******************************* Init *******************************//
+int			init_player(t_vars *vars);
+
+
+void	draw_enemies(t_vars *vars) NOPROF;
+void	process_enemies(t_vars *vars) NOPROF;
+void	draw_square_texture_center(t_vars *vars, t_coord p, t_data *img, double dist_b_players) NOPROF;
+void	img_text_simple(t_vars *vars, char *str, t_coord p) NOPROF;
+int	change_case(t_vars	*vars, double newposX, double newposY, t_vector2 *start) NOPROF;
+void	calc_ray(t_vars *vars, t_ray *r) NOPROF;
+void	draw_2d_map(t_vars *vars, int size) NOPROF;
+int	init_player(t_vars *vars) NOPROF;
+double	dist(double ax, double ay, double bx, double by, double angle) NOPROF;
 void	project_rays(t_vars *vars);
-void	process_bullets(t_vars *vars);
-void	gen_bullet(t_vars *vars);
-int	check_map(t_vars *vars, int x, int y);
-int	mouse_hook_up(int keycode, int x, int y, t_vars *vars);
-long	gettime(long initime);
-void	img_text(t_vars *vars, char *str, t_coords p);
-void	affect_ascii(t_vars *vars);
-void	vert_line(t_vars *vars, int x, int size, int color);
-void	rotate_player_x(t_vars *vars, int dir);
-unsigned int	add_shade(t_vars *vars, unsigned int c, unsigned int dist_int, double ao);
-void	print_tab_pos(t_vector2 tab[10]);
-int		serv_connect(t_vars *vars);
-int		serv_process(t_vars *vars);
-unsigned int	to_rgb(t_rgb c, unsigned char grey);
-void	show_player(t_vars *vars, double size);
-void	draw_direction(t_vars *vars, int ratio);
-void	calculate_plane_points(t_vars *vars);
-void	draw_square(t_vars *vars, t_coord p);
-void	draw_square_center(t_vars *vars, t_coord p);
-int		f_loop(t_vars *vars);
-void	render(t_vars *vars);
-void	plot_line(t_vars *vars, t_coord p1, t_coord p2);
-int		is_in_window(t_vars *vars, int x, int y);
-int		check_inputs(t_vars *vars);
-int	key_hook_down(int keycode, t_vars *vars);
-int	key_hook_up(int keycode, t_vars *vars);
-// int		grad_color(t_rgb *c1, t_rgb *c2, float val, t_rgb map_color);
-// int		base_color(t_rgb *c1, t_rgb *c2, float val, t_rgb map_color);
- int		mouse_hook(int keycode, int x, int y, t_vars *vars);
-// void	out(t_vars *vars);
-void	esc(t_vars *vars, int err);
-// void	reset(t_vars *vars);
-// void	project(t_vars *vars);
-// void	exit_lst(t_list **lst);
-// void	next_color(t_vars *vars);
-// void	color(t_rgb *c, int r, int g, int b);
-t_coord	gen_coord(int x, int y, int z, t_rgb c);
-t_rgb	gen_color(int r, int g, int b, int v);
-t_coord	coord(t_coord *p, int x, int y, int z);
+void	process_bullets(t_vars *vars) NOPROF;
+void	gen_bullet(t_vars *vars) NOPROF;
+int	check_map(t_vars *vars, int x, int y) NOPROF;
+int	mouse_hook_up(int keycode, int x, int y, t_vars *vars) NOPROF;
+long	gettime(long initime) NOPROF;
+void	img_text(t_vars *vars, char *str, t_coords p) NOPROF;
+void	affect_ascii(t_vars *vars) NOPROF;
+void	vert_line(t_vars *vars, int x, int size, int color) NOPROF;
+void	rotate_player_x(t_vars *vars, int dir) NOPROF;
+unsigned int	add_shade(t_vars *vars, unsigned int c, unsigned int dist_int, double ao) NOPROF;
+void	print_tab_pos(t_vector2 tab[10]) NOPROF;
+int		serv_connect(t_vars *vars) NOPROF;
+int		serv_process(t_vars *vars) NOPROF;
+unsigned int	to_rgb(t_rgb c, unsigned char grey) NOPROF;
+void	show_player(t_vars *vars, double size) NOPROF;
+void	draw_direction(t_vars *vars, int ratio) NOPROF;
+void	calculate_plane_points(t_vars *vars) NOPROF;
+void	draw_square(t_vars *vars, t_coord p) NOPROF;
+void	draw_square_center(t_vars *vars, t_coord p) NOPROF;
+int		f_loop(t_vars *vars) NOPROF;
+void	render(t_vars *vars) NOPROF;
+void	plot_line(t_vars *vars, t_coord p1, t_coord p2) NOPROF;
+int		is_in_window(t_vars *vars, int x, int y) NOPROF;
+int		check_inputs(t_vars *vars) NOPROF;
+int	key_hook_down(int keycode, t_vars *vars) NOPROF;
+int	key_hook_up(int keycode, t_vars *vars) NOPROF;
+// int		grad_color(t_rgb *c1, t_rgb *c2, float val, t_rgb map_color) NOPROF;
+// int		base_color(t_rgb *c1, t_rgb *c2, float val, t_rgb map_color) NOPROF;
+ int		mouse_hook(int keycode, int x, int y, t_vars *vars) NOPROF;
+// void	out(t_vars *vars) NOPROF;
+void	esc(t_vars *vars, int err) NOPROF;
+// void	reset(t_vars *vars) NOPROF;
+// void	project(t_vars *vars) NOPROF;
+// void	exit_lst(t_list **lst) NOPROF;
+// void	next_color(t_vars *vars) NOPROF;
+// void	color(t_rgb *c, int r, int g, int b) NOPROF;
+t_coord	gen_coord(int x, int y, int z, t_rgb c) NOPROF;
+t_rgb	gen_color(int r, int g, int b, int v) NOPROF;
+t_coord	coord(t_coord *p, int x, int y, int z) NOPROF;
 void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit_dist, double ao);
 
-void	pixel_put(t_data *data, int x, int y, unsigned int color);
-// float	deg_to_rad(int d);
-// t_rgb	cycle_color(t_rgb color);
+void	pixel_put(t_data *data, int x, int y, unsigned int color) NOPROF;
+// float	deg_to_rad(int d) NOPROF;
+// t_rgb	cycle_color(t_rgb color) NOPROF;
 char	*parse(int fd, t_vars *vars);
-char	*create_l_pts(t_list *lst, int size_x, int size_y);
+char	*create_l_pts(t_list *lst, int size_x, int size_y) NOPROF;
 
 #endif

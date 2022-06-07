@@ -3,33 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/12 17:22:38 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/02 16:21:11 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/cub3D.h"
-
-int	init_player(t_vars *vars)
-{
-	char	*player_in_map;
-
-	vars->player.rot.x = vars->start_rot;
-	vars->player.rot.y = 0;
-	vars->player.delta.x = 0;
-	vars->player.delta.y = 0;
-	player_in_map = ft_strchr(vars->map, 'P');
-	printf("test%p|%p\n", vars->map, player_in_map);
-	vars->map[player_in_map - vars->map] = '0';
-	printf("test\n");
-	vars->player.pos.x = (player_in_map - vars->map) % vars->size.x + .5;
-	vars->player.pos.y = (player_in_map - vars->map) / vars->size.x + .5;
-	return (0);
-}
+#include "cub3D.h"
 
 long	gettime(long initime)
+NOPROF
 {
 	long			res;
 	struct timeval	time;
@@ -43,8 +27,6 @@ long	gettime(long initime)
 
 void	init_imgs(t_vars *vars)
 {
-	// t_textures	*imgs;
-
 	vars->img = ft_calloc(1, sizeof(t_data));
 	vars->img2 = ft_calloc(1, sizeof(t_data));
 	vars->settings.bttext = ft_calloc(10, sizeof(t_data));
@@ -53,8 +35,10 @@ void	init_imgs(t_vars *vars)
 	load_texture(vars, "maps", 0, "./textures/pack_blue_pink/maps.xpm");
 	load_texture(vars, "textures", 0, "./textures/pack_blue_pink/textures.xpm");
 	load_texture(vars, "no", 0, vars->no);
-	//load_animtexture(vars, "no", 4, "./textures/nice/photo.xpm");
-	load_texture(vars, "oui", 0, "./textures/nice/arbre.xpm");
+	load_texture(vars, "aaa", 0, "./textures/nice/aaa.xpm");
+	load_texture(vars, "hp", 0, "./textures/hp.xpm");
+	load_texture(vars, "end", 0, "./textures/xpm/dirt.xpm");
+	load_texture(vars, "hud", 0, "./textures/hud.xpm");
 	load_texture(vars, "bullet", 0, "./textures/bullets/bullet.xpm");
 	load_texture(vars, "so", 0, vars->so);
 	load_texture(vars, "maps", 0, "./textures/pack_blue_pink/maps.xpm");
@@ -65,9 +49,10 @@ void	init_imgs(t_vars *vars)
 void	init_bullets(t_vars *vars)
 {
 	int	i;
-	
+
+	vars->bullet_cooldown = -1;
 	i = -1;
-	while (++i < MAX_CLIENT)
+	while (++i < MAX_BULLETS)
 	{
 		vars->bullets[i].pos.x = -1;
 	}
@@ -75,27 +60,59 @@ void	init_bullets(t_vars *vars)
 
 void	init_enemies(t_vars *vars)
 {
-	int	i;
-	int	n;
+	int				i;
+	int				n;
+	double			prob;
+	struct timeval	time;
 
-	i = -1;
+	i = 0;
+	//(int)(gettime(vars->n1) % 100)
+	// i = -1;
 	n = -1;
-	while (++i < vars->size.z && vars->n_enemies < vars->usable_cells / 20 + 1)
+	prob = .0001;
+	while (vars->max_n_enemies < vars->usable_cells / 20 + 1)
 	{
-		if (vars->parse_seen[i] == 1 && ++n % (int)(vars->usable_cells / 10) == 0)
+		gettimeofday(&time, NULL);
+		//printf("GEN ENEMY: %d %.2f %d %.2f\n", vars->max_n_enemies, prob, (int)(time.tv_usec) % 100, prob * 100);
+		if (vars->parse_seen[i] == 1
+			&& abs((int)vars->player.pos.x - i % vars->size.x) > 2 && abs((int)vars->player.pos.y - i % vars->size.y) > 2
+			&& (int)(time.tv_usec) % 100 < (int)(prob * 100))
 		{
-			vars->enemies[++vars->n_enemies - 1].lives = 3;
-			vars->enemies[vars->n_enemies - 1].pos.x = i % vars->size.x + .5;
-			vars->enemies[vars->n_enemies - 1].pos.y = i / vars->size.x + .5;
-			printf("Enemy: %.2f %.2f\n", vars->enemies[vars->n_enemies - 1].pos.x,
-			vars->enemies[vars->n_enemies - 1].pos.y);
+			vars->enemies[++vars->max_n_enemies - 1].lives = 3;
+			vars->enemies[vars->max_n_enemies - 1].last_attack = -1000;
+			vars->enemies[vars->max_n_enemies - 1].pos.x = i % vars->size.x + .5;
+			vars->enemies[vars->max_n_enemies - 1].pos.y = i / vars->size.x + .5;
+			ft_memcpy(&vars->enemies[vars->max_n_enemies - 1].last_player_pos,
+				&vars->enemies[vars->max_n_enemies - 1].pos, sizeof(t_vector2));
+			printf("Enemy: %.2f %.2f\n", vars->enemies[vars->max_n_enemies - 1].pos.x,
+				vars->enemies[vars->max_n_enemies - 1].pos.y);
+			prob = 0.0;
 		}
+		if (vars->parse_seen[i] == 1)
+			prob += 1.0 / vars->usable_cells;
+		i = (i + 1) % vars->size.z;
 	}
+
+	// while (++i < vars->size.z && vars->max_n_enemies < vars->usable_cells / 20 + 1)
+	// {
+	// 	if (vars->parse_seen[i] == 1 && ++n % (int)(vars->usable_cells / 10) == 0)
+	// 	{
+	// 		vars->enemies[++vars->max_n_enemies - 1].lives = 3;
+	// 		vars->enemies[vars->max_n_enemies - 1].last_attack = -1000;
+	// 		vars->enemies[vars->max_n_enemies - 1].pos.x = i % vars->size.x + .5;
+	// 		vars->enemies[vars->max_n_enemies - 1].pos.y = i / vars->size.x + .5;
+	// 		ft_memcpy(&vars->enemies[vars->max_n_enemies - 1].last_player_pos,
+	// 			&vars->enemies[vars->max_n_enemies - 1].pos, sizeof(t_vector2));
+	// 		printf("Enemy: %.2f %.2f\n", vars->enemies[vars->max_n_enemies - 1].pos.x,
+	// 			vars->enemies[vars->max_n_enemies - 1].pos.y);
+	// 	} 
+	// }
+	vars->n_enemies = vars->max_n_enemies;
 }
 
 static void	fill_vars(t_vars *vars, int fd)
 {
-	vars->n_enemies = 0;
+	vars->max_n_enemies = 0;
 	vars->mult_n_players = 0;
 	vars->usable_cells = 0;
 	vars->player.run = 0;
@@ -119,7 +136,7 @@ static void	fill_vars(t_vars *vars, int fd)
 	vars->max_size = ft_max(vars->size.x, vars->size.y);
 	if (init_player(vars))
 		return ; //NO PLAYER IN MAP
-	vars->parse_seen = ft_calloc(vars->size.z, 1);
+	vars->parse_seen = ft_calloc(vars->size.z + 1, 1);
 	if (!vars->parse_seen)
 		return ;
 	if (check_map(vars, (int)vars->player.pos.x, (int)vars->player.pos.y))
@@ -146,8 +163,6 @@ static void	fill_vars(t_vars *vars, int fd)
 		return ;
 	vars->img2->bits_per_pixel /= 8;
 	close(fd);
-	// mlx_mouse_hide();
-	// mlx_mouse_move(vars->win, 0, 0);
 }
 
 static char	*extract_name(char *str)
@@ -245,6 +260,7 @@ int	main(int argc, char **argv)
 	}
 	vars.min_map_mult = 16.0;
 	vars.ui = 1;
+	vars.n1 = gettime(0);
 	fill_vars(&vars, fd);
 	(void)extract_name;
 	vars.rays_number = 0;
@@ -254,10 +270,6 @@ int	main(int argc, char **argv)
 			vars.win_size.y, extract_name(argv[1]));
 	printf("EA: %s\nNO: %s\nSO: %s\nWE: %s\nF: %#x\nC: %#x\n",
 		vars.ea, vars.no, vars.so, vars.we, to_rgb(vars.f, 0), to_rgb(vars.c, 0));
-	// raycasting(&vars);
-	// if (!vars.win)
-	// 	esc(&vars, 1);
-	//mlx_key_hook(vars.win, key_hook, &vars);
 	mlx_do_key_autorepeatoff(vars.mlx);
 	mlx_hook(vars.win, ON_KEYDOWN, 0, key_hook_down, &vars);
 	mlx_hook(vars.win, ON_KEYUP, 0, key_hook_up, &vars);
@@ -266,7 +278,6 @@ int	main(int argc, char **argv)
 	mlx_loop_hook(vars.mlx, frame, &vars);
 	mlx_mouse_hook(vars.win, mouse_hook, &vars);
 	// mlx_loop_hook(vars.mlx, raycasting, &vars);
-	vars.n1 = gettime(0);
 	mlx_loop(vars.mlx);
 	free_textures(&vars);
 }

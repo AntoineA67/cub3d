@@ -2,17 +2,17 @@
 NAME		= cub3D
 OBJDIR		= obj/
 INCDIR		= inc/
-VPATH		= src/
+VPATH		= src/$(addprefix :src/, ui textures multi enemies parsing mouse_key_hooks render utils init)
 INC			= $(addprefix ${INCDIR}, cub3D.h)
-SRC			= main.c utils.c parse.c button.c slider.c ui.c l_pts.c key_hooks.c texture_manage.c mouse_hooks.c plot.c render.c color_utils.c client.c minimap.c font.c rays.c
+SRC			= main.c utils.c parse.c enemies.c init_player.c button.c slider.c ui.c l_pts.c key_hooks.c texture_manage.c mouse_hooks.c plot.c render.c color_utils.c client.c minimap.c font.c rays.c profiling.c
 SERVER		= server
 OBJ			= $(addprefix ${OBJDIR}, $(SRC:.c=.o))
 LIBRARY		= -L libft -lft -L mlx_opengl -lmlx -lm
 LIB_FILE	= libft/libft.a mlx_opengl/libmlx.a
-CC			= cc
-# FLAGS		= -I/usr/include
-FLAGS		= -Wall -Wextra -Werror
-# FLAGS		+= -O2
+CC			= gcc
+FLAGS		= -Wall -Wextra -Werror -I./inc/
+# FLAGS		+=  -DDEBUG_PROFILE -finstrument-functions
+# FLAGS		+= -O3
 # FLAGS		+= -fsanitize=address -g
 # FLAGS		+= -Ofast
 
