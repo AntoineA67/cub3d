@@ -6,31 +6,14 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/05/17 17:42:24 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/06/02 16:21:11 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/cub3D.h"
-
-int	init_player(t_vars *vars)
-{
-	char	*player_in_map;
-
-	vars->player.lives = 3;
-	vars->player.rot.x = vars->start_rot;
-	vars->player.rot.y = 0;
-	vars->player.delta.x = 0;
-	vars->player.delta.y = 0;
-	player_in_map = ft_strchr(vars->map, 'P');
-	printf("test%p|%p\n", vars->map, player_in_map);
-	vars->map[player_in_map - vars->map] = '0';
-	printf("test\n");
-	vars->player.pos.x = (player_in_map - vars->map) % vars->size.x + .5;
-	vars->player.pos.y = (player_in_map - vars->map) / vars->size.x + .5;
-	return (0);
-}
+#include "cub3D.h"
 
 long	gettime(long initime)
+NOPROF
 {
 	long			res;
 	struct timeval	time;
@@ -77,18 +60,23 @@ void	init_bullets(t_vars *vars)
 
 void	init_enemies(t_vars *vars)
 {
-	int		i;
-	int		n;
-	double	prob;
+	int				i;
+	int				n;
+	double			prob;
+	struct timeval	time;
 
 	i = 0;
+	//(int)(gettime(vars->n1) % 100)
 	// i = -1;
 	n = -1;
 	prob = .0001;
 	while (vars->max_n_enemies < vars->usable_cells / 20 + 1)
 	{
-		printf("GEN ENEMY: %d	%d %.2f\n", vars->max_n_enemies, (int)(gettime(vars->n1) % 100), prob * 100);
-		if (vars->parse_seen[i] == 1 && (int)(gettime(vars->n1) % 100) < (int)(prob * 100))
+		gettimeofday(&time, NULL);
+		//printf("GEN ENEMY: %d %.2f %d %.2f\n", vars->max_n_enemies, prob, (int)(time.tv_usec) % 100, prob * 100);
+		if (vars->parse_seen[i] == 1
+			&& abs((int)vars->player.pos.x - i % vars->size.x) > 2 && abs((int)vars->player.pos.y - i % vars->size.y) > 2
+			&& (int)(time.tv_usec) % 100 < (int)(prob * 100))
 		{
 			vars->enemies[++vars->max_n_enemies - 1].lives = 3;
 			vars->enemies[vars->max_n_enemies - 1].last_attack = -1000;
@@ -98,8 +86,10 @@ void	init_enemies(t_vars *vars)
 				&vars->enemies[vars->max_n_enemies - 1].pos, sizeof(t_vector2));
 			printf("Enemy: %.2f %.2f\n", vars->enemies[vars->max_n_enemies - 1].pos.x,
 				vars->enemies[vars->max_n_enemies - 1].pos.y);
+			prob = 0.0;
 		}
-		prob += 1.0 / vars->usable_cells;
+		if (vars->parse_seen[i] == 1)
+			prob += 1.0 / vars->usable_cells;
 		i = (i + 1) % vars->size.z;
 	}
 
@@ -146,7 +136,7 @@ static void	fill_vars(t_vars *vars, int fd)
 	vars->max_size = ft_max(vars->size.x, vars->size.y);
 	if (init_player(vars))
 		return ; //NO PLAYER IN MAP
-	vars->parse_seen = ft_calloc(vars->size.z, 1);
+	vars->parse_seen = ft_calloc(vars->size.z + 1, 1);
 	if (!vars->parse_seen)
 		return ;
 	if (check_map(vars, (int)vars->player.pos.x, (int)vars->player.pos.y))
@@ -173,8 +163,6 @@ static void	fill_vars(t_vars *vars, int fd)
 		return ;
 	vars->img2->bits_per_pixel /= 8;
 	close(fd);
-	// mlx_mouse_hide();
-	// mlx_mouse_move(vars->win, 0, 0);
 }
 
 static char	*extract_name(char *str)
@@ -282,10 +270,6 @@ int	main(int argc, char **argv)
 			vars.win_size.y, extract_name(argv[1]));
 	printf("EA: %s\nNO: %s\nSO: %s\nWE: %s\nF: %#x\nC: %#x\n",
 		vars.ea, vars.no, vars.so, vars.we, to_rgb(vars.f, 0), to_rgb(vars.c, 0));
-	// raycasting(&vars);
-	// if (!vars.win)
-	// 	esc(&vars, 1);
-	//mlx_key_hook(vars.win, key_hook, &vars);
 	mlx_do_key_autorepeatoff(vars.mlx);
 	mlx_hook(vars.win, ON_KEYDOWN, 0, key_hook_down, &vars);
 	mlx_hook(vars.win, ON_KEYUP, 0, key_hook_up, &vars);
