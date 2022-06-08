@@ -10,3 +10,5 @@ libft/libft.a
 server
 client
 *.dSYM
+*.json
+*.txt
