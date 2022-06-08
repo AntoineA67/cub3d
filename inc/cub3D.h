@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/08 11:57:11 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/08 13:45:27 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,18 +253,18 @@ int			ui_texture(t_vars	*vars) NOPROF;
 int			init_player(t_vars *vars);
 
 
-void	draw_enemies(t_vars *vars) NOPROF;
-void	process_enemies(t_vars *vars) NOPROF;
-void	draw_square_texture_center(t_vars *vars, t_coord p, t_data *img, double dist_b_players) NOPROF;
+void	draw_enemies(t_vars *vars);
+void	process_enemies(t_vars *vars);
+void	draw_square_texture_center(t_vars *vars, t_coord p, t_data *img, double dist_b_players);
 void	img_text_simple(t_vars *vars, char *str, t_coord p) NOPROF;
 int	change_case(t_vars	*vars, double newposX, double newposY, t_vector2 *start) NOPROF;
 void	calc_ray(t_vars *vars, t_ray *r) NOPROF;
-void	draw_2d_map(t_vars *vars, int size) NOPROF;
-int	init_player(t_vars *vars) NOPROF;
+void	draw_2d_map(t_vars *vars, int size);
+int	init_player(t_vars *vars);
 double	dist(double ax, double ay, double bx, double by, double angle) NOPROF;
 void	project_rays(t_vars *vars);
-void	process_bullets(t_vars *vars) NOPROF;
-void	gen_bullet(t_vars *vars) NOPROF;
+void	process_bullets(t_vars *vars);
+void	gen_bullet(t_vars *vars);
 int	check_map(t_vars *vars, int x, int y) NOPROF;
 int	mouse_hook_up(int keycode, int x, int y, t_vars *vars) NOPROF;
 long	gettime(long initime) NOPROF;
@@ -280,10 +280,10 @@ unsigned int	to_rgb(t_rgb c, unsigned char grey) NOPROF;
 void	show_player(t_vars *vars, double size) NOPROF;
 void	draw_direction(t_vars *vars, int ratio) NOPROF;
 void	calculate_plane_points(t_vars *vars) NOPROF;
-void	draw_square(t_vars *vars, t_coord p) NOPROF;
-void	draw_square_center(t_vars *vars, t_coord p) NOPROF;
+void	draw_square(t_vars *vars, t_coord p);
+void	draw_square_center(t_vars *vars, t_coord p);
 int		f_loop(t_vars *vars) NOPROF;
-void	render(t_vars *vars) NOPROF;
+void	render(t_vars *vars);
 void	plot_line(t_vars *vars, t_coord p1, t_coord p2) NOPROF;
 int		is_in_window(t_vars *vars, int x, int y) NOPROF;
 int		check_inputs(t_vars *vars) NOPROF;

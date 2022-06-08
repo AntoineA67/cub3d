@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/08 12:36:26 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/08 13:44:29 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ NOPROF
 }
 
 void	draw_easy_texture(t_vars *vars, t_coord p, t_data *img)
-NOPROF
 {
 	int		dy;
 	int		dx;
@@ -57,7 +56,6 @@ NOPROF
 }
 
 void	draw_square_texture_center(t_vars *vars, t_coord p, t_data *img, double dist_b_players)
-NOPROF
 {
 	int		dy;
 	int		dx;
@@ -97,7 +95,6 @@ NOPROF
 }
 
 void	draw_other_players(t_vars *vars)
-NOPROF
 {
 	int		i;
 	double	angle;
@@ -142,7 +139,6 @@ NOPROF
 }
 
 void	draw_square_center(t_vars *vars, t_coord p)
-NOPROF
 {
 	int	dy;
 	int	dx;
@@ -159,7 +155,6 @@ NOPROF
 }
 
 void	draw_square(t_vars *vars, t_coord p)
-NOPROF
 {
 	int	dy;
 	int	dx;
@@ -176,7 +171,6 @@ NOPROF
 }
 
 void	draw_2d_enemies(t_vars *vars, int size)
-NOPROF
 {
 	int	i;
 
@@ -193,7 +187,6 @@ NOPROF
 }
 
 void	draw_multi(t_vars *vars, int size)
-NOPROF
 {
 	int	i;
 
@@ -208,7 +201,6 @@ NOPROF
 }
 
 void	draw_bullets(t_vars *vars, int size)
-NOPROF
 {
 	int		i;
 	double	angle;
@@ -258,7 +250,6 @@ NOPROF
 }
 
 void	shade_floor_ceil(t_vars *vars)
-NOPROF
 {
 	// int	i;
 
@@ -295,12 +286,16 @@ NOPROF
 	// ft_int_memset(vars->img->addr,
 	// 	to_rgb(vars->f, 0), vars->win_size.y * vars->win_size.x);
 	// ft_int_memset(vars->img->addr, to_rgb(vars->c, 0),  vars->win_size.y * ceiling * vars->win_size.x);
+
+	// ft_int_memset(vars->img->addr,
+	// 	to_rgb(vars->c, 0), vars->win_size.y * ceiling * vars->win_size.x);
+	// ft_int_memset((int *)vars->img->addr + (int)(vars->win_size.y * ceiling * vars->win_size.x), to_rgb(vars->f, 0), vars->win_size.y * (1 - ceiling) * vars->win_size.x);
+	
 	// ft_int_memset(vars->img->addr + (int)(ceiling * vars->win_size.y * vars->img->line_length),
 	// 	to_rgb(vars->f, 0), (vars->win_size.y - ceiling * vars->win_size.y) * vars->win_size.x);
 }
 
 int	check_enemy_nearby(t_vars *vars, t_vector2 *bullet_pos)
-NOPROF
 {
 	int		i;
 	double	hitbox;
@@ -326,7 +321,6 @@ NOPROF
 }
 
 void	process_bullets(t_vars *vars)
-NOPROF
 {
 	int			i;
 	int			hit;
@@ -410,13 +404,12 @@ NOPROF
 }
 
 void	gen_bullet(t_vars *vars)
-NOPROF
 {
 	int		i;
 	time_t	cooldown;
 
 	cooldown = gettime(vars->n1);
-	if (cooldown - vars->bullet_cooldown < 400
+	if (cooldown - vars->bullet_cooldown < 300
 		|| vars->mult_fd || !vars->clicking)
 		return ;
 	vars->bullet_cooldown = cooldown;
@@ -434,20 +427,18 @@ NOPROF
 }
 
 void	draw_hud(t_vars *vars)
-NOPROF
 {
 	int	i;
 	// Cursor
 	draw_square_center(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, 4, gen_color(255, 255, 255, 0)));
 	draw_square_center(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, 2, gen_color(0, 0, 0, 0)));
-	draw_easy_texture(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, vars->win_size.y, gen_color(0, 0, 0, 0)), get_texture(vars, "hud", 0));
-	i = -1;
-	while (++i < vars->player.lives)
-		draw_easy_texture(vars, gen_coord(60 + i * 40, vars->win_size.y - 50, 32, gen_color(0, 0, 0, 0)), get_texture(vars, "hp", 0));
+	// draw_easy_texture(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, vars->win_size.y, gen_color(0, 0, 0, 0)), get_texture(vars, "hud", 0));
+	// i = -1;
+	// while (++i < vars->player.lives)
+	// 	draw_easy_texture(vars, gen_coord(60 + i * 40, vars->win_size.y - 50, 32, gen_color(0, 0, 0, 0)), get_texture(vars, "hp", 0));
 }
 
 void	render(t_vars *vars)
-NOPROF
 {
 	t_data	*img;
 
@@ -487,10 +478,11 @@ NOPROF
 		vars->jump_height = -(((-1.0 / 1000.0) * ((int)jump_time * (int)jump_time) + .0) + (int)jump_time) * 1.5;
 	else
 		vars->jump_height = 0.0;
-	//shade_floor_ceil(vars);
+	shade_floor_ceil(vars);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	project_rays(vars);
 	draw_other_players(vars);
-	process_enemies(vars);
+	// process_enemies(vars);
 	draw_enemies(vars);
 	//test_rays(vars);
 	draw_2d_map(vars, vars->min_map_mult);

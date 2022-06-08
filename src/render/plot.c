@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:03:35 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/08 12:14:30 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/08 13:44:47 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,9 +139,6 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit
 	wall_height = vars->win_size.y / 2 / hit_dist * .90;
 	if (wall_height < 2)
 		wall_height = 0;
-	// if (screen_x == vars->win_size.x / 2)
-	// 	printf("%.2f\n", ao);
-	// 	printf("%.2f %.2f\n", wall_height, hit_dist);
 	y = 0.0;
 	step = (img->size.y + .0) / ((vars->win_size.y / 2 + wall_height)
 			- (vars->win_size.y / 2 - wall_height));
@@ -149,7 +146,7 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit
 	if (i < 0)
 	{
 		y = step * (-i);
-		i = 0;
+		i = -1;
 	}
 	draw_end = vars->win_size.y / 2 + wall_height - vars->player.rot.y - (vars->jump_height / hit_dist);
 	if (draw_end > vars->win_size.y)

@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/08 13:18:17 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/08 13:45:00 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,7 @@ static int	test_hook(t_vars *vars)
 }
 
 int	frame(void *data)
+NOPROF
 {
 	t_vars	*vars;
 	long	temp;
