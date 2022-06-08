@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 15:00:14 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/02 15:59:18 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/06/08 14:22:51 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,6 +330,7 @@ void	project_rays(t_vars *vars)
 					&& (vars->map[(int)vars->rays[i].rx + 1 + ((int)vars->rays[i].ry + 1) * vars->size.x] == '1'
 					|| vars->map[(int)vars->rays[i].rx + 1 + ((int)vars->rays[i].ry + 1) * vars->size.x] == 'C'))
 					ao = (vars->rays[i].ry - (int)vars->rays[i].ry) * 2.0 - 1.0;
+				// ao = 0;
 				line_texture(vars, i, (1.0 - (vars->rays[i].ry - (int)vars->rays[i].ry)) * (get_texture(vars, "we", 0)->size.x + .0), get_texture(vars, "we", 0), vars->rays[i].dist, ao);
 				//ouest
 			}
@@ -345,9 +346,11 @@ void	project_rays(t_vars *vars)
 					&& (vars->map[(int)vars->rays[i].rx - 1 + ((int)vars->rays[i].ry + 1) * vars->size.x] == '1'
 					|| vars->map[(int)vars->rays[i].rx - 1 + ((int)vars->rays[i].ry + 1) * vars->size.x] == 'C'))
 					ao = (vars->rays[i].ry - (int)vars->rays[i].ry) * 2.0 - 1.0;
+				// ao = 0;
 				line_texture(vars, i, (vars->rays[i].ry - (int)vars->rays[i].ry) * (get_texture(vars, "ea", 0)->size.x + .0), get_texture(vars, "ea", 0), vars->rays[i].dist, ao);
 				//est
 			}
 		}
+		i += 0;
 	}
 }

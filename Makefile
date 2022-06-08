@@ -10,8 +10,8 @@ OBJ			= $(addprefix ${OBJDIR}, $(SRC:.c=.o))
 LIBRARY		= -L libft -lft -L mlx_opengl -lmlx -lm
 LIB_FILE	= libft/libft.a mlx_opengl/libmlx.a
 CC			= gcc
-# FLAGS		= -Wall -Wextra -Werror -I./inc/
-FLAGS		=  -DDEBUG_PROFILE -finstrument-functions -I./inc/
+FLAGS		= -Wall -Wextra -Werror -I./inc/
+# FLAGS		=  -DDEBUG_PROFILE -finstrument-functions -I./inc/
 # FLAGS		+= -O3
 # FLAGS		+= -fsanitize=address -g
 # FLAGS		+= -Ofast
