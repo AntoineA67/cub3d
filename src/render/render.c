@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/08 15:59:57 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/06/08 16:38:35 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -428,14 +428,14 @@ void	gen_bullet(t_vars *vars)
 
 void	draw_hud(t_vars *vars)
 {
-	// int	i;
+	int	i;
 	// Cursor
 	draw_square_center(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, 4, gen_color(255, 255, 255, 0)));
 	draw_square_center(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, 2, gen_color(0, 0, 0, 0)));
 	// draw_easy_texture(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, vars->win_size.y, gen_color(0, 0, 0, 0)), get_texture(vars, "hud", 0));
-	// i = -1;
-	// while (++i < vars->player.lives)
-	// 	draw_easy_texture(vars, gen_coord(60 + i * 40, vars->win_size.y - 50, 32, gen_color(0, 0, 0, 0)), get_texture(vars, "hp", 0));
+	i = -1;
+	while (++i < vars->player.lives)
+		draw_easy_texture(vars, gen_coord(60 + i * 40, vars->win_size.y - 50, 32, gen_color(0, 0, 0, 0)), get_texture(vars, "hp", 0));
 }
 
 void	render(t_vars *vars)
@@ -482,7 +482,7 @@ void	render(t_vars *vars)
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	project_rays(vars);
 	draw_other_players(vars);
-	// process_enemies(vars);
+	process_enemies(vars);
 	draw_enemies(vars);
 	//test_rays(vars);
 	draw_2d_map(vars, vars->min_map_mult);

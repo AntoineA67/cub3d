@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/08 13:45:00 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/08 16:40:56 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ void	init_enemies(t_vars *vars)
 
 static void	fill_vars(t_vars *vars, int fd)
 {
+	vars->res_scale = 4;
 	vars->max_n_enemies = 0;
 	vars->mult_n_players = 0;
 	vars->usable_cells = 0;
@@ -205,6 +206,8 @@ NOPROF
 			// printf("%.10f|%s\n", vars->delta_time, itoa);
 			render(vars);
 			mlx_string_put(vars->mlx, vars->win, 100, 100, 0xff00ff, fps);
+			img_text_simple(vars, fps, gen_coord(vars->win_size.x - 100, 10, 4, gen_color(255, 255, 255, 0)));
+			mlx_put_image_to_window(vars->mlx, vars->win, vars->img2, 0, 0);
 			free(itoa);
 			free(fps);
 			vars->n2 = temp;
