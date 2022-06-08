@@ -1,10 +1,14 @@
 NO ./textures/xpm/banane.xpm
-SO ./textures/xpm/gravel.xpm
-WE ./textures/xpm/leaves.xpm
-EA ./textures/xpm/bookshelf.xpm
 
-F 220,100,100
-C 225,30,0
+C 225,30,0 
+WE ./textures/xpm/leaves.xpm
+
+
+
+F 220  , 100 ,100
+SO ./textures/xpm/bookshelf.xpm
+
+EA ./textures/xpm/bookshelf.xpm
 
         1111111111111111111111111
         1000000000110000000000001

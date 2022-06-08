@@ -75,7 +75,6 @@ NOPROF
 }
 
 void	draw_2d_map(t_vars *vars, int size)
-NOPROF
 {
 	int	x;
 	int	y;

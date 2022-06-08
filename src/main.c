@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/02 16:21:11 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/06/07 17:43:43 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,7 @@ static int	test_hook(t_vars *vars)
 }
 
 int	frame(void *data)
+NOPROF
 {
 	t_vars	*vars;
 	long	temp;

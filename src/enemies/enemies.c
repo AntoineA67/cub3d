@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 14:25:33 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/02 15:59:18 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/06/07 19:23:32 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ NOPROF
 }
 
 void	process_enemies(t_vars *vars)
-NOPROF
 {
 	int			i;
 	double		angle;
@@ -80,13 +79,14 @@ NOPROF
 }
 
 void	draw_enemies(t_vars *vars)
-NOPROF
 {
 	int		i;
 	double	angle;
 	double	dist_enemy;
 	double	dangle;
 	int		screen_x;
+	double	sprite_size;
+	
 
 	i = -1;
 	while (++i < vars->max_n_enemies)
@@ -100,27 +100,31 @@ NOPROF
 			angle = fmod(angle, M_PI * 2);
 			// printf("player%d:%f|%f|%f\\%f\n",i,vars->start,angle,vars->end, angle + (M_PI * 2.0));
 			dist_enemy = dist(vars->player.pos.x, vars->player.pos.y, vars->enemies[i].pos.x, vars->enemies[i].pos.y, angle);
+			sprite_size = (1 / dist_enemy) * (vars->win_size.y / 2);
 			if (angle > vars->start && angle < vars->end)
-			{
 				dangle = vars->end - angle;
+			else
+				dangle = vars->end - (angle + (M_PI * 2.0));
+			// {
+				
 				screen_x = vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2);
-				if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x].dist > dist_enemy)
+				if ((screen_x - sprite_size / 2 < vars->win_size.x || screen_x + sprite_size / 2 > 0) && vars->rays[screen_x].dist > dist_enemy)
 				{
-					draw_square_texture_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_enemy) * (vars->win_size.y / 2), gen_color(100,100,100,0)), get_texture(vars, "aaa", 0), dist_enemy);
+					draw_square_texture_center(vars, gen_coord(screen_x, vars->win_size.y / 2, sprite_size, gen_color(100,100,100,0)), get_texture(vars, "aaa", 0), dist_enemy);	
 				}
 				// draw_square_texture_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) * 200, gen_color(100,100,100,0)), get_animtexture(vars, "player", 0.2));
 				// draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));
-			}
-			else if (( angle + (M_PI * 2.0)) > vars->start && (angle + (M_PI * 2.0)) < vars->end)
-			{
-				dangle = vars->end - (angle + (M_PI * 2.0));
-				screen_x = vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2);
-				if (screen_x < vars->win_size.x && screen_x > 0 && vars->rays[screen_x].dist > dist_enemy)
-				{
-					draw_square_texture_center(vars, gen_coord(screen_x, vars->win_size.y / 2, (1 / dist_enemy) * (vars->win_size.y / 2), gen_color(100,100,100,0)), get_texture(vars, "aaa", 0), dist_enemy);	
-				}
-				// draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));	
-			}
+			// }
+			// else if (( angle + (M_PI * 2.0)) > vars->start && (angle + (M_PI * 2.0)) < vars->end)
+			// {
+				
+			// 	screen_x = vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2);
+			// 	if ((screen_x - sprite_size / 2 < vars->win_size.x || screen_x + sprite_size / 2 > 0) && vars->rays[screen_x].dist > dist_enemy)
+			// 	{
+			// 		draw_square_texture_center(vars, gen_coord(screen_x, vars->win_size.y / 2, sprite_size, gen_color(100,100,100,0)), get_texture(vars, "aaa", 0), dist_enemy);	
+			// 	}
+			// 	// draw_square_center(vars, gen_coord(vars->win_size.x - ((dangle * vars->win_size.x) / M_PI_2), vars->win_size.y / 2, (1 / dist(vars->player.pos.x, vars->player.pos.y, vars->mult_positions[i].x, vars->mult_positions[i].y, angle)) *100 , gen_color(100,100,100,0)));	
+			// }
 		}
 	}
 }
