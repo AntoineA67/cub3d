@@ -1,13 +1,12 @@
 #include "cub3D.h"
 
 int	ui_frame1(t_vars	*vars)
-NOPROF
 { 
-	button(screen_pc(25.15,50.05, gen_color(255,0,100, 100), vars), "start", &change_ui, 0);
+	button(screen_pc(25.15,50.1, gen_color(255,0,100, 100), vars), "start", &change_ui, 0);
 	if (!vars->mult_fd)
-		button(screen_pc(25.30,25.025, gen_color(255,255,100, 0), vars), "maps", &change_ui, 2);
-	button(screen_pc(25.40,25.025, gen_color(25,60,100, 0), vars), "textures", &change_ui, 3);
-	button(screen_pc(25.50,25.025, gen_color(56,69,10, 0), vars), "settings", &change_ui, 4);
+		button(screen_pc(25.30,25.05, gen_color(255,255,100, 0), vars), "maps", &change_ui, 2);
+	button(screen_pc(25.40,25.05, gen_color(25,60,100, 0), vars), "textures", &change_ui, 3);
+	button(screen_pc(25.50,25.05, gen_color(56,69,10, 0), vars), "settings", &change_ui, 4);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	return (0);
 }
@@ -128,6 +127,8 @@ NOPROF
 	img_text(vars, ft_strjoin("Sensibilite Y: ", ft_dtoa(vars->settings.y_ratio_mouse_speed)), screen_pc(60.50,20.025, gen_color(255,0,100, 0), vars));
 	slider(vars, screen_pc(25.60,25.025, gen_color(255,0,100, 0), vars), slider_param(2.0, 0.1, &vars->settings.x_ratio_mouse_speed), 0.1);
 	img_text(vars, ft_strjoin("Sensibilite X: ", ft_dtoa(vars->settings.x_ratio_mouse_speed)), screen_pc(60.60,20.025, gen_color(255,0,100, 0), vars));
+	slider(vars, screen_pc(25.70,25.025, gen_color(255,0,100, 0), vars), slider_param(7.0, 0.0, &vars->settings.m), 1.0);
+	img_text(vars, ft_strjoin("M: ", ft_dtoa(vars->settings.m)), screen_pc(60.70,20.025, gen_color(255,0,100, 0), vars));
 	//slider(vars, screen_pc(25.50,25.025, gen_color(255,0,100, 0), vars), slider_param(0.2, 1.6, &vars->settings.y_ratio_mouse_speed), 0.1);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	return (0);

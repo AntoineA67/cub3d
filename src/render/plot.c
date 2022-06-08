@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   plot.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:03:35 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/08 16:00:30 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/06/08 16:42:24 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit
 		unsigned int oui = add_shade(vars, *(unsigned int *)(img->addr + (t + (int)y * img->line_length)), hit,
 			 vars->ao * (ao + (1 - sin((((y + 1) * isize)) * M_PI)) * vars->ao_scale));
 			unsigned int *add = (unsigned int *)(vars->img->addr + (i * vars->img->line_length + screen_x * vars->img->bits_per_pixel));
-		for (int n = 0; n < 1; n++)
+		for (int n = 0; n < pow(2, vars->settings.m); n++)
 		{
 			if ((int)screen_x + n > vars->win_size.x)
 				break;

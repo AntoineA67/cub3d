@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/08 13:45:27 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/08 16:39:49 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ typedef struct s_player {
 typedef struct s_settings
 {
 	double			fps_cap;
+	double			m;
 	int				map_type;
 	double			y_ratio_mouse_speed;
 	double			x_ratio_mouse_speed;

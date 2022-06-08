@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rays.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 15:00:14 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/08 16:00:09 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/06/08 16:40:49 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -353,6 +353,6 @@ void	project_rays(t_vars *vars)
 				//est
 			}
 		}
-		i += 0;
+		i += pow(2, vars->settings.m) - 1;
 	}
 }

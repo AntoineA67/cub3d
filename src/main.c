@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/08 13:45:00 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/08 16:39:24 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ static void	fill_vars(t_vars *vars, int fd)
 	vars->jump = -2000;
 	vars->ao = 1.0;
 	vars->ao_scale = .22;
+	vars->settings.m = 0;
 	vars->settings.y_ratio_mouse_speed = 1.2;
 	vars->settings.x_ratio_mouse_speed = 1.2;
 	vars->mult_fd = 0;
