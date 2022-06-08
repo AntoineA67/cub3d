@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/08 14:09:54 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/06/08 15:59:57 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,9 +270,27 @@ void	shade_floor_ceil(t_vars *vars)
 	if (ceiling < 0.0)
 		ceiling = 0.0;
 	// printf("%.2f\n", vars->win_size.y - ceiling * vars->win_size.y);
-	ft_int_memset(vars->img->addr,
-		to_rgb(vars->c, 0), vars->win_size.y * ceiling * vars->win_size.x);
-	ft_int_memset((int *)vars->img->addr + (int)(vars->win_size.y * ceiling * vars->win_size.x), to_rgb(vars->f, 0), vars->win_size.y * (1 - ceiling) * vars->win_size.x);
+	unsigned int *i = (unsigned int *)vars->img->addr;
+	int max = vars->win_size.y * vars->win_size.x;
+
+	while (i - (unsigned int *)vars->img->addr < max* ceiling)
+	{
+		*i = to_rgb(vars->c, 0);
+		i++;
+	}
+	while (i - (unsigned int *)vars->img->addr < max)
+	{
+		*i = to_rgb(vars->f, 0);
+		i++;
+	}
+	// ft_int_memset(vars->img->addr,
+	// 	to_rgb(vars->f, 0), vars->win_size.y * vars->win_size.x);
+	// ft_int_memset(vars->img->addr, to_rgb(vars->c, 0),  vars->win_size.y * ceiling * vars->win_size.x);
+
+	// ft_int_memset(vars->img->addr,
+	// 	to_rgb(vars->c, 0), vars->win_size.y * ceiling * vars->win_size.x);
+	// ft_int_memset((int *)vars->img->addr + (int)(vars->win_size.y * ceiling * vars->win_size.x), to_rgb(vars->f, 0), vars->win_size.y * (1 - ceiling) * vars->win_size.x);
+	
 	// ft_int_memset(vars->img->addr + (int)(ceiling * vars->win_size.y * vars->img->line_length),
 	// 	to_rgb(vars->f, 0), (vars->win_size.y - ceiling * vars->win_size.y) * vars->win_size.x);
 }
@@ -342,11 +360,12 @@ void	process_bullets(t_vars *vars)
 void	end_game_lose(t_vars *vars)
 NOPROF
 {
-	vars->ui = 10;
+	vars->ui = 11;
 	ft_int_memset(vars->img->addr, 0x000000,
 				vars->img->line_length * vars->win_size.y / 4);
 	// draw_easy_texture(vars, gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, vars->win_size.y / 2, gen_color(0, 0, 0, 0)), get_texture(vars, "end", 0));
 	img_text_simple(vars, "GAME OVER", gen_coord(vars->win_size.x / 2, vars->win_size.y / 2, 8, gen_color(0, 0, 0, 0)));
+	vars->n2 = gettime(vars->n1);
 	printf("Game over\n");
 }
 void	end_game_win(t_vars *vars)

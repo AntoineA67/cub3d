@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/02 15:59:18 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/06/08 12:05:26 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,14 +140,14 @@ NOPROF
 
 	i = 0;
 	if (!s)
-		return (0);
+		return (-1);
 	while (finds && finds[i])
 	{
 		if (ft_strchr(s, finds[i]))
 			return (i);
 		i++;
 	}
-	return (0);
+	return (-1);
 }
 
 char	*parse(int fd, t_vars *vars)
@@ -166,10 +166,11 @@ NOPROF
 	node = lst->next;
 	vars->size.x = 0;
 	vars->size.y = 0;
+	vars->start_rot = 0.0;
 	while (node && node->content)
 	{
 		printf("d:%s\n", node->content);
-		if (ft_strschr(node->content, tmp))
+		if (ft_strschr(node->content, tmp) >= 0)
 		{
 			vars->start_rot = M_PI_2 * ft_strschr(node->content, tmp);
 			*ft_strchr(node->content, tmp[ft_strschr(node->content, tmp)]) = 'P';
