@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:03:35 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/08 16:42:24 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/08 16:47:31 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,11 +164,6 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit
 	double isize = 1.0 / (img->size.y + 1.0);
 	while (++i < draw_end)// && (int)y < img->size.y)
 	{
-		// if (y < 0.1)
-		// 	printf("%.2f %.2f	%.2f\n", y / img->size.y, sin((y / img->size.y) * M_PI), ((fabs(1.0 - ao) > .1) * (1.0 - ao) - 1.0));
-		//pixel_put_add(vars->img, &screen_x, &i, (unsigned int *)(img->addr + t + (int)y * img->line_length));
-		// *(unsigned int *)(vars->img->addr + (i * vars->img->line_length + screen_x * vars->img->bits_per_pixel)) = *(unsigned int *)(img->addr + (t + (int)y * img->line_length));
-		// *(unsigned int *)(vars->img->addr + (i * vars->img->line_length + (screen_x + 1) * vars->img->bits_per_pixel)) = *(unsigned int *)(img->addr + (t + (int)y * img->line_length));
 		unsigned int oui = add_shade(vars, *(unsigned int *)(img->addr + (t + (int)y * img->line_length)), hit,
 			 vars->ao * (ao + (1 - sin((((y + 1) * isize)) * M_PI)) * vars->ao_scale));
 			unsigned int *add = (unsigned int *)(vars->img->addr + (i * vars->img->line_length + screen_x * vars->img->bits_per_pixel));
@@ -176,15 +171,8 @@ void	line_texture(t_vars *vars, int screen_x, int img_x, t_data *img, double hit
 		{
 			if ((int)screen_x + n > vars->win_size.x)
 				break;
-			*add = oui;
-			add++;
+			add[n] = oui;
 		}
-		
-		// *(unsigned int *)(vars->img->addr + (i * vars->img->line_length + screen_x * vars->img->bits_per_pixel)) = oui;
-		// *(unsigned int *)(vars->img->addr + (i * vars->img->line_length + (screen_x + 1) * vars->img->bits_per_pixel)) = oui;
-		// *(unsigned int *)(vars->img->addr + (i * vars->img->line_length + (screen_x  + 2)* vars->img->bits_per_pixel)) = oui;
-		// *(unsigned int *)(vars->img->addr + (i * vars->img->line_length + (screen_x + 3) * vars->img->bits_per_pixel)) = oui;
-		// *(unsigned int *)(varsaimg->addr + (i * vars->img->line_length + (screen_x + 7) * vars->img->bits_per_pixel)) = oui;
 		y += step;
 	}
 }

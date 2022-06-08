@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/08 16:39:49 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/08 16:47:53 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ typedef struct s_ray {
 
 // size.z => size.x * size.y
 typedef struct s_vars {
+	int				res_scale;
 	time_t			bullet_cooldown;
 	t_ray			*rays;
 	int				max_size;

@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 15:00:14 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/08 16:40:49 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/08 16:47:16 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,8 +276,8 @@ void	project_rays(t_vars *vars)
 			ca -= M_2PI;
 		vars->rays[i].dist *= cos(ca);
 	}
-	i = -1;
-	while (++i < vars->win_size.x)
+	i = 0;
+	while (i < vars->win_size.x)
 	{
 		ao = 0.0;
 		if (vars->rays[i].side == 0)
@@ -285,33 +285,31 @@ void	project_rays(t_vars *vars)
 			// vars->rays[i] = dist(vars->player.pos.x, vars->player.pos.y, disV.x, disV.y, ra2);
 			if (vars->rays[i].ra2 > M_PI)
 			{
-				vars->ao = 0;
-				// if (vars->rays[i].rx - (int)vars->rays[i].rx < .5 && ((int)vars->rays[i].rx - 1) >= 0 && ((int)vars->rays[i].rx - 1) < vars->size.x
-				// 	&& ((int)vars->rays[i].ry + 1) >= 0 && ((int)vars->rays[i].ry + 1) < vars->size.y
-				// 	&& (vars->map[(int)vars->rays[i].rx - 1 + ((int)vars->rays[i].ry + 1) * vars->size.x] == '1'
-				// 	|| vars->map[(int)vars->rays[i].rx - 1 + ((int)vars->rays[i].ry + 1) * vars->size.x] == 'C'))
-				// 	ao = 1.0 - (vars->rays[i].rx - (int)vars->rays[i].rx) * 2.0;
-				// else if (vars->rays[i].rx - (int)vars->rays[i].rx > .5 && ((int)vars->rays[i].rx + 1) >= 0 && ((int)vars->rays[i].rx + 1) < vars->size.x
-				// 	&& ((int)vars->rays[i].ry + 1) >= 0 && ((int)vars->rays[i].ry + 1) < vars->size.y
-				// 	&& (vars->map[(int)vars->rays[i].rx + 1 + ((int)vars->rays[i].ry + 1) * vars->size.x] == '1'
-				// 	|| vars->map[(int)vars->rays[i].rx + 1 + ((int)vars->rays[i].ry + 1) * vars->size.x] == 'C'))
-				// 	ao = (vars->rays[i].rx - (int)vars->rays[i].rx) * 2.0 - 1.0;
+				if (vars->rays[i].rx - (int)vars->rays[i].rx < .5 && ((int)vars->rays[i].rx - 1) >= 0 && ((int)vars->rays[i].rx - 1) < vars->size.x
+					&& ((int)vars->rays[i].ry + 1) >= 0 && ((int)vars->rays[i].ry + 1) < vars->size.y
+					&& (vars->map[(int)vars->rays[i].rx - 1 + ((int)vars->rays[i].ry + 1) * vars->size.x] == '1'
+					|| vars->map[(int)vars->rays[i].rx - 1 + ((int)vars->rays[i].ry + 1) * vars->size.x] == 'C'))
+					ao = 1.0 - (vars->rays[i].rx - (int)vars->rays[i].rx) * 2.0;
+				else if (vars->rays[i].rx - (int)vars->rays[i].rx > .5 && ((int)vars->rays[i].rx + 1) >= 0 && ((int)vars->rays[i].rx + 1) < vars->size.x
+					&& ((int)vars->rays[i].ry + 1) >= 0 && ((int)vars->rays[i].ry + 1) < vars->size.y
+					&& (vars->map[(int)vars->rays[i].rx + 1 + ((int)vars->rays[i].ry + 1) * vars->size.x] == '1'
+					|| vars->map[(int)vars->rays[i].rx + 1 + ((int)vars->rays[i].ry + 1) * vars->size.x] == 'C'))
+					ao = (vars->rays[i].rx - (int)vars->rays[i].rx) * 2.0 - 1.0;
 				line_texture(vars, i, (vars->rays[i].rx - (int)vars->rays[i].rx) * (get_animtexture(vars, "no", 0.2)->size.x + .0), get_animtexture(vars, "no", 0.2), vars->rays[i].dist, ao);
 				//nord
 			}
 			else
 			{
-				vars->ao = 0;
-				// if (vars->rays[i].rx - (int)vars->rays[i].rx < .5 && ((int)vars->rays[i].rx - 1) >= 0 && ((int)vars->rays[i].rx - 1) < vars->size.x
-				// 	&& ((int)vars->rays[i].ry - 1) >= 0 && ((int)vars->rays[i].ry - 1) < vars->size.y
-				// 	&& (vars->map[(int)vars->rays[i].rx - 1 + ((int)vars->rays[i].ry - 1) * vars->size.x] == '1'
-				// 	|| vars->map[(int)vars->rays[i].rx - 1 + ((int)vars->rays[i].ry - 1) * vars->size.x] == 'C'))
-				// 	ao = 1.0 - (vars->rays[i].rx - (int)vars->rays[i].rx) * 2.0;
-				// else if (vars->rays[i].rx - (int)vars->rays[i].rx > .5 && ((int)vars->rays[i].rx + 1) >= 0 && ((int)vars->rays[i].rx + 1) < vars->size.x
-				// 	&& ((int)vars->rays[i].ry - 1) >= 0 && ((int)vars->rays[i].ry - 1) < vars->size.y
-				// 	&& (vars->map[(int)vars->rays[i].rx + 1 + ((int)vars->rays[i].ry - 1) * vars->size.x] == '1'
-				// 	|| vars->map[(int)vars->rays[i].rx + 1 + ((int)vars->rays[i].ry - 1) * vars->size.x] == 'C'))
-				// 	ao = (vars->rays[i].rx - (int)vars->rays[i].rx) * 2.0 - 1.0;
+				if (vars->rays[i].rx - (int)vars->rays[i].rx < .5 && ((int)vars->rays[i].rx - 1) >= 0 && ((int)vars->rays[i].rx - 1) < vars->size.x
+					&& ((int)vars->rays[i].ry - 1) >= 0 && ((int)vars->rays[i].ry - 1) < vars->size.y
+					&& (vars->map[(int)vars->rays[i].rx - 1 + ((int)vars->rays[i].ry - 1) * vars->size.x] == '1'
+					|| vars->map[(int)vars->rays[i].rx - 1 + ((int)vars->rays[i].ry - 1) * vars->size.x] == 'C'))
+					ao = 1.0 - (vars->rays[i].rx - (int)vars->rays[i].rx) * 2.0;
+				else if (vars->rays[i].rx - (int)vars->rays[i].rx > .5 && ((int)vars->rays[i].rx + 1) >= 0 && ((int)vars->rays[i].rx + 1) < vars->size.x
+					&& ((int)vars->rays[i].ry - 1) >= 0 && ((int)vars->rays[i].ry - 1) < vars->size.y
+					&& (vars->map[(int)vars->rays[i].rx + 1 + ((int)vars->rays[i].ry - 1) * vars->size.x] == '1'
+					|| vars->map[(int)vars->rays[i].rx + 1 + ((int)vars->rays[i].ry - 1) * vars->size.x] == 'C'))
+					ao = (vars->rays[i].rx - (int)vars->rays[i].rx) * 2.0 - 1.0;
 				line_texture(vars, i, (1.0 - (vars->rays[i].rx - (int)vars->rays[i].rx)) * (get_texture(vars, "so", 0)->size.x + .0), get_texture(vars, "so", 0), vars->rays[i].dist, ao);
 				//sud
 			}
