@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/02 16:21:11 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/06/08 13:18:17 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,6 +237,14 @@ int	frame(void *data)
 	{
 		ui_texture(vars);
 		vars->clicked = 0;
+	}
+	else if (vars->ui == 11)
+	{
+		if (gettime(vars->n1) - vars->n2 > 10000)
+		{
+			free_textures(vars);
+			exit(0);
+		}
 	}
 	}
 	return (0);
