@@ -6,14 +6,13 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:07:51 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/08 13:18:09 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/10 17:49:33 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
 void	img_text(t_vars *vars, char *str, t_coords p)
-NOPROF
 {
 	int	i;
 	int	j;
@@ -33,15 +32,16 @@ NOPROF
 			k = -1;
 			while (++k < 8 * scale)
 			{
-				if ((vars->font[(int)str[i]]>>(64 - (j / scale * 8) - (k / scale))) & 1)
-					pixel_put(vars->img, p.a.x + k + i * (8 * scale), p.a.y + j, to_rgb(p.a.c, 0));
-			}	
+				if ((vars->font[(int)str[i]]
+						>> (64 - (j / scale * 8) - (k / scale))) & 1)
+					pixel_put(vars->img, p.a.x + k + i
+						* (8 * scale), p.a.y + j, to_rgb(p.a.c, 0));
+			}
 		}
 	}
 }
 
 void	img_text_simple(t_vars *vars, char *str, t_coord p)
-NOPROF
 {
 	int	i;
 	int	j;
@@ -61,19 +61,20 @@ NOPROF
 			k = -1;
 			while (++k < 8 * scale)
 			{
-				if ((vars->font[(int)str[i]]>>(64 - (j / scale * 8) - (k / scale))) & 1)
-					pixel_put(vars->img, p.x + k + i * (8 * scale), p.y + j, to_rgb(p.c, 0));
-			}	
+				if ((vars->font[(int)str[i]]
+						>> (64 - (j / scale * 8) - (k / scale))) & 1)
+					pixel_put(vars->img, p.x + k + i
+						* (8 * scale), p.y + j, to_rgb(p.c, 0));
+			}
 		}
 	}
 }
 
 void	affect_ascii(t_vars *vars)
-NOPROF
 {
-	int			i;
-	char		*line;
-	int			fd;
+	int		i;
+	char	*line;
+	int		fd;
 
 	fd = open("./fonts/font.csv", O_RDONLY);
 	if (fd < 0)
