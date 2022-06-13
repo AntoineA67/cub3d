@@ -12,24 +12,36 @@
 
 #include "cub3D.h"
 
-// static void	fill_point(t_coord *point, char *s)
-// {
-// 	char	*find;
+void	exit_lst(t_list **lst)
+{
+	perror("Map error");
+	ft_lstclear(lst, &ft_freetab);
+	exit(EXIT_FAILURE);
+}
 
-// 	point->z = ft_atoi(s);
-// 	find = ft_strchr(s, ',');
-// 	if (find && *(find) + 1 && *(find) + 2)
-// 		point->c.v = ft_max(ft_atoi_base(find + 3, "0123456789abcdef"),
-// 				ft_atoi_base(find + 3, "0123456789ABCDEF"));
-// 	else
-// 		point->c.v = 0xffffff;
-// 	point->c.r = (point->c.v / 0x10000) % 0x100;
-// 	point->c.g = (point->c.v / 0x100) % 0x100;
-// 	point->c.b = point->c.v % 0x100;
-// }
+void	fill_lst(t_list **lst, int fd, t_vars *vars)
+{
+	char		*l;
+	t_list		*node;
+
+	node = *lst;
+	l = get_next_line(fd);
+	if (!l)
+		exit_lst(lst);
+	while (l)
+		if (elem_textures(&l, vars, fd))
+			break ;
+	while (l)
+	{
+		node->next = ft_lstnew(l);
+		node = node->next;
+		if (!node || !*(char *)node->content)
+			exit_lst(lst);
+		l = get_next_line(fd);
+	}
+}
 
 char	*create_l_pts(t_list *lst, int size_x, int size_y)
-NOPROF
 {
 	char	*l_pts;
 	t_list	*node;

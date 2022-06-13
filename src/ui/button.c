@@ -1,14 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   button.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/09 16:05:40 by qroussea          #+#    #+#             */
+/*   Updated: 2022/06/11 14:37:21 by qroussea         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3D.h"
 
-void	change_map(void		*v, int data)
-NOPROF
+void	change_map(t_vars *vars, int data)
 {
-	t_vars	*vars;
-
-	vars = (t_vars *)v;
-	int fd;
+	int		fd;
 	char	*str;
-	int i;
+	int		i;
 
 	fd = open("maps.txt", O_RDONLY);
 	str = get_next_line(fd);
@@ -24,11 +32,10 @@ NOPROF
 			if (str[ft_strlen(str) - 1] == '\n')
 				str[ft_strlen(str) - 1] = 0;
 			i = open(str, O_RDONLY);
-			vars->map = parse(i, vars);
+			vars->map = parse(i, vars, 0);
 			printf("{%s}\n", vars->map);
 			if (init_player(vars))
-				return ; //NO PLAYER IN MAP
-			//free(str);
+				return ;
 		}
 		i++;
 		free(str);
@@ -38,15 +45,11 @@ NOPROF
 	change_ui(vars, 1);
 }
 
-void	change_texture(void		*v, int data)
-NOPROF
+void	change_texture(t_vars *vars, int data)
 {
-	t_vars	*vars;
-
-	vars = (t_vars *)v;
-	int fd;
+	int		fd;
 	char	*str;
-	int i;
+	int		i;
 
 	fd = open("textures.txt", O_RDONLY);
 	str = get_next_line(fd);
@@ -58,7 +61,11 @@ NOPROF
 			if (str[ft_strlen(str) - 1] == '\n')
 				str[ft_strlen(str) - 1] = 0;
 			printf("Load:%s| to |%s|\n", str, vars->changetexture);
-			load_texture(vars, vars->changetexture, 0, str);
+			if (!ft_strchr(str, '@'))
+				load_texture(vars, vars->changetexture, 0, str);
+			else
+				load_animtexture(vars, vars->changetexture,
+					ft_atoi(str), str + (ft_strchr(str, '@') - str) + 1);
 		}
 		i++;
 		free(str);
@@ -68,13 +75,8 @@ NOPROF
 	change_ui(vars, 1);
 }
 
-
-void	change_ui(void		*v, int data)
-NOPROF
+void	change_ui(t_vars *vars, int data)
 {
-	t_vars	*vars;
-
-	vars = (t_vars *)v;
 	vars->ui = data;
 	vars->scroll = 0;
 	if (vars->ui)
@@ -86,12 +88,8 @@ NOPROF
 	}
 }
 
-void	change_setting(void		*v, int	data)
-NOPROF
+void	change_setting(t_vars *vars, int data)
 {
-	t_vars	*vars;
-
-	vars = (t_vars *)v;
 	if (data == 1)
 	{
 		vars->settings.map_type++;
@@ -100,36 +98,12 @@ NOPROF
 	}
 }
 
-t_coords screen_pc(double off, double wh, t_rgb colore, t_vars *vars)
-NOPROF
+void	button(t_coords p, char *txt, void (*f)(t_vars *, int), int data)
 {
-	t_coords res;
-	int	width;
-	int	height;
-	int	off_l;
-	int	off_d;
-
-	width = (int)wh;
-	height = fmod(wh * 100.0, 100.0);
-	off_l = (int)off;
-	off_d = fmod(off * 100.0, 100.0);
-	res.a.x = vars->win_size.x * off_l / 100;
-	res.a.y = vars->win_size.y * off_d / 100;
-	res.b.x = res.a.x + (vars->win_size.x * width / 100);
-	res.b.y = res.a.y + (vars->win_size.y * height / 100);
-	res.a.c = colore;
-	res.vars = vars;
-	//printf("%d|%d|%d\n", res.x, res.y, res.z);
-	return (res);
-}
-
-void	button(t_coords p, char *txt,void (*f)(void*, int), int data)
-NOPROF
-{
-	int	dy;
-	int	dx;
+	int				dy;
+	int				dx;
 	unsigned int	add;
-	t_data	*text;
+	t_data			*text;
 
 	if (txt)
 		text = get_texture(p.vars, txt, 0);
@@ -137,10 +111,11 @@ NOPROF
 	while (++dy < p.b.y)
 	{
 		dx = p.a.x;
-		while (++dx < p.b.x)// && dy - p.a.y < 95)
+		while (++dx < p.b.x)
 		{
 			if (txt)
-				add =  *(unsigned int *)(text->addr + ((int)(((dx - p.a.x) * text->size.x) / (p.b.x - p.a.x))
+				add = *(unsigned int *)(text->addr
+						+ ((int)(((dx - p.a.x) * text->size.x) / (p.b.x - p.a.x))
 							* (text->bits_per_pixel / 8) + ((int)floor(((dy - p.a.y) * text->size.y) / (p.b.y - p.a.y)) * text->line_length)));
 			else
 				add = to_rgb(p.a.c, 0);
@@ -150,7 +125,6 @@ NOPROF
 				pixel_put(p.vars->img, dx, dy, add);
 		}
 	}
-	//printf("%d\n", mlx_string_put(p.vars->mlx, p.vars->win,100,100,0xff00ff, "PLAY"));
 	if (p.vars->clicked)
 	{
 		if (p.vars->clicked_co.x >= p.a.x && p.vars->clicked_co.x <= p.b.x)

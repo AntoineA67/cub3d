@@ -4,7 +4,40 @@ OBJDIR		= obj/
 INCDIR		= inc/
 VPATH		= src/$(addprefix :src/, ui textures multi enemies parsing mouse_key_hooks render utils init)
 INC			= $(addprefix ${INCDIR}, cub3D.h)
-SRC			= main.c utils.c parse.c enemies.c init_player.c button.c slider.c ui.c l_pts.c key_hooks.c texture_manage.c mouse_hooks.c plot.c render.c color_utils.c client.c minimap.c font.c rays.c profiling.c
+
+SRC			= main.c \
+			utils.c \
+			parse.c \
+			parse_utils.c \
+			enemies.c \
+			init_player.c \
+			glb_init.c \
+			combat_init.c \
+			button.c \
+			slider.c \
+			ui1.c \
+			ui2.c \
+			ui_utils.c \
+			l_pts.c \
+			key_actions.c \
+			key_hooks.c \
+			texture_manage_get.c \
+			texture_manage_load.c \
+			texture_manage_free.c \
+			mouse_hooks.c \
+			plot.c \
+			line_texture.c \
+			render.c \
+			color_utils.c \
+			client.c \
+			minimap.c \
+			font.c \
+			project_rays.c \
+			combat.c \
+			draw_utils.c \
+			end_game.c \
+			calc_rays.c
+
 SERVER		= server
 OBJ			= $(addprefix ${OBJDIR}, $(SRC:.c=.o))
 LIBRARY		= -L libft -lft -L mlx_opengl -lmlx -lm
@@ -13,7 +46,7 @@ CC			= gcc
 FLAGS		= -Wall -Wextra -Werror -I./inc/
 # FLAGS		=  -DDEBUG_PROFILE -finstrument-functions -I./inc/
 # FLAGS		+= -O3
-# FLAGS		+= -fsanitize=address -g
+FLAGS		+= -fsanitize=address -g
 # FLAGS		+= -Ofast
 
 #	RULES
@@ -42,6 +75,8 @@ clean:
 
 fclean:
 	make fclean -C libft
+	rm -rf maps.txt
+	rm -rf textures.txt
 	rm -rf ${OBJDIR}
 	${RM} ${NAME}
 

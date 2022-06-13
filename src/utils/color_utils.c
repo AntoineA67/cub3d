@@ -6,14 +6,13 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 19:45:52 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/08 12:22:30 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/10 17:49:26 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
 void	color(t_rgb *c, int r, int g, int b)
-NOPROF
 {
 	c->r = r;
 	c->g = g;
@@ -21,7 +20,6 @@ NOPROF
 }
 
 t_rgb	gen_color(int r, int g, int b, int v)
-NOPROF
 {
 	t_rgb	c;
 
@@ -33,7 +31,6 @@ NOPROF
 }
 
 unsigned int	to_rgb(t_rgb c, unsigned char grey)
-NOPROF
 {
 	if (grey)
 		return (c.v << 24 | grey << 16 | grey << 8 | grey);
@@ -41,7 +38,6 @@ NOPROF
 }
 
 t_rgb	cycle_color(t_rgb color)
-NOPROF
 {
 	t_rgb	c;
 
@@ -63,29 +59,3 @@ NOPROF
 		c.b -= 5;
 	return (c);
 }
-
-// void	next_color(t_vars *vars)
-// {
-// 	t_rgb	*c;
-
-// 	c = &vars->color;
-// 	if (c->v)
-// 		c->v = 0;
-// 	if (c->r == 255 && c->g == 255 && c->b == 255)
-// 	{
-// 		c->g = 0;
-// 		c->b = 0;
-// 	}
-// 	else if (c->r == 255 && c->g < 255 && c->b == 0)
-// 		c->g = 255;
-// 	else if (c->r == 0 && c->g == 255 && c->b < 255)
-// 		c->b = 255;
-// 	else if (c->r < 255 && c->g == 0 && c->b == 255)
-// 		c->r = 255;
-// 	else if (c->r > 0 && c->g == 255 && c->b == 0)
-// 		c->r = 0;
-// 	else if (c->r == 0 && c->g > 0 && c->b == 255)
-// 		c->g = 0;
-// 	else if (c->r == 255 && c->g == 0 && c->b > 0)
-// 		c->b = 0;
-// }
