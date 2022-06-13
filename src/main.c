@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/08 16:47:37 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/08 17:17:03 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ void	init_enemies(t_vars *vars)
 
 static void	fill_vars(t_vars *vars, int fd)
 {
-	vars->res_scale = 4;
 	vars->max_n_enemies = 0;
 	vars->mult_n_players = 0;
 	vars->usable_cells = 0;
@@ -121,7 +120,7 @@ static void	fill_vars(t_vars *vars, int fd)
 	vars->jump = -2000;
 	vars->ao = 1.0;
 	vars->ao_scale = .22;
-	vars->settings.m = 0;
+	vars->settings.m = 1;
 	vars->settings.y_ratio_mouse_speed = 1.2;
 	vars->settings.x_ratio_mouse_speed = 1.2;
 	vars->mult_fd = 0;
@@ -207,8 +206,8 @@ NOPROF
 			// printf("%.10f|%s\n", vars->delta_time, itoa);
 			render(vars);
 			mlx_string_put(vars->mlx, vars->win, 100, 100, 0xff00ff, fps);
-			img_text_simple(vars, fps, gen_coord(vars->win_size.x - 100, 10, 4, gen_color(255, 255, 255, 0)));
-			mlx_put_image_to_window(vars->mlx, vars->win, vars->img2, 0, 0);
+			// img_text_simple(vars, fps, gen_coord(vars->win_size.x - 100, 10, 4, gen_color(255, 255, 255, 0)));
+			// mlx_put_image_to_window(vars->mlx, vars->win, vars->img2, 0, 0);
 			free(itoa);
 			free(fps);
 			vars->n2 = temp;
