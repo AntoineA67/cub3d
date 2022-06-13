@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 16:11:59 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/13 11:31:13 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/13 12:18:41 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	show_player(t_vars *vars, double size)
 	}
 }
 
-int	draw_mini_circle(t_vars *vars, int x, int y, t_data *i)
+int	draw_mini_circle(t_vars *v, int x, int y, t_data *i)
 {
 	double	pos;
 
@@ -51,15 +51,15 @@ int	draw_mini_circle(t_vars *vars, int x, int y, t_data *i)
 		{
 			if (sqrt(pow(x - 100, 2) + pow(y - 100, 2)) < 100)
 			{
-				pos = (vars->player.pos.y + y * 8. / 200. - 4.) * vars->size.x;
-				pos += (vars->player.pos.x + ((x * 8.0) / 200.0) - 4.0);
-				if ((int)pos > vars->size.x * vars->size.y || (int)pos < 0)
+				pos = (int)(v->player.pos.y + y * 8. / 200. - 4.) * v->size.x;
+				pos += (v->player.pos.x + ((x * 8.0) / 200.0) - 4.0);
+				if ((int)pos > v->size.x * v->size.y || (int)pos < 0)
 					pixel_put(i, x, y, to_rgb(gen_color(100, 100, 100, 0), 0));
-				else if (vars->map[(int)pos] == '1')
+				else if (v->map[(int)pos] == '1')
 					pixel_put(i, x, y, to_rgb(gen_color(255, 255, 255, 0), 99));
-				else if (vars->map[(int)floor(pos)] == 'C')
+				else if (v->map[(int)floor(pos)] == 'C')
 					pixel_put(i, x, y, to_rgb(gen_color(0, 255, 0, 0), 0));
-				else if (vars->map[(int)floor(pos)] == '0')
+				else if (v->map[(int)floor(pos)] == '0')
 					pixel_put(i, x, y, to_rgb(gen_color(0, 0, 0, 0), 0));
 				else
 					pixel_put(i, x, y, to_rgb(gen_color(100, 100, 100, 0), 0));
