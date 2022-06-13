@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 11:22:27 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/11 12:38:45 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/13 13:10:53 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	end_game_win(t_vars *vars)
 	ft_int_memset(vars->img->addr, 0x000000,
 		vars->img->line_length * vars->win_size.y / 4);
 	img_text(vars, "YOU WIN", screen_pc(30.30, 50.50, red, vars));
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 	printf("You win\n");
 }
 

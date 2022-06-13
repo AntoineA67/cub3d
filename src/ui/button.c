@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 16:05:40 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/11 14:37:21 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/13 13:07:10 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ void	change_map(t_vars *vars, int data)
 
 	fd = open("maps.txt", O_RDONLY);
 	str = get_next_line(fd);
-	i = 0;
-	while (str)
+	i = -1;
+	while (str && ++i >= 0)
 	{
 		if (i == data)
 		{
@@ -37,7 +37,6 @@ void	change_map(t_vars *vars, int data)
 			if (init_player(vars))
 				return ;
 		}
-		i++;
 		free(str);
 		str = get_next_line(fd);
 	}
@@ -53,8 +52,8 @@ void	change_texture(t_vars *vars, int data)
 
 	fd = open("textures.txt", O_RDONLY);
 	str = get_next_line(fd);
-	i = 0;
-	while (str)
+	i = -1;
+	while (str && ++i >= 0)
 	{
 		if (i == data)
 		{
@@ -67,7 +66,6 @@ void	change_texture(t_vars *vars, int data)
 				load_animtexture(vars, vars->changetexture,
 					ft_atoi(str), str + (ft_strchr(str, '@') - str) + 1);
 		}
-		i++;
 		free(str);
 		str = get_next_line(fd);
 	}
