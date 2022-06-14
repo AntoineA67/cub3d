@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 13:22:11 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/13 16:05:23 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/14 15:11:41 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void	init_imgs(t_vars *vars)
 	load_texture(vars, "aaa", 0, "./textures/xpm/ennemie.xpm");
 	load_texture(vars, "hp", 0, "./textures/hp.xpm");
 	load_texture(vars, "end", 0, "./textures/xpm/dirt.xpm");
-	load_texture(vars, "hud", 0, "./textures/hud.xpm");
+	load_texture(vars, "hud", 0, "./textures/hud0.xpm");
+	load_texture(vars, "hud1", 0, "./textures/hud1.xpm");
 	load_texture(vars, "bullet", 0, "./textures/bullets/bullet.xpm");
 	load_texture(vars, "so", 0, vars->so);
 	load_texture(vars, "maps", 0, "./textures/pack_blue_pink/maps.xpm");

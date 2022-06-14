@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:24:04 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/13 15:27:08 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/14 15:09:55 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	exit_err(t_vars *vars, int err)
 {
 	if (err)
 		write(2, "Error\n", 6);
-	if (vars->img->img)
+	if (vars->img && vars->img->img)
 		mlx_destroy_image(vars->mlx, vars->img->img);
 	if (vars->win)
 		mlx_destroy_window(vars->mlx, vars->win);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   end_game.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 11:22:27 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/13 13:10:53 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/14 15:06:39 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ int	check_end_game(t_vars *vars)
 	int	i;
 
 	i = -1;
+	if (vars->usable_cells < 30)
+		return (0);
 	if (vars->player.lives <= 0)
 	{
 		end_game_lose(vars);

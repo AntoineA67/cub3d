@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/13 15:59:56 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/14 15:13:39 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,7 +251,7 @@ void		fill_vars(t_vars *vars, int fd);
 char		*extract_name(char *str);
 int			elem_textures(char **l, t_vars *vars, int fd);
 char		*parse(int fd, t_vars *vars, int len_tmp);
-int			str_to_rgb(t_rgb *col, char *str);
+int			str_to_rgb(t_vars *vars, t_rgb *col, char *str);
 void		fill_lst(t_list **lst, int fd, t_vars *vars);
 void		draw_2d_enemies(t_vars *vars, int size);
 void		draw_bullets(t_vars *varsm, int i);

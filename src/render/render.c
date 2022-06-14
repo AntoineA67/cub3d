@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/13 15:22:21 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/14 15:10:48 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,22 @@ void	shade_floor_ceil(t_vars *vars)
 
 void	draw_hud(t_vars *vars)
 {
-	int	i;
+	int		i;
+	char	*hud;
+	time_t	cooldown;
 
 	draw_square_center(vars, gen_coord(vars->win_size.x / 2,
 			vars->win_size.y / 2, 4, gen_color(255, 255, 255, 0)));
 	draw_square_center(vars, gen_coord(vars->win_size.x / 2,
 			vars->win_size.y / 2, 2, gen_color(0, 0, 0, 0)));
+	cooldown = gettime(vars->n1);
+	if (cooldown - vars->bullet_cooldown < 140)
+		hud = "hud1";
+	else
+		hud = "hud";
+	draw_easy_texture(vars, gen_coord(vars->win_size.x / 2,
+			vars->win_size.y - 50,
+			1000, gen_color(0, 0, 0, 0)), get_texture(vars, hud, 0));
 	i = -1;
 	while (++i < vars->player.lives)
 		draw_easy_texture(vars, gen_coord(60 + i * 40, vars->win_size.y - 50,

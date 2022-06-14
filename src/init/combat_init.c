@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 13:22:08 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/13 15:15:57 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/14 15:11:56 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ void	init_enemies(t_vars *vars)
 
 	i = 0;
 	prob = .0001;
+	if (vars->usable_cells < 30)
+	{
+		vars->max_n_enemies = 0;
+		return ;
+	}
 	while (vars->max_n_enemies < vars->usable_cells / 20 + 1)
 	{
 		gettimeofday(&time, NULL);

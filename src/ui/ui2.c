@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 12:40:29 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/13 16:25:52 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/14 15:10:41 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,6 @@ int	ui_setting(t_vars	*vars)
 	draw_2d_map(vars, vars->min_map_mult);
 	button(screen_pc(80.80, 05.05, color, vars), "start", &change_ui, 1);
 	button(screen_pc(25.30, 25.025, color, vars), "start", &change_setting, 1);
-	tmp2 = ft_itoa(vars->settings.map_type);
-	tmp = ft_strjoin("Minimaps_type: ", tmp2);
-	free(tmp2);
-	img_text(vars, tmp,
-		screen_pc(60.30, 20.025, color, vars));
-	free(tmp);
 	slider(vars, screen_pc(25.40, 25.025, color, vars),
 		slider_param(120.0, 0, &vars->settings.fps_cap, 1.0));
 	tmp2 = ft_itoa(vars->settings.fps_cap);
