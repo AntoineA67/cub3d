@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/11 14:32:55 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/13 16:48:02 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ char	*parse(int fd, t_vars *vars, int len_tmp)
 	node = lst->next;
 	while (node && node->content)
 	{
-		//printf("d:%s\n", node->content);
+		
 		if (ft_strschr(node->content, pp) >= 0)
 		{
 			vars->start_rot = M_PI_2 * ft_strschr(node->content, pp);
@@ -107,6 +107,7 @@ char	*parse(int fd, t_vars *vars, int len_tmp)
 			((char *)node->content)[--len_tmp] = 0;
 		if (++vars->size.y && len_tmp > vars->size.x)
 			vars->size.x = len_tmp;
+		printf("d:%s\n", node->content);
 		node = node->next;
 	}
 	return (parse_sec(vars, lst));

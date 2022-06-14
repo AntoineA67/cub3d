@@ -6,11 +6,27 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 13:17:58 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/11 13:25:13 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/13 16:01:13 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
+
+void	escap(t_vars *vars)
+{
+	printf("escap\n");
+	if (vars->ui == 1)
+		exit_err(vars, 0);
+	else
+	{
+		mlx_mouse_show();
+		ft_int_memset(vars->img->addr, 0x000000,
+			vars->img->line_length * vars->win_size.y / 4);
+		vars->ui = 1;
+		vars->clicked = 0;
+	}
+	vars->keyboard[53] = 0;
+}
 
 int	change_case(t_vars	*vars, double newposX, double newposY, t_vector2 *start)
 {
@@ -27,17 +43,6 @@ int	change_case(t_vars	*vars, double newposX, double newposY, t_vector2 *start)
 		vars->map[pos + vars->size.x] = 'O';
 	else if (vars->map[pos - vars->size.x] == 'C')
 		vars->map[pos - vars->size.x] = 'O';
-	// else if (vars->map[pos] != 'O')
-	// {
-	// 	if (vars->map[posplayer - 1] == 'O')
-	// 		vars->map[posplayer - 1] = 'C';
-	// 	else if (vars->map[posplayer + 1] == 'O')
-	// 		vars->map[posplayer + 1] = 'C';
-	// 	else if (vars->map[posplayer + vars->size.x] == 'O')
-	// 		vars->map[posplayer + vars->size.x] = 'C';
-	// 	else if (vars->map[posplayer - vars->size.x] == 'O')
-	// 		vars->map[posplayer - vars->size.x] = 'C';
-	// }
 	return (0);
 }
 
@@ -45,9 +50,7 @@ void	move_player(t_vars *vars, int dir_x, int dir_y)
 {
 	double	newposx;
 	double	newposy;
-	int		size;
 
-	size = vars->min_map_mult;
 	if (dir_x)
 	{
 		newposx = vars->player.pos.x + dir_x * cos(vars->player.rot.x) * (.1 + .05 * vars->player.run) * vars->delta_time * 20.0;

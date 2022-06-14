@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:24:04 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/10 17:49:25 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/13 15:27:08 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,16 @@ void	exit_err(t_vars *vars, int err)
 	exit(err);
 }
 
-t_coord	coord(t_coord *p, int x, int y, int z)
+long	gettime(long initime)
 {
-	p->x = x;
-	p->y = y;
-	p->z = z;
-	return (*p);
+	long			res;
+	struct timeval	time;
+
+	gettimeofday(&time, NULL);
+	res = time.tv_usec / 1000;
+	res += time.tv_sec * 1000;
+	res -= initime;
+	return (res);
 }
 
 t_coord	gen_coord(int x, int y, int z, t_rgb c)

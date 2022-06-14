@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:07:51 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/10 17:49:33 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/13 16:04:39 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,11 @@ void	affect_ascii(t_vars *vars)
 		line = get_next_line(fd);
 		if (!line || ft_strlen(line) < 3)
 		{
+			free(line);
 			write(2, "Error while parsing fonts\n", 16);
 			return ;
 		}	
 		vars->font[i] = ft_atoi_base_u_64(line + 2, "0123456789ABCDEF");
+		free(line);
 	}
 }

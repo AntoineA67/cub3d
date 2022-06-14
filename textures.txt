@@ -22,6 +22,7 @@ textures/xpm/dirt0.xpm
 textures/xpm/dirt1.xpm
 textures/xpm/dirt2.xpm
 textures/xpm/dirt3.xpm
+textures/xpm/ennemie.xpm
 textures/xpm/gravel.xpm
 textures/xpm/leaves.xpm
 textures/xpm/oui.xpm

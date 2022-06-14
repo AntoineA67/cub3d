@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 11:55:44 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/13 10:49:14 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/13 16:26:07 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,8 @@ int	ui_frame1(t_vars	*vars)
 {
 	button(screen_pc(25.15, 50.1, gen_color(255, 0, 100, 100), vars),
 		"start", &change_ui, 0);
-	if (!vars->mult_fd)
-		button(screen_pc(25.30, 25.05, gen_color(255, 255, 100, 0), vars),
-			"maps", &change_ui, 2);
+	button(screen_pc(25.30, 25.05, gen_color(255, 255, 100, 0), vars),
+		"maps", &change_ui, 2);
 	button(screen_pc(25.40, 25.05, gen_color(25, 60, 100, 0), vars),
 		"textures", &change_ui, 3);
 	button(screen_pc(25.50, 25.05, gen_color(56, 69, 10, 0), vars),
@@ -35,11 +34,14 @@ int	ui_frame2(t_vars	*v)
 	int		i;
 
 	fd = open("maps.txt", O_RDONLY);
-	str = "MAPS:";
+	str = ft_strdup("MAPS:");
 	off = 30.10;
 	i = -1;
 	while (v->scroll && i++ < v->scroll)
+	{
+		free(str);
 		str = get_next_line(fd);
+	}
 	while (str && off < 31.0)
 	{
 		if (i >= 0)
@@ -47,8 +49,15 @@ int	ui_frame2(t_vars	*v)
 				NULL, &change_map, i);
 		img_text(v, str, screen_pc(off, 20.025, gen_color(255, 0, 100, 0), v));
 		off += 0.10 + (0 * i++);
+		free(str);
 		str = get_next_line(fd);
 	}
+	while (str)
+	{
+		free(str);
+		str = get_next_line(fd);
+	}
+	free(str);
 	close(fd);
 	button(screen_pc(80.80, 05.05, gen_color(255, 0, 100, 0), v),
 		"start", &change_ui, 1);
