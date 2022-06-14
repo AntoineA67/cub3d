@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   combat_init.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 13:22:08 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/11 13:23:00 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/14 14:31:39 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,15 @@ void	init_enemies(t_vars *vars)
 	// i = -1;
 	n = -1;
 	prob = .0001;
+	if (vars->usable_cells < 30)
+	{
+		vars->max_n_enemies = 0;
+		return ;
+	}
 	while (vars->max_n_enemies < vars->usable_cells / 20 + 1)
 	{
 		gettimeofday(&time, NULL);
-		//printf("GEN ENEMY: %d %.2f %d %.2f\n", vars->max_n_enemies, prob, (int)(time.tv_usec) % 100, prob * 100);
+		printf("GEN ENEMY: %d %.2f %d %.2f\n", vars->max_n_enemies, prob, (int)(time.tv_usec) % 100, prob * 100);
 		if (vars->parse_seen[i] == 1
 			&& abs((int)vars->player.pos.x - i % vars->size.x) > 2 && abs((int)vars->player.pos.y - i % vars->size.y) > 2
 			&& (int)(time.tv_usec) % 100 < (int)(prob * 100))

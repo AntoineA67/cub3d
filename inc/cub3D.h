@@ -6,7 +6,7 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/13 11:35:23 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/06/13 14:26:19 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,7 +262,7 @@ void	fill_vars(t_vars *vars, int fd);
 char	*extract_name(char *str);
 int	elem_textures(char **l, t_vars *vars, int fd);
 char	*parse(int fd, t_vars *vars, int len_tmp);
-int	str_to_rgb(t_rgb *col, char *str);
+int		str_to_rgb(t_vars *vars, t_rgb *col, char *str);
 void	fill_lst(t_list **lst, int fd, t_vars *vars);
 void	draw_2d_enemies(t_vars *vars, int size);
 void	draw_bullets(t_vars *vars);

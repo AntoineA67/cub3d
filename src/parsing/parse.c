@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/11 14:32:55 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/13 14:25:54 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ int	elem_textures(char **l, t_vars *vars, int fd)
 	else if (!ft_strncmp(*l, "EA ", 3))
 		vars->ea = ft_strtrim(*l + 3, "\n ");
 	else if (!ft_strncmp(*l, "F ", 2))
-		str_to_rgb(&vars->f, *l + 2);
+		str_to_rgb(vars, &vars->f, *l + 2);
 	else if (!ft_strncmp(*l, "C ", 2))
-		str_to_rgb(&vars->c, *l + 2);
+		str_to_rgb(vars, &vars->c, *l + 2);
 	else
 		return (1);
 	free(*l);
@@ -72,13 +72,11 @@ char	*parse_sec(t_vars *vars, t_list	*lst)
 			ft_strlcpy(tmp, node->content,
 				ft_strlen((char *)node->content) + 1);
 			tmp[ft_strlen((char *)node->content)] = ' ';
-			printf("|%s|\n", tmp);
 			free(node->content);
 			node->content = tmp;
 		}
 		node = node->next;
 	}
-	printf("x: %d y: %d\n", vars->size.x, vars->size.y);
 	return (create_l_pts(lst, vars->size.x, vars->size.y));
 }
 
@@ -96,7 +94,6 @@ char	*parse(int fd, t_vars *vars, int len_tmp)
 	node = lst->next;
 	while (node && node->content)
 	{
-		//printf("d:%s\n", node->content);
 		if (ft_strschr(node->content, pp) >= 0)
 		{
 			vars->start_rot = M_PI_2 * ft_strschr(node->content, pp);

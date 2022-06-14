@@ -45,7 +45,7 @@ LIB_FILE	= libft/libft.a mlx_opengl/libmlx.a
 CC			= gcc
 FLAGS		= -Wall -Wextra -Werror -I./inc/
 # FLAGS		=  -DDEBUG_PROFILE -finstrument-functions -I./inc/
-FLAGS		+= -O2
+FLAGS		+= -O3
 # FLAGS		+= -fsanitize=address -g
 # FLAGS		+= -Ofast
 

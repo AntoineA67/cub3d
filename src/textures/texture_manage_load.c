@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_manage_load.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 12:45:45 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/10 13:29:51 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/13 14:18:08 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ void	new_texture(t_vars	*vars, char *name, t_textures	**act, char *path)
 	actt = last->imgtab[0];
 	actt->img = mlx_xpm_file_to_image(vars->mlx, path,
 			&actt->size.x, &actt->size.y);
+	if (!actt->img)
+		exit_err(vars, 1);
 	actt->addr = mlx_get_data_addr(actt->img, &actt->bits_per_pixel,
 			&actt->line_length, &actt->endian);
 	if (*act)

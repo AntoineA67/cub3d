@@ -5,7 +5,7 @@ WE ./textures/xpm/leaves.xpm
 
 
 
-F 100  , 70 ,50
+F 255, 70   ,50   
 SO ./textures/xpm/bookshelf.xpm
 
 EA ./textures/xpm/bookshelf.xpm

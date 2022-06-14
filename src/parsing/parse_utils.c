@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 12:51:09 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/11 13:03:59 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/14 11:42:45 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,6 @@ int	ft_strschr(char *s, char *finds)
 	return (-1);
 }
 
-int	str_to_rgb(t_rgb *col, char *str)
-{
-	char	**splitted;
-	int		i;
-
-	splitted = ft_split(str, ',');
-	i = -1;
-	while (splitted[++i])
-		;
-	col->r = ft_atoi(splitted[0]);
-	col->g = ft_atoi(splitted[1]);
-	col->b = ft_atoi(splitted[2]);
-	ft_freetab(splitted);
-	return (0);
-}
-
 int	err_format_rgb(char *str)
 {
 	char	*cpy;
@@ -56,6 +40,47 @@ int	err_format_rgb(char *str)
 	while (cpy[++i])
 		if (!ft_isdigit(cpy[i]))
 			return (1);
+	if (i > 3)
+		return (1);
 	free(cpy);
+	return (0);
+}
+
+static char **check_n_comma(char *str)
+{
+	int	i;
+	int	n;
+
+	i = -1;
+	n = 0;
+	if (str[ft_strlen(str) - 1] == '\n')
+		str[ft_strlen(str) - 1] = '\0';
+	while (str[++i])
+		if (str[i] == ',')
+			n++;
+	if (n > 2)
+		return (NULL);
+	return (ft_split(str, ','));
+}
+int	str_to_rgb(t_vars *vars, t_rgb *col, char *str)
+{
+	char	**splitted;
+	int		i;
+
+	splitted = check_n_comma(str);
+	if (!splitted)
+		exit_err(vars, 1);
+	i = -1;
+	while (splitted[++i])
+		if (err_format_rgb(splitted[i]))
+			exit_err(vars, 1);
+	if (i > 3)
+		exit_err(vars, 1);
+	col->r = ft_atoi(splitted[0]);
+	col->g = ft_atoi(splitted[1]);
+	col->b = ft_atoi(splitted[2]);
+	if (col->r > 255 || col->g > 255 || col->b > 255)
+		exit_err(vars, 1);
+	ft_freetab(splitted);
 	return (0);
 }
