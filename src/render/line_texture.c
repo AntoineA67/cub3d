@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 13:36:27 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/14 14:44:12 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/14 16:01:02 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@ void	line_texture_draw(t_vars *vars, t_ltextcalc *calc)
 	unsigned int	oui;
 	unsigned int	*add;
 	double			isize;
+	long			max;
 
 	isize = 1.0 / (calc->img->size.y + 1.0);
+	max = (vars->win_size.x * vars->win_size.y) - 1;
 	while (++calc->i < calc->draw_end)
 	{
 		oui = add_shade(vars, *(unsigned int *)(calc->img->addr + (calc->img_x
@@ -29,9 +31,10 @@ void	line_texture_draw(t_vars *vars, t_ltextcalc *calc)
 		add = (unsigned int *)(vars->img->addr
 				+ (calc->i * vars->img->line_length + calc->screen_x
 					* vars->img->bits_per_pixel));
-		for (size_t i = 0; i < pow(2., vars->settings.m); i++)
+		for (size_t i = 0; i < pow(2., (int)vars->settings.m); i++)
 		{
-			*(add + i) = oui;
+			if ((int *)(add + i) - (int *)vars->img->addr < max)
+				*(add + i) = oui;
 		}
 		calc->y += calc->step;
 	}
@@ -65,28 +68,23 @@ void	line_texture_calc(t_vars *vars, t_ltextcalc	*calc)
 	line_texture_draw(vars, calc);
 }
 
-void	line_texture(t_vars *vars, int x, int rot, double ao)
+void	line_texture(t_vars *vars, int x, char *t, double ao)
 {
 	t_ltextcalc	calc;
 
-	if (rot == 0 || rot == 1)
-	{
-		if (rot == 0)
-			calc.img = get_animtexture(vars, "no", 0.2);
-		else
-			calc.img = get_animtexture(vars, "so", 0.2);
+	calc.img = get_animtexture(vars, t, 0.2);
+	if (t[0] == 'n')
 		calc.img_x = (vars->rays[x].rx - (int)vars->rays[x].rx)
 			* (calc.img->size.x + .0);
-	}
-	if (rot == 2 || rot == 3)
-	{
-		if (rot == 2)
-			calc.img = get_animtexture(vars, "we", 0.2);
-		else
-			calc.img = get_animtexture(vars, "ea", 0.2);
+	else if (t[0] == 's')
+		calc.img_x = (1.0 - (vars->rays[x].rx
+					- (int)vars->rays[x].rx)) * (calc.img->size.x + .0);
+	else if (t[0] == 'e')
 		calc.img_x = (vars->rays[x].ry - (int)vars->rays[x].ry)
 			* (calc.img->size.x + .0);
-	}
+	else
+		calc.img_x = (1.0 - (vars->rays[x].ry - (int)vars->rays[x].ry))
+			* (calc.img->size.x + .0);
 	calc.wall_height = vars->win_size.y / 2 / vars->rays[x].dist * .90;
 	calc.ao = ao * vars->ao_scale;
 	calc.screen_x = x;

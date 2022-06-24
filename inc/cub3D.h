@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/14 15:13:39 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/14 15:33:06 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,7 +300,7 @@ void		exit_err(t_vars *vars, int err);
 t_coord		gen_coord(int x, int y, int z, t_rgb c);
 t_rgb		gen_color(int r, int g, int b, int v);
 t_coord		coord(t_coord *p, int x, int y, int z);
-void		line_texture(t_vars *vars, int screen_x, int rot, double ao);
+void		line_texture(t_vars *vars, int screen_x, char *t, double ao);
 void		pixel_put(t_data *data, int x, int y, unsigned int color);
 char		*create_l_pts(t_list *lst, int size_x, int size_y);
 

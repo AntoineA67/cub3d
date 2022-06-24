@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 15:00:14 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/14 14:43:54 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/14 15:50:48 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,18 +75,18 @@ void	project_rays_draw(t_vars *vars)
 		if (vars->rays[i].side == 0)
 		{
 			if (vars->rays[i].ra2 > M_PI)
-				line_texture(vars, i, 0, get_aox(vars, 0, i));
+				line_texture(vars, i, "no", get_aox(vars, 0, i));
 			else
-				line_texture(vars, i, 1, get_aox(vars, 1, i));
+				line_texture(vars, i, "so", get_aox(vars, 1, i));
 		}
 		else
 		{
 			if (vars->rays[i].ra2 > M_PI_2 && vars->rays[i].ra2 < M_PI_2 + M_PI)
-				line_texture(vars, i, 2, get_aoy(vars, 0, i));
+				line_texture(vars, i, "we", get_aoy(vars, 0, i));
 			else
-				line_texture(vars, i, 3, get_aoy(vars, 1, i));
+				line_texture(vars, i, "ea", get_aoy(vars, 1, i));
 		}
-		i += pow(2., vars->settings.m);
+		i += pow(2., (int)vars->settings.m);
 	}
 }
 

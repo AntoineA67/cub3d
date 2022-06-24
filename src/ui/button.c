@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 16:05:40 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/13 13:34:36 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/14 16:42:23 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@ void	change_map(t_vars *vars, int data)
 	int		fd;
 	char	*str;
 	int		i;
+	int		fd2;
+	void *mlx;
+	void *win;
 
 	fd = open("maps.txt", O_RDONLY);
 	str = get_next_line(fd);
@@ -31,11 +34,32 @@ void	change_map(t_vars *vars, int data)
 			vars->map = NULL;
 			if (str[ft_strlen(str) - 1] == '\n')
 				str[ft_strlen(str) - 1] = 0;
-			i = open(str, O_RDONLY);
-			vars->map = parse(i, vars, 0);
-			printf("{%s}\n", vars->map);
-			if (init_player(vars))
-				return ;
+			fd2 = open(str, O_RDONLY);
+			if (fd2 < 0)
+			{
+				close(fd2);
+				exit_err(vars, 1);
+			}
+			mlx = vars->mlx;
+			win = vars->win;
+			if (vars->textures)
+				free_textures(vars);
+			free(vars->img->img);
+			free(vars->img->addr);
+			free(vars->img2->img);
+			free(vars->img2->addr);
+			free(vars->img);
+			free(vars->img2);
+			free(vars->settings.bttext);
+			free(vars->enemies);
+			free(vars->rays);
+			free(vars->parse_seen);
+			free(vars->map);
+			fill_vars(vars, fd2);
+			(void)extract_name;
+			vars->settings.map_type = 1;
+			vars->mlx = mlx;
+			vars->win = win;
 		}
 		free(str);
 		str = get_next_line(fd);
