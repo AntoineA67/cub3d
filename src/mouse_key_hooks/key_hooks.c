@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_hooks.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/13 15:34:37 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/06/14 15:34:04 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	key_hook_down(int keycode, t_vars *vars)
 {
+	// printf("%d\n", keycode);
 	if (keycode < 300)
 		vars->keyboard[keycode] = 1;
 	return (0);
@@ -56,6 +57,8 @@ int	check_inputs(t_vars *vars)
 {
 	if (vars->keyboard[53])
 		escap(vars);
+	if (vars->keyboard[35])
+		exit_err(vars, 0);
 	if (vars->ui)
 		return (0);
 	if (vars->keyboard[257])
