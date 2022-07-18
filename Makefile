@@ -66,7 +66,7 @@ FLAGS		+= -O2
 # FLAGS		+= -Ofast
 
 #	RULES
-all: ${OBJDIR} ${NAME}
+all: ${OBJDIR} ${NAME} 
 
 
 ${OBJDIR}:
