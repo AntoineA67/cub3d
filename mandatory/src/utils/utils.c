@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:24:04 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/25 14:22:20 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/18 15:14:03 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,17 @@
 
 void	exit_err(t_vars *vars, int err)
 {
-	if (err)
+	if (err != 0)
 		write(2, "Error\n", 6);
-	if (vars->img && vars->img->img)
-		mlx_destroy_image(vars->mlx, vars->img->img);
-	if (vars->win)
-		mlx_destroy_window(vars->mlx, vars->win);
-	if (vars->textures)
-		free_textures(vars);
+	if (err != -1)
+	{
+		if (vars->img && vars->img->img)
+			mlx_destroy_image(vars->mlx, vars->img->img);
+		if (vars->win)
+			mlx_destroy_window(vars->mlx, vars->win);
+		if (vars->textures)
+			free_textures(vars);
+	}
 	exit(err);
 }
 
