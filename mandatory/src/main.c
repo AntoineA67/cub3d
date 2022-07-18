@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/25 16:19:25 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/18 15:14:10 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	main(int argc, char **argv)
 	int		fd;
 
 	if (argc != 2 || !ft_strnstr(argv[1], ".cub", ft_strlen(argv[1])))
-		exit_err(&vars, 1);
+		exit_err(&vars, -1);
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
 	{
