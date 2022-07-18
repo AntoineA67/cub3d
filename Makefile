@@ -4,7 +4,7 @@ OBJDIR		= obj/
 OBJDIRB		= objb/
 INCDIR		= mandatory/inc/
 INCDIRB		= bonus/inc/
-VPATH		= bonus/src/$(addprefix :bonus/src/, ui textures multi enemies parsing mouse_key_hooks render utils init  )
+VPATH		= mandatory/src/$(addprefix :mandatory/src/, ui textures multi enemies parsing mouse_key_hooks render utils init  )
 INC			= $(addprefix ${INCDIR}, cub3D.h)
 INCB		= $(addprefix ${INCDIRB}, cub3D.h)
 
