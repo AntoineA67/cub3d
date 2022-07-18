@@ -30,7 +30,7 @@ SRC			= utils.c \
 			project_rays.c \
 			draw_utils.c \
 			calc_rays.c
-SRC_BONUS = $(subst .c,_bonus.c,${SRC} minimap_bonus.c)
+SRC_BONUS = $(subst .c,_bonus.c,${SRC} minimap.c)
 
 OBJ			= $(addprefix ${OBJDIR}, $(SRC:.c=.o))
 OBJ_BONUS	= $(addprefix ${OBJDIR_BONUS}, $(SRC_BONUS:.c=.o))
@@ -66,7 +66,7 @@ ${OBJDIR_BONUS}:
 ${NAME_BONUS}: ${OBJ_BONUS} ${LIB_FILE}
 	${CC} ${FLAGS} ${LIBRARY} $^ -framework OpenGL -framework AppKit -o ${NAME_BONUS}
 
-${OBJDIR_BONUS}%.o: ${SRC_BONUS} ${INC_BONUS} Makefile
+${OBJDIR_BONUS}%.o: %.c ${INC_BONUS} Makefile
 	${CC} ${FLAGS} -I./${INCDIR_BONUS} -c $< -o $@
 
 clean:
