@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/25 16:03:28 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/21 14:37:24 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,7 @@ int				str_to_rgb(t_vars *vars, t_rgb *col, char *str);
 char			*create_l_pts(t_list *lst, int size_x, int size_y);
 void			fill_lst(t_list **lst, int fd, t_vars *vars);
 char			*parse(int fd, t_vars *vars, int len_tmp);
-int				check_map(t_vars *vars, int x, int y);
+int				check_map(t_vars *vars, char *maps);
 void			line_texture(t_vars *vars, int screen_x, char *t);
 int				elem_textures(char *l, t_vars *vars);
 

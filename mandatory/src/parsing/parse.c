@@ -3,29 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/07/18 15:06:52 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/07/21 15:05:19 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-int	check_map(t_vars *vars, int x, int y)
+int	check_map(t_vars *vars, char *maps)
 {
-	if (x < 0 || y < 0 || x >= vars->size.x || y >= vars->size.y
-		|| vars->map[x + vars->size.x * y] == ' ')
-		return (1);
-	else if (vars->parse_seen[x + vars->size.x * y])
-		return (0);
-	if (vars->map[x + vars->size.x * y] == '0'
-		|| vars->map[x + vars->size.x * y] == 'C')
+	int	i;
+
+	i = 0;
+	if (ft_strnstr(maps, " 0", ft_strlen(maps))
+		|| ft_strnstr(maps, "0 ", ft_strlen(maps)))
+		exit_err(vars, 1);
+	while (i < (int)(ft_strlen(maps) + 1))
 	{
-		vars->parse_seen[x + vars->size.x * y] = 1;
-		vars->usable_cells++;
-		return (check_map(vars, x + 1, y) || check_map(vars, x - 1, y)
-			|| check_map(vars, x, y + 1) || check_map(vars, x, y - 1));
+		if (maps[i] == '0' || (i > 0 && maps[i + vars->size.x - 1] == '0'))
+			exit_err(vars, 1);
+		i += vars->size.x;
 	}
 	return (0);
 }

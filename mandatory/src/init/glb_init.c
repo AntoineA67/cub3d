@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 13:22:11 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/25 15:01:07 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/21 14:37:07 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	init_imgs(t_vars *vars)
 
 void	fill_vars2(t_vars *vars, int fd)
 {
-	if (check_map(vars, (int)vars->player.pos.x, (int)vars->player.pos.y))
+	if (check_map(vars, vars->map))
 		exit_err(vars, 1);
 	free(vars->parse_seen);
 	init_imgs(vars);

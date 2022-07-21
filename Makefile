@@ -3,7 +3,7 @@ NAME		= cub3D
 OBJDIR		= obj/
 OBJDIRB		= objb/
 INCDIR		= mandatory/inc/
-INCDIRB		= bonus/inc/
+INCDIRB		= mandatory/inc/
 VPATH		= mandatory/src/$(addprefix :mandatory/src/, ui textures multi enemies parsing mouse_key_hooks render utils init  )
 INC			= $(addprefix ${INCDIR}, cub3D.h)
 INCB		= $(addprefix ${INCDIRB}, cub3D.h)
@@ -23,7 +23,6 @@ SRCM		= utils.c \
 			mouse_hooks.c \
 			plot.c \
 			line_texture.c \
-			minimap.c \
 			render.c \
 			color_utils.c \
 			project_rays.c \
@@ -47,7 +46,6 @@ SRC			= utils.c \
 			line_texture.c \
 			render.c \
 			color_utils.c \
-			minimap.c \
 			project_rays.c \
 			draw_utils.c \
 			calc_rays.c
@@ -58,8 +56,8 @@ OBJB			= $(addprefix ${OBJDIRB}, $(SRC:.c=.o))
 LIBRARY		= -L libft -lft -L mlx_opengl -lmlx -lm
 LIB_FILE	= libft/libft.a mlx_opengl/libmlx.a
 CC			= gcc
-FLAGS		= -Wall -Wextra -Werror -I./bonus/inc/
-FLAGSB		= -Wall -Wextra -Werror -I./bonus/inc/
+FLAGS		= -Wall -Wextra -Werror -I./mandatory/inc/
+FLAGSB		= -Wall -Wextra -Werror -I./mandatory/inc/
 # FLAGS		=  -DDEBUG_PROFILE -finstrument-functions -I./inc/
 FLAGS		+= -O2
 #  FLAGS		+= -fsanitize=address -g
