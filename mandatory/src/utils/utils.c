@@ -6,16 +6,18 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:24:04 by arangoni          #+#    #+#             */
-/*   Updated: 2022/07/18 15:14:03 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/07/21 15:49:00 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-void	exit_err(t_vars *vars, int err)
+void	exit_err(t_vars *vars, int err, char *msg)
 {
 	if (err != 0)
 		write(2, "Error\n", 6);
+	if (msg)
+		write(2, msg, ft_strlen(msg));
 	if (err != -1)
 	{
 		if (vars->img && vars->img->img)

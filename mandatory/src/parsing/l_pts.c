@@ -75,7 +75,7 @@ char	*rotate_map(t_vars *vars)
 	y = -1;
 	r_map = ft_calloc(vars->size.x * vars->size.y + 1, sizeof(char));
 	if (!r_map)
-		exit_err(vars, 1);
+		exit_err(vars, 1, "Malloc error");
 	while (++y < vars->size.y)
 	{
 		x = -1;

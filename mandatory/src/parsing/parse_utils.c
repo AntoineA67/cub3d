@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 12:51:09 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/25 16:09:49 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/21 15:47:37 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,19 +92,19 @@ int	str_to_rgb(t_vars *vars, t_rgb *col, char *str)
 
 	splitted = check_n_comma(str);
 	if (!splitted)
-		exit_err(vars, 1);
+		exit_err(vars, 1, "Invalid map file");
 	i = -1;
 	while (splitted[++i])
 		if (err_format_rgb(splitted[i]))
-			exit_err(vars, 1);
+			exit_err(vars, 1, "Invalid map file");
 	if (i > 3)
-		exit_err(vars, 1);
+		exit_err(vars, 1, "Invalid map file");
 	col->r = ft_atoi(splitted[0]);
 	col->g = ft_atoi(splitted[1]);
 	col->b = ft_atoi(splitted[2]);
 	col->v = 1;
 	if (col->r > 255 || col->g > 255 || col->b > 255)
-		exit_err(vars, 1);
+		exit_err(vars, 1, "Invalid map file");
 	ft_freetab(splitted);
 	return (0);
 }

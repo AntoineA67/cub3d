@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/29 13:47:22 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/21 15:50:04 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,6 @@ void			project_rays(t_vars *vars);
 
 //********************************************* ******************************//
 
-void			exit_err(t_vars *vars, int err);
+void			exit_err(t_vars *vars, int err, char *msg);
 
 #endif

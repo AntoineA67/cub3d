@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   texture_manage_get.c                               :+:      :+:    :+:   */
+/*   texture_manage_get_bonus.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 12:46:15 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/29 13:50:05 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/21 15:45:11 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_data	*get_texture(t_vars	*vars, char	*name, int nb)
 		return (act->imgtab[i]);
 	}
 	printf("NOT FOUND:%s\n", name);
-	exit_err(vars, 1);
+	exit_err(vars, 1, "Invalid texture");
 	return (NULL);
 }
 

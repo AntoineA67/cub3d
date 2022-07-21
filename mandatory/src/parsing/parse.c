@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/07/21 15:15:59 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/21 16:05:41 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ int	check_map(t_vars *vars, char *maps)
 	i = 0;
 	if (ft_strnstr(maps, " 0", ft_strlen(maps))
 		|| ft_strnstr(maps, "0 ", ft_strlen(maps)))
-		exit_err(vars, 1);
+		exit_err(vars, 1, "Invalid map (error id 1)");
 	while (i < (int)(ft_strlen(maps) + 1))
 	{
 		if (maps[i] == '0' || (i > 0 && maps[i + vars->size.x - 1] == '0'))
-			exit_err(vars, 1);
+			exit_err(vars, 1, "Invalid map (error id 2");
 		i += vars->size.x;
 	}
 	return (0);
@@ -77,7 +77,7 @@ char	*parse_sec(t_vars *vars, t_list	*lst)
 	}
 	if (!vars->no || !vars->so || !vars->we
 		|| !vars->ea || !vars->c.v || !vars->f.v)
-		exit_err(vars, 1);
+		exit_err(vars, 1, "Invalid map (error id 3)");
 	return (create_l_pts(lst, vars->size.x, vars->size.y));
 }
 
@@ -105,7 +105,7 @@ char	*parse(int fd, t_vars *vars, int len_tmp)
 	while (node && node->content)
 	{
 		if (!ft_strnschr(node->content, " 01NSEW\n"))
-			exit_err(vars, 1);
+			exit_err(vars, 1, "Invalid map (error id 4)");
 		if (ft_strschr(node->content, pp) >= 0)
 		{
 			vars->start_rot = M_PI_2 * ft_strschr(node->content, pp);
