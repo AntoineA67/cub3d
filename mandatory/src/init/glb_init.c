@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   glb_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 13:22:11 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/25 15:01:07 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/21 15:05:37 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,26 @@ void	init_imgs(t_vars *vars)
 
 void	fill_vars2(t_vars *vars, int fd)
 {
-	if (check_map(vars, (int)vars->player.pos.x, (int)vars->player.pos.y))
-		exit_err(vars, 1);
+	// if (check_map(vars, (int)vars->player.pos.x, (int)vars->player.pos.y))
+	// 	exit_err(vars, 1);
+	// for (int i = 0; i < vars->size.y; i++)
+	// {
+	// 	write(1, &vars->map[i * vars->size.x], vars->size.x);
+	// 	write(1, "\n", 1);
+	// }
+	// char *r_map = rotate_map(vars);
+	// int	sx = vars->size.x;
+	// int sy = vars->size.y;
+	// vars->size.x = sy;
+	// vars->size.y = sx;
+	// for (int i = 0; i < vars->size.y; i++)
+	// {
+	// 	write(1, &r_map[i * vars->size.x], vars->size.x);
+	// 	write(1, "\n", 1);
+	// }
+	// vars->size.x = sx;
+	// vars->size.y = sy;
+	
 	free(vars->parse_seen);
 	init_imgs(vars);
 	vars->img->img = mlx_new_image(vars->mlx, vars->win_size.x,

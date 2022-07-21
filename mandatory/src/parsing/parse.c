@@ -6,28 +6,30 @@
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/07/18 15:06:52 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/07/21 15:04:55 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-int	check_map(t_vars *vars, int x, int y)
+char	*rotate_map(t_vars *vars)
 {
-	if (x < 0 || y < 0 || x >= vars->size.x || y >= vars->size.y
-		|| vars->map[x + vars->size.x * y] == ' ')
-		return (1);
-	else if (vars->parse_seen[x + vars->size.x * y])
-		return (0);
-	if (vars->map[x + vars->size.x * y] == '0'
-		|| vars->map[x + vars->size.x * y] == 'C')
+	int		y;
+	int		x;
+	char	*r_map;
+
+	y = -1;
+	r_map = ft_calloc(vars->size.x * vars->size.y + 1, sizeof(char));
+	if (!r_map)
+		exit_err(vars, 1);
+	while (++y < vars->size.y)
 	{
-		vars->parse_seen[x + vars->size.x * y] = 1;
-		vars->usable_cells++;
-		return (check_map(vars, x + 1, y) || check_map(vars, x - 1, y)
-			|| check_map(vars, x, y + 1) || check_map(vars, x, y - 1));
+		x = -1;
+		while (++x < vars->size.x)
+			r_map[(vars->size.x - 1 - x)
+				* vars->size.y + y] = vars->map[x + vars->size.x * y];
 	}
-	return (0);
+	return r_map;
 }
 
 int	elem_textures(char *l, t_vars *vars)
