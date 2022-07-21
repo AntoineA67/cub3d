@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 13:22:11 by qroussea          #+#    #+#             */
-/*   Updated: 2022/07/21 14:37:07 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/21 15:13:20 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,32 @@ void	init_imgs(t_vars *vars)
 	load_texture(vars, "we", 0, vars->we);
 }
 
-void	fill_vars2(t_vars *vars, int fd)
+void	map_checker(t_vars *vars)
 {
+	char	*r_map;
+	int		sx;
+	int		sy;
+
 	if (check_map(vars, vars->map))
 		exit_err(vars, 1);
+	r_map = rotate_map(vars);
+	sx = vars->size.x;
+	sy = vars->size.y;
+	vars->size.x = sy;
+	vars->size.y = sx;
+	if (check_map(vars, r_map))
+	{
+		free(r_map);
+		exit_err(vars, 1);
+	}
+	vars->size.x = sx;
+	vars->size.y = sy;
+	free(r_map);
+}
+
+void	fill_vars2(t_vars *vars, int fd)
+{
+	map_checker(vars);
 	free(vars->parse_seen);
 	init_imgs(vars);
 	vars->img->img = mlx_new_image(vars->mlx, vars->win_size.x,

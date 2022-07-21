@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/29 11:34:53 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/18 15:22:07 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,15 @@ char	*parse_sec(t_vars *vars, t_list	*lst)
 	return (create_l_pts(lst, vars->size.x, vars->size.y));
 }
 
+void	calc_len(t_list *node, int *len_tmp, t_vars *vars)
+{
+	*len_tmp = ft_strlen((char *)node->content);
+	if (((char *)node->content)[*len_tmp - 1] == '\n')
+		((char *)node->content)[--*len_tmp] = 0;
+	if (++vars->size.y && *len_tmp > vars->size.x)
+		vars->size.x = *len_tmp;
+}
+
 char	*parse(int fd, t_vars *vars, int len_tmp)
 {
 	t_list	*lst;
@@ -103,11 +112,7 @@ char	*parse(int fd, t_vars *vars, int len_tmp)
 			vars->start_rot = M_PI_2 * ft_strschr(node->content, pp);
 			*ft_strchr(node->content, pp[ft_strschr(node->content, pp)]) = 'P';
 		}
-		len_tmp = ft_strlen((char *)node->content);
-		if (((char *)node->content)[len_tmp - 1] == '\n')
-			((char *)node->content)[--len_tmp] = 0;
-		if (++vars->size.y && len_tmp > vars->size.x)
-			vars->size.x = len_tmp;
+		calc_len(node, &len_tmp, vars);
 		node = node->next;
 	}
 	return (parse_sec(vars, lst));

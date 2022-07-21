@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_actions.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 13:17:58 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/29 11:44:44 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/18 15:20:35 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,33 +41,40 @@ int	change_case(t_vars	*vars, double newposX, double newposY, t_vector2 *start)
 	return (0);
 }
 
+void	init_pos_dir_x(int dir_x, double *np_x, double *np_y, t_vars *vars)
+{
+	*np_x = vars->player.pos.x + dir_x
+		* cos(vars->player.rot.x) * (.1 + .05);
+	*np_y = vars->player.pos.y + dir_x
+		* sin(vars->player.rot.x) * (.1 + .05);
+}
+
+void	init_pos_dir_y(int dir_y, double *np_x, double *np_y, t_vars *vars)
+{
+	*np_x = vars->player.pos.x + dir_y
+		* cos(vars->player.rot.x - M_PI_2) * (.05 + .02);
+	*np_y = vars->player.pos.y + dir_y
+		* sin(vars->player.rot.x - M_PI_2) * (.05 + .02);
+}
+
 void	move_player(t_vars *vars, int dir_x, int dir_y)
 {
 	double	newposx;
 	double	newposy;
 
 	if (dir_x)
-	{
-		newposx = vars->player.pos.x + dir_x
-			* cos(vars->player.rot.x) * (.1 + .05);
-		newposy = vars->player.pos.y + dir_x
-			* sin(vars->player.rot.x) * (.1 + .05);
-	}
+		init_pos_dir_x(dir_x, &newposx, &newposy, vars);
 	else
-	{
-		newposx = vars->player.pos.x + dir_y
-			* cos(vars->player.rot.x - M_PI_2) * (.05 + .02);
-		newposy = vars->player.pos.y + dir_y
-			* sin(vars->player.rot.x - M_PI_2) * (.05 + .02);
-	}
+		init_pos_dir_y(dir_y, &newposx, &newposy, vars);
 	if (vars->map[(int)newposx + (int)vars->player.pos.y * vars->size.x] == '1')
 		newposx = vars->player.pos.x;
 	if (vars->map[(int)vars->player.pos.x + (int)newposy * vars->size.x] == '1')
 		newposy = vars->player.pos.y;
 	if (vars->map[(int)newposx + (int)newposy * vars->size.x] != 'C')
 	{
-		if ((int)newposx + (int)newposy * vars->size.x != (int)vars->player.pos.x + (int)vars->player.pos.y * vars->size.x)
-				change_case(vars, newposx, newposy, &vars->player.pos);
+		if ((int)newposx + (int)newposy * vars->size.x
+			!= (int)vars->player.pos.x + (int)vars->player.pos.y * vars->size.x)
+			change_case(vars, newposx, newposy, &vars->player.pos);
 		vars->player.pos.x = newposx;
 		vars->player.pos.y = newposy;
 	}

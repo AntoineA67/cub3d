@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/29 13:48:04 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/18 15:31:04 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ void	mouse_rotate(t_vars *vars)
 	else if (x < vars->win_size.x / 2)
 		rotate_player_x(vars, x - vars->win_size.x / 2);
 	if (vars->player.rot.y + (y - vars->win_size.y / 2) > -vars->win_size.y / 2
-		&& vars->player.rot.y + (y - vars->win_size.y / 2) < vars->win_size.y / 2)
+		&& vars->player.rot.y
+		+ (y - vars->win_size.y / 2) < vars->win_size.y / 2)
 		vars->player.rot.y += (y - vars->win_size.y / 2);
 	mlx_mouse_move(vars->win, vars->win_size.x / 2, vars->win_size.y / 2);
 }

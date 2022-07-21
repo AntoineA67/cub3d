@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_manage_load.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 12:45:45 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/29 13:39:44 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/18 15:42:53 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	load_texture(t_vars	*vars, char *name, int nb, char *path)
 	}
 }
 
-void	load_animtexture(t_vars	*vars, char *name, int nb, char *path)
+void	free_paths(int nb, char *path, t_vars *vars, char *name)
 {
 	int		i;
 	char	*pathn;
@@ -97,23 +97,32 @@ void	load_animtexture(t_vars	*vars, char *name, int nb, char *path)
 	char	*buff2;
 
 	i = 0;
+	while (i < nb)
+	{
+		pathn = ft_substr(path, 0, ft_strlen(path) - 4);
+		buff2 = ft_itoa(i);
+		buff = ft_strjoin(pathn, buff2);
+		free(pathn);
+		free(buff2);
+		pathn = ft_strjoin(buff, ".xpm");
+		free(buff);
+		load_texture(vars, name, i, pathn);
+		free(pathn);
+		i++;
+	}
+}
+
+void	load_animtexture(t_vars	*vars, char *name, int nb, char *path)
+{
+	int		i;
+
+	i = 0;
 	if (ft_strchr(path, '@'))
 	{
 		nb = ft_atoi(path);
-		path = ft_substr(path, ft_strchr(path, '@') - path + 1, ft_strlen(path));
-		while (i < nb)
-		{
-			pathn = ft_substr(path, 0, ft_strlen(path) - 4);
-			buff2 = ft_itoa(i);
-			buff = ft_strjoin(pathn, buff2);
-			free(pathn);
-			free(buff2);
-			pathn = ft_strjoin(buff, ".xpm");
-			free(buff);
-			load_texture(vars, name, i, pathn);
-			free(pathn);
-			i++;
-		}
+		path = ft_substr(path,
+				ft_strchr(path, '@') - path + 1, ft_strlen(path));
+		free_paths(nb, path, vars, name);
 		free(path);
 	}
 	else

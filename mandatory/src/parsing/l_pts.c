@@ -65,3 +65,23 @@ char	*create_l_pts(t_list *lst, int size_x, int size_y)
 	ft_lstclear(&lst, &free);
 	return (l_pts);
 }
+
+char	*rotate_map(t_vars *vars)
+{
+	int		y;
+	int		x;
+	char	*r_map;
+
+	y = -1;
+	r_map = ft_calloc(vars->size.x * vars->size.y + 1, sizeof(char));
+	if (!r_map)
+		exit_err(vars, 1);
+	while (++y < vars->size.y)
+	{
+		x = -1;
+		while (++x < vars->size.x)
+			r_map[(vars->size.x - 1 - x)
+				* vars->size.y + y] = vars->map[x + vars->size.x * y];
+	}
+	return (r_map);
+}

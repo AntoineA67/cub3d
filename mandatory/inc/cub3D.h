@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:48:46 by arangoni          #+#    #+#             */
-/*   Updated: 2022/07/21 14:37:24 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/21 15:06:11 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,7 @@ char			*extract_name(char *str);
 
 //**************************** Parsing Functions *****************************//
 
+char			*rotate_map(t_vars *vars);
 int				ft_strschr(char *s, char *finds);
 int				ft_strnschr(char *s, char *finds);
 int				str_to_rgb(t_vars *vars, t_rgb *col, char *str);
