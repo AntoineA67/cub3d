@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 16:53:05 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/25 14:20:05 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/21 15:35:03 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	calc_v_rays(t_vars *vars, t_vector2 *disV, t_ray *r, t_vector2 *rv)
 	ft_bzero(&o, sizeof(t_vector2));
 	if (r->ra2 > M_PI)
 	{
-		rv->y = (int)floorf(r->start_pos.y) - 0.001;
+		rv->y = (int)floorf(r->start_pos.y) - 0.0000001;
 		rv->x = (r->start_pos.y - rv->y) * (-1. / tan(r->ra2)) + r->start_pos.x;
 		o.y = -1.0;
 		o.x = 1.0 * (-1.0 / tan(r->ra2));
@@ -74,7 +74,7 @@ void	calc_h_rays(t_vars *vars, t_vector2 *disH, t_ray *r, t_vector2 *rv)
 	ft_bzero(&o, sizeof(t_vector2));
 	if (r->ra2 > M_PI_2 && r->ra2 < M_PI_2 * 3.0)
 	{
-		rv->x = (int)floorf(r->start_pos.x) - 0.001;
+		rv->x = (int)floorf(r->start_pos.x) - 0.00000001;
 		rv->y = (r->start_pos.x - rv->x) * (-tan(r->ra2)) + r->start_pos.y;
 		o.x = -1.0;
 		o.y = 1.0 * (-tan(r->ra2));

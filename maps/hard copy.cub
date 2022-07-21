@@ -1,7 +1,7 @@
 NO 4@./textures/xpm/dirt.xpm
 
 C 100,200,200
-WE 4@./textures/xpm/dirt.xpm
+WE ./textures/xpm/banane.xpm
 
 
 F 100  , 70 ,50
