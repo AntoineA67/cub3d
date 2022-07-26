@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   parse_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/07/18 15:22:07 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/07/21 15:44:34 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	*parse_sec(t_vars *vars, t_list	*lst)
 	}
 	if (!vars->no || !vars->so || !vars->we
 		|| !vars->ea || !vars->c.v || !vars->f.v)
-		exit_err(vars, 1);
+		exit_err(vars, 1, "Invalid map file");
 	return (create_l_pts(lst, vars->size.x, vars->size.y));
 }
 
@@ -106,7 +106,7 @@ char	*parse(int fd, t_vars *vars, int len_tmp)
 	while (node && node->content)
 	{
 		if (!ft_strnschr(node->content, " 01CNSEW\n"))
-			exit_err(vars, 1);
+			exit_err(vars, 1, "Invalid map file");
 		if (ft_strschr(node->content, pp) >= 0)
 		{
 			vars->start_rot = M_PI_2 * ft_strschr(node->content, pp);

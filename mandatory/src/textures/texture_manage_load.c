@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_manage_load.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 12:45:45 by qroussea          #+#    #+#             */
-/*   Updated: 2022/06/25 14:22:10 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/21 15:48:31 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	new_texture(t_vars	*vars, char *name, t_textures	**act, char *path)
 	actt->img = mlx_xpm_file_to_image(vars->mlx, path,
 			&actt->size.x, &actt->size.y);
 	if (!actt->img)
-		exit_err(vars, 1);
+		exit_err(vars, 1, "Invalid texture");
 	actt->addr = mlx_get_data_addr(actt->img, &actt->bits_per_pixel,
 			&actt->line_length, &actt->endian);
 	if (*act)
@@ -70,7 +70,7 @@ void	load_texture(t_vars	*vars, char *name, int nb, char *path)
 
 	printf("LOADING:%s\t...\n", path);
 	if (access(path, F_OK) == -1)
-		exit_err(vars, 1);
+		exit_err(vars, 1, "Invalid texture");
 	act = &vars->textures;
 	if (*act)
 		printf("%s, ", (*act)->name);

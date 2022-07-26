@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_hooks.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 20:58:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/25 15:46:34 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/21 15:49:22 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ int	check_inputs2(t_vars *vars)
 int	check_inputs(t_vars *vars)
 {
 	if (vars->keyboard[53])
-		exit_err(vars, 0);
+		exit_err(vars, 0, NULL);
 	if (vars->keyboard[35])
-		exit_err(vars, 0);
+		exit_err(vars, 0, NULL);
 	return (check_inputs2(vars));
 }
