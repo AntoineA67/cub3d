@@ -6,7 +6,7 @@
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 22:42:07 by arangoni          #+#    #+#             */
-/*   Updated: 2022/07/21 15:07:15 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/26 14:34:36 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,12 @@ int	frame(void *data)
 	return (0);
 }
 
+void	mouse_start(t_vars *vars)
+{
+	mlx_mouse_hide();
+	mlx_mouse_move(vars->win, vars->win_size.x / 2, vars->win_size.y / 2);
+}
+
 int	main(int argc, char **argv)
 {
 	t_vars	vars;
@@ -47,7 +53,7 @@ int	main(int argc, char **argv)
 	vars.win = mlx_new_window(vars.mlx, vars.win_size.x,
 			vars.win_size.y, extract_name(argv[1]));
 	mlx_do_key_autorepeatoff(vars.mlx);
-	mlx_mouse_hide();
+	mouse_start(&vars);
 	mlx_hook(vars.win, ON_KEYDOWN, 0, key_hook_down, &vars);
 	mlx_hook(vars.win, ON_KEYUP, 0, key_hook_up, &vars);
 	mlx_hook(vars.win, ON_MOUSEUP, 0, mouse_hook_up, &vars);
