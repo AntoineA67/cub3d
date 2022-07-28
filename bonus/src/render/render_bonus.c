@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render.c                                           :+:      :+:    :+:   */
+/*   render_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:54:13 by arangoni          #+#    #+#             */
-/*   Updated: 2022/07/18 15:31:04 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/07/28 17:51:42 by arangoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,6 @@ void	render(t_vars *vars)
 	project_rays(vars);
 	draw_mini_circle(vars, 0, -1, vars->img);
 	show_player(vars);
+	mlx_mouse_hide();
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img->img, 0, 0);
 }
