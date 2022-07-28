@@ -2,7 +2,7 @@ NO ./textures/dir/north.xpm
 SO ./textures/dir/south.xpm
 EA ./textures/dir/east.xpm
 WE ./textures/dir/west.xpm
-C 100,rgerg0,200
+C 100,   200,200
 
          F      158,        158,         158						
 
