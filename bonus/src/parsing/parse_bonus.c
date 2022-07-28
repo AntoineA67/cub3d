@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 22:01:30 by arangoni          #+#    #+#             */
-/*   Updated: 2022/07/21 15:44:34 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/07/28 15:03:50 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ int	elem_textures(char *l, t_vars *vars)
 	else if (!ft_strncmp(tmp, "EA ", 3))
 		vars->ea = ft_strtrim(tmp + 3, "\n ");
 	else if (!ft_strncmp(tmp, "F ", 2))
-		str_to_rgb(vars, &vars->f, tmp + 2);
+		str_to_rgb(vars, &vars->f, tmp);
 	else if (!ft_strncmp(tmp, "C ", 2))
-		str_to_rgb(vars, &vars->c, tmp + 2);
+		str_to_rgb(vars, &vars->c, tmp);
 	else if (*l != '\n' && *(l + 1))
 	{
 		free(tmp);

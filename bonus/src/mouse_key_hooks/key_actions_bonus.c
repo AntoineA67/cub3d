@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   key_actions.c                                      :+:      :+:    :+:   */
+/*   key_actions_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 13:17:58 by qroussea          #+#    #+#             */
-/*   Updated: 2022/07/18 15:20:35 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/07/28 16:16:53 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,13 @@ void	move_player(t_vars *vars, int dir_x, int dir_y)
 		init_pos_dir_x(dir_x, &newposx, &newposy, vars);
 	else
 		init_pos_dir_y(dir_y, &newposx, &newposy, vars);
-	if (vars->map[(int)newposx + (int)vars->player.pos.y * vars->size.x] == '1')
-		newposx = vars->player.pos.x;
-	if (vars->map[(int)vars->player.pos.x + (int)newposy * vars->size.x] == '1')
-		newposy = vars->player.pos.y;
+	if (vars->map[(int)(newposx + 0.1 - (0.2 * (newposx < vars->player.pos.x)))
+		+ (int)(newposy + 0.1 - (0.2 * (newposy < vars->player.pos.y)))
+				*vars->size.x] == '1')
+	{
+			newposx = vars->player.pos.x;
+			newposy = vars->player.pos.y;
+	}
 	if (vars->map[(int)newposx + (int)newposy * vars->size.x] != 'C')
 	{
 		if ((int)newposx + (int)newposy * vars->size.x

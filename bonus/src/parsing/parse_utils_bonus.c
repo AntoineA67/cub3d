@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arangoni <arangoni@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 12:51:09 by qroussea          #+#    #+#             */
-/*   Updated: 2022/07/21 15:44:46 by arangoni         ###   ########.fr       */
+/*   Updated: 2022/07/28 15:05:42 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,24 @@ int	err_format_rgb(char *str)
 
 	cpy = ft_strtrim(str, " ");
 	if (!cpy)
+	{
+		free(cpy);
 		return (1);
+	}
 	i = -1;
 	while (cpy[++i])
+	{
 		if (!ft_isdigit(cpy[i]))
+		{
+			free(cpy);
 			return (1);
+		}
+	}
 	if (i > 3)
+	{
+		free(cpy);
 		return (1);
+	}
 	free(cpy);
 	return (0);
 }
@@ -90,21 +101,21 @@ int	str_to_rgb(t_vars *vars, t_rgb *col, char *str)
 	char	**splitted;
 	int		i;
 
-	splitted = check_n_comma(str);
+	splitted = check_n_comma(str + 2);
 	if (!splitted)
-		exit_err(vars, 1, "Invalid map file");
+		exit_err_rgb(vars, splitted, str);
 	i = -1;
 	while (splitted[++i])
 		if (err_format_rgb(splitted[i]))
-			exit_err(vars, 1, "Invalid map file");
+			exit_err_rgb(vars, splitted, str);
 	if (i > 3)
-		exit_err(vars, 1, "Invalid map file");
+		exit_err_rgb(vars, splitted, str);
 	col->r = ft_atoi(splitted[0]);
 	col->g = ft_atoi(splitted[1]);
 	col->b = ft_atoi(splitted[2]);
 	col->v = 1;
 	if (col->r > 255 || col->g > 255 || col->b > 255)
-		exit_err(vars, 1, "Invalid map file");
+		exit_err_rgb(vars, splitted, str);
 	ft_freetab(splitted);
 	return (0);
 }

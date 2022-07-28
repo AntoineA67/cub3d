@@ -1,16 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   color_utils.c                                      :+:      :+:    :+:   */
+/*   color_utils_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qroussea <qroussea@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 19:45:52 by arangoni          #+#    #+#             */
-/*   Updated: 2022/06/25 14:22:15 by qroussea         ###   ########lyon.fr   */
+/*   Updated: 2022/07/28 15:03:44 by qroussea         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
+
+void	exit_err_rgb(t_vars *vars, char **splitted, char *str)
+{
+	ft_freetab(splitted);
+	free(str);
+	exit_err(vars, 1, "Invalid map file");
+}
 
 void	color(t_rgb *c, int r, int g, int b)
 {
